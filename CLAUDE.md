@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project status
 
-Honey Bee is a production e-commerce store for a Pakistani honey business. **Only `.gitignore` exists so far.** The app hasn't been scaffolded yet. The approved build plan is in `~/.claude/plans/hi-effervescent-wilkes.md`, and the next step is design mockups (PNG images in `design-mockups/`) for the owner to review. **Don't start full development until the owner approves the design.** Update this file once real commands and code exist.
+Honey Bee is a production e-commerce store for a Pakistani honey business. The app hasn't been scaffolded yet. So far the repo holds `.gitignore` and design mockups (PNG images in `design-mockups/`) that are waiting for the owner's review. The approved build plan is in `~/.claude/plans/hi-effervescent-wilkes.md`. **Don't start full development until the owner approves the design.** Update this file once real commands and code exist.
 
 Mockups: edit `design-mockups/src/build.py` + `styles.css`, then `python3 build.py && node shoot.mjs [page-filter]` from that folder. `shoot.mjs` needs `playwright-core` resolvable (not a project dependency) and uses `/usr/bin/google-chrome`. Approved visual direction becomes the app's Tailwind theme tokens (cream `#FBF6EC`, ink `#2B1D0E`, honey `#E9A21A`, sage `#5E7A4A`; Fraunces headings + Inter body).
 
