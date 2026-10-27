@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 // Seeds the database with the sample catalogue, shipping zones, discounts, pages and the first admin.
 // Safe to re-run: existing rows are updated (upsert), never duplicated.
 // Usage: npm run db:seed
