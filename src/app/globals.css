@@ -1,0 +1,152 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+/* The store uses a single warm light theme (approved design). */
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-inter);
+  --font-heading: var(--font-fraunces);
+  --font-serif: var(--font-fraunces);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* brand palette */
+  --color-cream: #fbf6ec;
+  --color-cream-2: #f5ecda;
+  --color-ink: #2b1d0e;
+  --color-ink-2: #5c4a36;
+  --color-honey: #e9a21a;
+  --color-honey-dark: #c97f06;
+  --color-honey-light: #fcebc2;
+  --color-sage: #5e7a4a;
+  --color-sage-light: #e6eedc;
+  --color-clay: #c2483d;
+  --color-clay-light: #f9e1dd;
+  --color-sky: #345c8c;
+  --color-sky-light: #e3eaf4;
+  --color-plum: #7a4692;
+  --color-plum-light: #efe3f5;
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+
+  --shadow-card: 0 1px 2px rgb(43 29 14 / 0.05), 0 8px 24px -12px rgb(43 29 14 / 0.18);
+}
+
+:root {
+  --background: #fbf6ec;
+  --foreground: #2b1d0e;
+  --card: #ffffff;
+  --card-foreground: #2b1d0e;
+  --popover: #ffffff;
+  --popover-foreground: #2b1d0e;
+  --primary: #e9a21a;
+  --primary-foreground: #2b1d0e;
+  --secondary: #2b1d0e;
+  --secondary-foreground: #ffffff;
+  --muted: #f5ecda;
+  --muted-foreground: #8a7862;
+  --accent: #fcebc2;
+  --accent-foreground: #2b1d0e;
+  --destructive: #c2483d;
+  --border: #e9ddc7;
+  --input: #ded0b6;
+  --ring: #c97f06;
+  --chart-1: #e9a21a;
+  --chart-2: #b86b05;
+  --chart-3: #5e7a4a;
+  --chart-4: #2b1d0e;
+  --chart-5: #c2483d;
+  --radius: 0.875rem;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans antialiased;
+    scroll-padding-top: 6rem;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  h1,
+  h2,
+  h3 {
+    @apply font-heading tracking-tight text-balance;
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+  ::selection {
+    background: var(--color-honey-light);
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+  .eyebrow {
+    @apply inline-flex items-center gap-2 text-xs font-semibold tracking-[0.12em] text-honey-dark uppercase;
+  }
+  .card-surface {
+    @apply rounded-2xl border border-border bg-card shadow-card;
+  }
+  .comb-pattern {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='98' viewBox='0 0 56 98'%3E%3Cpath d='M28 66 0 50V18L28 2l28 16v32L28 66zm0 32L0 82' fill='none' stroke='%23ffffff' stroke-width='2'/%3E%3C/svg%3E");
+  }
+  .prose-honey {
+    @apply text-ink-2 leading-relaxed;
+  }
+  .prose-honey h2 {
+    @apply mt-8 mb-3 text-2xl text-foreground;
+  }
+  .prose-honey h3 {
+    @apply mt-6 mb-2 text-xl text-foreground;
+  }
+  .prose-honey p {
+    @apply mb-4;
+  }
+  .prose-honey ul {
+    @apply mb-4 list-disc space-y-1 pl-5;
+  }
+  .prose-honey ol {
+    @apply mb-4 list-decimal space-y-1 pl-5;
+  }
+  .prose-honey a {
+    @apply font-medium text-honey-dark underline underline-offset-4;
+  }
+  .prose-honey strong {
+    @apply text-foreground;
+  }
+}

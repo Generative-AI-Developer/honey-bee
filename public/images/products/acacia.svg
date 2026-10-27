@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800">
+  <defs>
+    <linearGradient id="h" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F6CF5A"/><stop offset="1" stop-color="#C98B10"/></linearGradient>
+    <linearGradient id="s" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset=".35" stop-color="#fff" stop-opacity="0"/></linearGradient>
+    <pattern id="c" width="56" height="98" patternUnits="userSpaceOnUse"><path d="M28 66 0 50V18L28 2l28 16v32L28 66zm0 32L0 82" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width="2"/></pattern>
+  </defs>
+  <rect width="800" height="800" fill="#FBF0CF"/>
+  <rect width="800" height="800" fill="url(#c)"/>
+  
+  <g transform="translate(240 150) ">
+    <ellipse cx="160" cy="492" rx="130" ry="14" fill="#000" opacity=".14"/>
+    <path d="M68 128 Q60 140 60 168 V430 Q60 476 104 476 H216 Q260 476 260 430 V168 Q260 140 252 128 Z" fill="url(#h)"/>
+    <path d="M68 128 Q60 140 60 168 V430 Q60 476 104 476 H216 Q260 476 260 430 V168 Q260 140 252 128 Z" fill="url(#s)"/>
+    <rect x="76" y="62" width="168" height="70" rx="12" fill="#3B2A1A"/>
+    <rect x="76" y="104" width="168" height="10" fill="#000" opacity=".18"/>
+    <rect x="86" y="236" width="148" height="128" rx="12" fill="#FFF8EA"/>
+    <path d="M160 254 l13 7.5 v15 l-13 7.5 -13-7.5 v-15z" fill="none" stroke="#C98B10" stroke-width="3"/>
+    <text x="160" y="320" text-anchor="middle" font-family="Georgia, serif" font-weight="700" font-size="26" fill="#3B2A1A" letter-spacing="2">ACACIA</text>
+    <text x="160" y="346" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#7a6650" letter-spacing="3">RAW · PURE</text>
+  </g>
+</svg>
