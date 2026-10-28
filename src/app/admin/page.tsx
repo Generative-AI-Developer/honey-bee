@@ -49,7 +49,7 @@ export default async function AdminDashboard({ searchParams }: PageProps<"/admin
           <>
             <nav className="flex rounded-full border border-border bg-card p-1 text-sm" aria-label="Date range">
               {RANGES.map((d) => (
-                <Link key={d} href={`/admin?days=${d}`} aria-current={d === days ? "true" : undefined} className={cn("rounded-full px-3.5 py-1.5 font-medium", d === days ? "bg-ink text-white" : "hover:bg-muted")}>
+                <Link key={d} href={`/admin?days=${d}`} aria-current={d === days ? "true" : undefined} className={cn("rounded-full px-3.5 py-1.5 font-medium", d === days ? "bg-inverse text-inverse-foreground" : "hover:bg-muted")}>
                   {d}d
                 </Link>
               ))}
@@ -87,7 +87,7 @@ export default async function AdminDashboard({ searchParams }: PageProps<"/admin
           title="Recent orders"
           padded={false}
           actions={
-            <Link href="/admin/orders" className="inline-flex items-center gap-1 text-sm font-semibold text-honey-dark">
+            <Link href="/admin/orders" className="inline-flex items-center gap-1 text-sm font-semibold text-primary-strong">
               View all <ChevronRight className="size-4" />
             </Link>
           }
@@ -105,9 +105,9 @@ export default async function AdminDashboard({ searchParams }: PageProps<"/admin
             <tbody>
               {recent.length === 0 && <EmptyRow colSpan={5}>No orders yet.</EmptyRow>}
               {recent.map((o) => (
-                <tr key={o.id} className="hover:bg-cream/60">
+                <tr key={o.id} className="hover:bg-muted/60">
                   <Td>
-                    <Link href={`/admin/orders/${o.id}`} className="font-semibold hover:text-honey-dark">
+                    <Link href={`/admin/orders/${o.id}`} className="font-semibold hover:text-primary-strong">
                       {orderNumber(o.number)}
                     </Link>
                   </Td>
@@ -135,7 +135,7 @@ export default async function AdminDashboard({ searchParams }: PageProps<"/admin
             <ul className="grid gap-3">
               {best.map((b) => (
                 <li key={b.name} className="flex items-center gap-3 text-sm">
-                  <div className="relative size-11 shrink-0 overflow-hidden rounded-xl bg-cream-2">
+                  <div className="relative size-11 shrink-0 overflow-hidden rounded-xl bg-muted">
                     <ProductImage src={b.image} alt="" sizes="44px" />
                   </div>
                   <div className="min-w-0 flex-1">
@@ -155,12 +155,12 @@ export default async function AdminDashboard({ searchParams }: PageProps<"/admin
             <ul className="grid gap-2.5">
               {lowStock.map((v) => (
                 <li key={v.id} className="flex items-center gap-3 text-sm">
-                  <AlertTriangle className="size-4 shrink-0 text-clay" aria-hidden />
+                  <AlertTriangle className="size-4 shrink-0 text-destructive" aria-hidden />
                   <span className="min-w-0 flex-1 truncate">
                     {v.productName} · {v.name}
                   </span>
-                  <b className="text-clay tabular-nums">{v.stock} left</b>
-                  <Link href={`/admin/inventory?q=${encodeURIComponent(v.sku)}`} className="text-xs font-semibold text-honey-dark">
+                  <b className="text-destructive tabular-nums">{v.stock} left</b>
+                  <Link href={`/admin/inventory?q=${encodeURIComponent(v.sku)}`} className="text-xs font-semibold text-primary-strong">
                     Restock
                   </Link>
                 </li>

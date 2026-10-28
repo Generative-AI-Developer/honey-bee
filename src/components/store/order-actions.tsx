@@ -24,7 +24,7 @@ export function CancelOrderButton({ orderId, token }: { orderId: string; token: 
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="ghost" className="justify-self-start text-clay hover:bg-clay-light hover:text-clay">
+        <Button variant="ghost" className="justify-self-start text-destructive hover:bg-destructive-soft hover:text-destructive">
           Cancel this order
         </Button>
       </AlertDialogTrigger>
@@ -37,7 +37,7 @@ export function CancelOrderButton({ orderId, token }: { orderId: string; token: 
           <AlertDialogCancel>Keep order</AlertDialogCancel>
           <AlertDialogAction
             disabled={pending}
-            className="bg-clay text-white hover:bg-clay/90"
+            className="bg-destructive text-card hover:bg-destructive/90"
             onClick={(e) => {
               e.preventDefault();
               start(async () => {
@@ -76,9 +76,9 @@ export function ReceiptUploadForm({ orderId, token }: { orderId: string; token: 
       <Label htmlFor="receipt" className="font-semibold">
         Upload your payment receipt
       </Label>
-      <input id="receipt" name="receipt" type="file" accept="image/jpeg,image/png,image/webp" required className="text-sm file:mr-3 file:rounded-full file:border-0 file:bg-ink file:px-4 file:py-2 file:text-white" />
+      <input id="receipt" name="receipt" type="file" accept="image/jpeg,image/png,image/webp" required className="text-sm file:mr-3 file:rounded-full file:border-0 file:bg-inverse file:px-4 file:py-2 file:text-inverse-foreground" />
       {error && (
-        <p className="text-clay" role="alert">
+        <p className="text-destructive" role="alert">
           {error}
         </p>
       )}

@@ -240,3 +240,15 @@ export const setUserRole = action(z.object({ userId: z.string().max(60), role: z
   refresh();
   return ok(undefined, `Role changed to ${role.toLowerCase()}`);
 });
+
+// ───────────── appearance (global theme) ─────────────
+
+export const saveAppearance = action(settingsSchemas.appearance, async (value) => {
+  await assertStaff("ADMIN");
+  await db.storeSetting.upsert({ where: { key: "appearance" }, update: { value }, create: { key: "appearance", value } });
+  // Every page's shell reads the theme through the cached getSettings() (tag "settings"),
+  // so expiring the tag re-renders the whole site with the new colours for all visitors.
+  updateTag("settings");
+  refresh();
+  return ok(value, "Theme applied to the whole website");
+});

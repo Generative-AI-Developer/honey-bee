@@ -15,6 +15,7 @@ npm run test:e2e            # Playwright, against a running server
 npm run db:migrate          # prisma migrate dev; npm run db:seed loads sample data + admin
 npm run build               # requires a reachable database; don't run during routine development (owner's preference), only before deploying
 E2E_BASE_URL=http://localhost:3001 E2E_CHROME_PATH=/usr/bin/google-chrome npx playwright test   # e2e vs dev server
+# If the dev server reload-loops or serves stale code after a `next build`: stop it, `rm -rf .next`, restart.
 ```
 
 ## Fixed decisions (agreed with the owner; don't revisit without asking)
@@ -43,4 +44,5 @@ E2E_BASE_URL=http://localhost:3001 E2E_CHROME_PATH=/usr/bin/google-chrome npx pl
 - **Email:** `src/services/email` sends via Resend, or in dev logs and writes `.emails/*.html`. Templates are in `src/emails`. `src/server/notifications.ts` never throws and is called via `after()`.
 - **Images:** `src/services/storage` uses Cloudinary, or `public/uploads` in dev. File type is sniffed from the bytes.
 - **Business settings** (store info, COD fee, bank details, payment window) are DB rows edited in Admin → Settings and merged over defaults in `src/server/settings.ts`. Secrets stay in env (validated by `src/lib/env.ts`).
-- **UI:** design tokens (cream/ink/honey/sage/clay) are in `src/app/globals.css`; the approved mockups are in `design-mockups/` (regenerate with `python3 build.py && node shoot.mjs` in `design-mockups/src`). The shadcn components in `src/components/ui` were restyled: pill buttons, taller inputs and extra badge variants.
+- **Theming (3 schemes × light/dark, global):** colour values live only in `src/lib/themes.ts`, emitted by the root layout as CSS variables on `[data-theme][data-mode]` (from the cached `appearance` setting, so no flash/hydration issues). `globals.css` maps them to Tailwind utilities; `dark:` follows `[data-mode=dark]`, not the OS. **Never hard-code colours** — use semantic utilities: `bg-background/card/muted`, `text-foreground/foreground-soft/muted-foreground`, `text-primary-strong` (brand text/links), `bg-primary`, `bg-inverse` (strong solid), `bg-chrome*` (header/footer/sidebar bands), `success/warning/info/processing/destructive(-soft)`, `rating`, `chart-*`. New tokens must be added to every palette; `tests/unit/themes.test.ts` enforces WCAG contrast. Admins switch themes in Admin → Appearance (`saveAppearance`, ADMIN only). Emails, the payment hand-off page and `global-error` intentionally keep fixed golden colours (they render outside the app shell).
+- **UI:** the approved mockups are in `design-mockups/` (regenerate with `python3 build.py && node shoot.mjs` in `design-mockups/src`). The shadcn components in `src/components/ui` were restyled: pill buttons, taller inputs and extra badge variants; Button `secondary` = the `inverse` token.

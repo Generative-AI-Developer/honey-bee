@@ -58,7 +58,7 @@ async function Category({ params, searchParams }: Pick<PageProps<"/category/[slu
       </nav>
       <header className="mb-7">
         <h1 className="text-3xl lg:text-4xl">{category.name}</h1>
-        {category.description && <p className="mt-1 max-w-2xl text-ink-2">{category.description}</p>}
+        {category.description && <p className="mt-1 max-w-2xl text-foreground-soft">{category.description}</p>}
       </header>
       <CatalogView searchParams={searchParams} category={slug} basePath={`/category/${slug}`} />
     </div>

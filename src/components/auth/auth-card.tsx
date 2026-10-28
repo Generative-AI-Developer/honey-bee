@@ -7,10 +7,10 @@ export function AuthCard({ title, subtitle, children, footer }: { title: string;
       <div className="card-surface w-full max-w-md p-6 sm:p-8">
         <LogoMark className="mb-5 size-10" />
         <h1 className="text-3xl">{title}</h1>
-        {subtitle && <p className="mt-1.5 text-ink-2">{subtitle}</p>}
+        {subtitle && <p className="mt-1.5 text-foreground-soft">{subtitle}</p>}
         <div className="mt-6">{children}</div>
       </div>
-      {footer && <div className="mt-5 text-sm text-ink-2">{footer}</div>}
+      {footer && <div className="mt-5 text-sm text-foreground-soft">{footer}</div>}
     </div>
   );
 }

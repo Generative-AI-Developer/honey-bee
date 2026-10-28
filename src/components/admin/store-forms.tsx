@@ -48,7 +48,7 @@ export function DiscountForm({ initial, onDone }: { initial: DiscountValues; onD
   const set = (k: keyof DiscountValues) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => setD({ ...d, [k]: e.target.value });
   return (
     <form
-      className="grid gap-4 rounded-xl bg-cream p-4 sm:grid-cols-3"
+      className="grid gap-4 rounded-xl bg-background p-4 sm:grid-cols-3"
       onSubmit={(e) => {
         e.preventDefault();
         run(
@@ -163,7 +163,7 @@ export function BannerForm({ initial, onDone }: { initial: BannerValues; onDone?
   const { pending, run } = useAction();
   return (
     <form
-      className="grid gap-3 rounded-xl bg-cream p-4 sm:grid-cols-2"
+      className="grid gap-3 rounded-xl bg-background p-4 sm:grid-cols-2"
       onSubmit={(e) => {
         e.preventDefault();
         run(() => saveBanner({ ...b, startsAt: b.startsAt || undefined, endsAt: b.endsAt || undefined }), onDone);
@@ -198,7 +198,7 @@ export function BannerForm({ initial, onDone }: { initial: BannerValues; onDone?
       </label>
       <div className="flex justify-end gap-2">
         {b.id && (
-          <Button type="button" size="sm" variant="ghost" className="text-clay" disabled={pending} onClick={() => run(() => deleteBanner({ id: b.id! }), onDone)}>
+          <Button type="button" size="sm" variant="ghost" className="text-destructive" disabled={pending} onClick={() => run(() => deleteBanner({ id: b.id! }), onDone)}>
             <Trash2 /> Delete
           </Button>
         )}
@@ -239,7 +239,7 @@ export function PageForm({ initial, onDone }: { initial: PageValues; onDone?: ()
   const { pending, run } = useAction();
   return (
     <form
-      className="grid gap-3 rounded-xl bg-cream p-4"
+      className="grid gap-3 rounded-xl bg-background p-4"
       onSubmit={(e) => {
         e.preventDefault();
         run(() => savePage(p), onDone);
@@ -304,7 +304,7 @@ export function ZoneForm({ initial, onDone }: { initial: ZoneValues; onDone?: ()
   const setRate = (i: number, patch: Partial<Rate>) => setZ({ ...z, rates: z.rates.map((r, j) => (j === i ? { ...r, ...patch } : r)) });
   return (
     <form
-      className="grid gap-4 rounded-xl bg-cream p-4"
+      className="grid gap-4 rounded-xl bg-background p-4"
       onSubmit={(e) => {
         e.preventDefault();
         run(() => saveShippingZone({ ...z, rates: z.rates.map((r) => ({ ...r, freeOver: r.freeOver || null })) } as never), onDone);
@@ -350,7 +350,7 @@ export function ZoneForm({ initial, onDone }: { initial: ZoneValues; onDone?: ()
       </div>
       <div className="flex justify-end gap-2">
         {z.id && !z.isDefault && (
-          <Button type="button" size="sm" variant="ghost" className="text-clay" disabled={pending} onClick={() => run(() => deleteShippingZone({ id: z.id! }), onDone)}>
+          <Button type="button" size="sm" variant="ghost" className="text-destructive" disabled={pending} onClick={() => run(() => deleteShippingZone({ id: z.id! }), onDone)}>
             <Trash2 /> Delete zone
           </Button>
         )}

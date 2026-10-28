@@ -16,7 +16,7 @@ export default function ResetPasswordPage({ searchParams }: PageProps<"/reset-pa
           if (!token || sp.error) {
             return (
               <div className="grid gap-4">
-                <p className="text-ink-2">This reset link is invalid or has expired.</p>
+                <p className="text-foreground-soft">This reset link is invalid or has expired.</p>
                 <Button asChild>
                   <Link href="/forgot-password">Request a new link</Link>
                 </Button>

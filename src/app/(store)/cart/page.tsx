@@ -38,9 +38,9 @@ async function CartContents() {
   if (cart.lines.length === 0) {
     return (
       <div className="grid place-items-center rounded-3xl border border-dashed border-border bg-card px-6 py-16 text-center">
-        <ShoppingBag className="mb-3 size-10 text-honey-dark" aria-hidden />
+        <ShoppingBag className="mb-3 size-10 text-primary-strong" aria-hidden />
         <h2 className="text-2xl">Your cart is empty</h2>
-        <p className="mt-2 text-ink-2">Discover raw honey from Pakistan&apos;s wild valleys.</p>
+        <p className="mt-2 text-foreground-soft">Discover raw honey from Pakistan&apos;s wild valleys.</p>
         <Button asChild className="mt-6">
           <Link href="/shop">Start shopping</Link>
         </Button>
@@ -54,7 +54,7 @@ async function CartContents() {
   return (
     <>
       {remaining != null && (
-        <div className="mb-6 grid gap-2.5 rounded-2xl bg-sage-light px-5 py-4 text-sm text-sage">
+        <div className="mb-6 grid gap-2.5 rounded-2xl bg-success-soft px-5 py-4 text-sm text-success">
           <p className="flex items-center gap-2">
             <Truck className="size-4" aria-hidden />
             {remaining === 0 ? (
@@ -68,7 +68,7 @@ async function CartContents() {
             )}
           </p>
           <div className="h-2 overflow-hidden rounded-full bg-card">
-            <div className="h-full rounded-full bg-sage" style={{ width: `${Math.min(100, (cart.subtotal / freeOver!) * 100)}%` }} />
+            <div className="h-full rounded-full bg-success" style={{ width: `${Math.min(100, (cart.subtotal / freeOver!) * 100)}%` }} />
           </div>
         </div>
       )}
@@ -77,18 +77,18 @@ async function CartContents() {
           <ul className="divide-y divide-border">
             {cart.lines.map((l) => (
               <li key={l.id} className="flex items-start gap-4 py-5">
-                <Link href={`/products/${l.productSlug}`} className="relative size-20 shrink-0 overflow-hidden rounded-xl bg-cream-2 sm:size-24">
+                <Link href={`/products/${l.productSlug}`} className="relative size-20 shrink-0 overflow-hidden rounded-xl bg-muted sm:size-24">
                   <ProductImage src={l.image?.url} alt={l.image?.alt ?? l.productName} sizes="96px" />
                 </Link>
                 <div className="min-w-0 flex-1">
                   <h2 className="text-base sm:text-lg">
-                    <Link href={`/products/${l.productSlug}`} className="hover:text-honey-dark">
+                    <Link href={`/products/${l.productSlug}`} className="hover:text-primary-strong">
                       {l.productName}
                     </Link>
                   </h2>
                   <p className="text-sm text-muted-foreground">Size: {l.variantName}</p>
                   {l.issue && (
-                    <p className="mt-1 flex items-center gap-1.5 text-sm text-clay">
+                    <p className="mt-1 flex items-center gap-1.5 text-sm text-destructive">
                       <AlertTriangle className="size-3.5" />
                       {l.issue === "insufficient_stock" ? `Only ${l.stock} left. Please reduce the quantity.` : l.issue === "out_of_stock" ? "Out of stock" : "No longer available"}
                     </p>
@@ -106,7 +106,7 @@ async function CartContents() {
               </li>
             ))}
           </ul>
-          <Link href="/shop" className="mt-2 inline-flex items-center gap-1 text-sm font-semibold text-honey-dark">
+          <Link href="/shop" className="mt-2 inline-flex items-center gap-1 text-sm font-semibold text-primary-strong">
             <ChevronLeft className="size-4" /> Continue shopping
           </Link>
         </section>
@@ -114,9 +114,9 @@ async function CartContents() {
         <aside className="card-surface grid gap-4 p-6 lg:sticky lg:top-28" aria-label="Order summary">
           <h2 className="text-2xl">Order summary</h2>
           <dl className="grid grid-cols-[1fr_auto] gap-y-2.5 border-t border-border pt-4 text-[0.95rem]">
-            <dt className="text-ink-2">Subtotal ({cart.itemCount} items)</dt>
+            <dt className="text-foreground-soft">Subtotal ({cart.itemCount} items)</dt>
             <dd className="text-right font-semibold">{formatPrice(cart.subtotal)}</dd>
-            <dt className="text-ink-2">Delivery</dt>
+            <dt className="text-foreground-soft">Delivery</dt>
             <dd className="text-right text-sm text-muted-foreground">Calculated at checkout</dd>
           </dl>
           <p className="text-sm text-muted-foreground">Have a discount code? Add it at checkout.</p>
@@ -133,7 +133,7 @@ async function CartContents() {
           )}
           <ul className="flex flex-wrap justify-center gap-1.5" aria-label="Accepted payment methods">
             {methods.map((m) => (
-              <li key={m.id} className="rounded-md border border-border bg-card px-2.5 py-1 text-[0.7rem] font-bold text-ink-2">
+              <li key={m.id} className="rounded-md border border-border bg-card px-2.5 py-1 text-[0.7rem] font-bold text-foreground-soft">
                 {m.shortLabel}
               </li>
             ))}

@@ -26,7 +26,7 @@ export function CartLineControls({ itemId, quantity, max }: { itemId: string; qu
       <button
         type="button"
         disabled={pending}
-        className="text-sm text-muted-foreground underline-offset-2 hover:text-clay hover:underline"
+        className="text-sm text-muted-foreground underline-offset-2 hover:text-destructive hover:underline"
         onClick={() =>
           start(async () => {
             const res = await removeCartItem({ itemId });

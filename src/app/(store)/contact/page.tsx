@@ -16,15 +16,15 @@ export default async function ContactPage() {
   return (
     <div className="container-page max-w-3xl py-10 lg:py-16">
       <h1 className="mb-3 text-4xl lg:text-5xl">Contact us</h1>
-      <p className="mb-8 text-lg text-ink-2">Questions about an order, wholesale or corporate gifting? We usually reply on WhatsApp within an hour (9am–9pm, Monday–Saturday).</p>
+      <p className="mb-8 text-lg text-foreground-soft">Questions about an order, wholesale or corporate gifting? We usually reply on WhatsApp within an hour (9am–9pm, Monday–Saturday).</p>
       <ul className="grid gap-4 sm:grid-cols-2">
         {items.map(({ icon: Icon, label, value, href }) => (
           <li key={label} className="card-surface flex items-center gap-4 p-5">
-            <Icon className="size-11 shrink-0 rounded-xl bg-honey-light p-2.5 text-honey-dark" aria-hidden />
+            <Icon className="size-11 shrink-0 rounded-xl bg-accent p-2.5 text-primary-strong" aria-hidden />
             <div className="min-w-0">
               <span className="text-sm text-muted-foreground">{label}</span>
               {href ? (
-                <a href={href} className="block truncate font-semibold hover:text-honey-dark" target={href.startsWith("http") ? "_blank" : undefined} rel="noreferrer">
+                <a href={href} className="block truncate font-semibold hover:text-primary-strong" target={href.startsWith("http") ? "_blank" : undefined} rel="noreferrer">
                   {value}
                 </a>
               ) : (

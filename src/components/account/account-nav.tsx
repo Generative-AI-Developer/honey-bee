@@ -25,7 +25,7 @@ export function AccountNav() {
             key={href}
             href={href}
             aria-current={active ? "page" : undefined}
-            className={cn("flex shrink-0 items-center gap-2.5 rounded-xl px-3.5 py-2.5 text-sm font-medium whitespace-nowrap", active ? "bg-honey-light" : "hover:bg-muted")}
+            className={cn("flex shrink-0 items-center gap-2.5 rounded-xl px-3.5 py-2.5 text-sm font-medium whitespace-nowrap", active ? "bg-accent" : "hover:bg-muted")}
           >
             <Icon className="size-4" /> {label}
           </Link>

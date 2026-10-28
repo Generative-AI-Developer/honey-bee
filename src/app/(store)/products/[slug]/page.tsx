@@ -48,7 +48,7 @@ export default function ProductPage({ params }: PageProps<"/products/[slug]">) {
 function ProductSkeleton() {
   return (
     <div className="container-page grid gap-8 py-10 lg:grid-cols-[1.1fr_1fr] lg:gap-14" aria-busy="true">
-      <div className="aspect-square animate-pulse rounded-3xl bg-cream-2" />
+      <div className="aspect-square animate-pulse rounded-3xl bg-muted" />
       <div className="grid content-start gap-4">
         <div className="h-4 w-1/3 animate-pulse rounded bg-muted" />
         <div className="h-12 w-3/4 animate-pulse rounded bg-muted" />
@@ -140,14 +140,14 @@ async function Product({ params }: Pick<PageProps<"/products/[slug]">, "params">
             {product.ratingCount > 0 ? (
               <>
                 <Stars rating={product.ratingAvg} /> <b>{product.ratingAvg.toFixed(1)}</b>
-                <a href="#reviews" className="font-semibold text-honey-dark">{product.ratingCount} reviews</a>
+                <a href="#reviews" className="font-semibold text-primary-strong">{product.ratingCount} reviews</a>
               </>
             ) : (
               <a href="#reviews" className="text-muted-foreground">No reviews yet</a>
             )}
             {product.soldCount > 50 && <span className="text-muted-foreground">· {product.soldCount.toLocaleString()}+ sold</span>}
           </div>
-          <p className="text-ink-2">{product.shortDescription}</p>
+          <p className="text-foreground-soft">{product.shortDescription}</p>
 
           <BuyBox
             variants={product.variants.map((v) => ({
@@ -163,7 +163,7 @@ async function Product({ params }: Pick<PageProps<"/products/[slug]">, "params">
 
           <ul className="mt-1 divide-y divide-border rounded-2xl border border-border bg-card text-sm">
             <li className="flex gap-3.5 px-4 py-3.5">
-              <Truck className="mt-0.5 size-5 shrink-0 text-honey-dark" aria-hidden />
+              <Truck className="mt-0.5 size-5 shrink-0 text-primary-strong" aria-hidden />
               <span>
                 <b>Delivery in {deliveryRange}</b>
                 <br />
@@ -171,7 +171,7 @@ async function Product({ params }: Pick<PageProps<"/products/[slug]">, "params">
               </span>
             </li>
             <li className="flex gap-3.5 px-4 py-3.5">
-              <Banknote className="mt-0.5 size-5 shrink-0 text-honey-dark" aria-hidden />
+              <Banknote className="mt-0.5 size-5 shrink-0 text-primary-strong" aria-hidden />
               <span>
                 <b>{settings.cod.enabled ? "Cash on Delivery available" : "Secure online payment"}</b>
                 <br />
@@ -179,7 +179,7 @@ async function Product({ params }: Pick<PageProps<"/products/[slug]">, "params">
               </span>
             </li>
             <li className="flex gap-3.5 px-4 py-3.5">
-              <ShieldCheck className="mt-0.5 size-5 shrink-0 text-honey-dark" aria-hidden />
+              <ShieldCheck className="mt-0.5 size-5 shrink-0 text-primary-strong" aria-hidden />
               <span>
                 <b>Lab-tested purity</b>
                 <br />
@@ -253,8 +253,8 @@ async function Product({ params }: Pick<PageProps<"/products/[slug]">, "params">
           {reviews.distribution.map((d) => (
             <div key={d.rating} className="grid grid-cols-[32px_1fr_32px] items-center gap-3 py-0.5 text-sm">
               <span>{d.rating}★</span>
-              <div className="h-2 overflow-hidden rounded-full bg-cream-2">
-                <div className="h-full rounded-full bg-honey" style={{ width: `${reviews.total ? (d.count / reviews.total) * 100 : 0}%` }} />
+              <div className="h-2 overflow-hidden rounded-full bg-muted">
+                <div className="h-full rounded-full bg-primary" style={{ width: `${reviews.total ? (d.count / reviews.total) * 100 : 0}%` }} />
               </div>
               <span className="text-muted-foreground">{d.count}</span>
             </div>
@@ -266,16 +266,16 @@ async function Product({ params }: Pick<PageProps<"/products/[slug]">, "params">
           </div>
         </div>
         <div className="grid content-start gap-4">
-          {reviews.reviews.length === 0 && <p className="rounded-2xl border border-dashed border-border p-6 text-ink-2">Be the first to review {product.name}.</p>}
+          {reviews.reviews.length === 0 && <p className="rounded-2xl border border-dashed border-border p-6 text-foreground-soft">Be the first to review {product.name}.</p>}
           {reviews.reviews.map((r) => (
             <figure key={r.id} className="grid gap-2 rounded-2xl border border-border bg-card p-5">
               <Stars rating={r.rating} />
               {r.title && <b>{r.title}</b>}
-              <blockquote className="text-ink-2">{r.body}</blockquote>
+              <blockquote className="text-foreground-soft">{r.body}</blockquote>
               <figcaption className="text-sm text-muted-foreground">
                 {r.author} · {r.createdAt.toLocaleDateString("en-PK", { day: "numeric", month: "short", year: "numeric" })}
                 {r.verifiedPurchase && (
-                  <span className="ml-2 inline-flex items-center gap-1 font-medium text-sage">
+                  <span className="ml-2 inline-flex items-center gap-1 font-medium text-success">
                     <BadgeCheck className="size-3.5" /> Verified buyer
                   </span>
                 )}

@@ -53,7 +53,7 @@ export function AddressBook({ addresses }: { addresses: Address[] }) {
           <div key={k} className={k.startsWith("line") ? "grid gap-1.5 sm:col-span-2" : "grid gap-1.5"}>
             <Label htmlFor={k}>{label}</Label>
             <Input id={k} autoComplete={ac} value={editing[k]} onChange={set(k)} aria-invalid={!!err(k)} />
-            {err(k) && <p className="text-xs text-clay">{err(k)}</p>}
+            {err(k) && <p className="text-xs text-destructive">{err(k)}</p>}
           </div>
         ))}
         <div className="grid gap-1.5">
@@ -64,7 +64,7 @@ export function AddressBook({ addresses }: { addresses: Address[] }) {
               <option key={c} value={c} />
             ))}
           </datalist>
-          {err("city") && <p className="text-xs text-clay">{err("city")}</p>}
+          {err("city") && <p className="text-xs text-destructive">{err("city")}</p>}
         </div>
         <div className="grid gap-1.5">
           <Label htmlFor="province">Province</Label>
@@ -76,7 +76,7 @@ export function AddressBook({ addresses }: { addresses: Address[] }) {
               <option key={p}>{p}</option>
             ))}
           </select>
-          {err("province") && <p className="text-xs text-clay">{err("province")}</p>}
+          {err("province") && <p className="text-xs text-destructive">{err("province")}</p>}
         </div>
         <label className="flex items-center gap-2.5 text-sm sm:col-span-2">
           <Checkbox checked={!!editing.isDefault} onCheckedChange={(v) => setEditing({ ...editing, isDefault: v === true })} /> Use as my default address
@@ -101,16 +101,16 @@ export function AddressBook({ addresses }: { addresses: Address[] }) {
           <Plus /> Add address
         </Button>
       </div>
-      {addresses.length === 0 && <p className="text-ink-2">No saved addresses yet. They&apos;ll also be saved when you check out.</p>}
+      {addresses.length === 0 && <p className="text-foreground-soft">No saved addresses yet. They&apos;ll also be saved when you check out.</p>}
       <ul className="grid gap-3 sm:grid-cols-2">
         {addresses.map((a) => (
           <li key={a.id} className="grid gap-2 rounded-2xl border border-border p-4 text-sm">
             <div className="flex items-center gap-2">
-              <MapPin className="size-4 text-honey-dark" />
+              <MapPin className="size-4 text-primary-strong" />
               <b>{a.fullName}</b>
               {a.isDefault && <Badge variant="warning">Default</Badge>}
             </div>
-            <p className="text-ink-2">
+            <p className="text-foreground-soft">
               {[a.line1, a.line2].filter(Boolean).join(", ")}
               <br />
               {a.city}, {a.province}
@@ -128,7 +128,7 @@ export function AddressBook({ addresses }: { addresses: Address[] }) {
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-clay"
+                className="text-destructive"
                 disabled={pending}
                 onClick={() =>
                   start(async () => {

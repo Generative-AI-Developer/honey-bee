@@ -24,7 +24,7 @@ async function AccountShell({ children }: { children: React.ReactNode }) {
   return (
     <>
       <div className="flex items-center gap-4 pt-8 pb-6 lg:pt-10">
-        <div className="grid size-14 place-items-center rounded-full bg-honey text-lg font-bold">{initials(user.name)}</div>
+        <div className="grid size-14 place-items-center rounded-full bg-primary text-lg font-bold text-primary-foreground">{initials(user.name)}</div>
         <div>
           <h1 className="text-2xl lg:text-3xl">Assalam-o-Alaikum, {user.name.split(" ")[0]}</h1>
           <p className="text-sm text-muted-foreground">{user.email}</p>

@@ -11,7 +11,7 @@ export function OrderList({ orders }: { orders: Awaited<ReturnType<typeof getMyO
   if (orders.length === 0) {
     return (
       <div className="grid justify-items-center gap-3 py-8 text-center">
-        <p className="text-ink-2">You haven&apos;t placed any orders yet.</p>
+        <p className="text-foreground-soft">You haven&apos;t placed any orders yet.</p>
         <Button asChild>
           <Link href="/shop">Start shopping</Link>
         </Button>
@@ -26,7 +26,7 @@ export function OrderList({ orders }: { orders: Awaited<ReturnType<typeof getMyO
           <li key={o.id} className="flex flex-wrap items-center gap-3 py-4 sm:flex-nowrap sm:gap-4">
             <div className="flex">
               {o.items.slice(0, 3).map((i, idx) => (
-                <div key={idx} className="relative -ml-2.5 size-11 overflow-hidden rounded-xl border-2 border-card bg-cream-2 first:ml-0">
+                <div key={idx} className="relative -ml-2.5 size-11 overflow-hidden rounded-xl border-2 border-card bg-muted first:ml-0">
                   <ProductImage src={i.imageUrl} alt="" sizes="44px" />
                 </div>
               ))}

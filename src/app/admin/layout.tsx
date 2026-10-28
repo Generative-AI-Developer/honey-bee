@@ -11,7 +11,7 @@ export const metadata: Metadata = { title: { default: "Admin", template: "%s · 
 
 export default function AdminLayout({ children }: LayoutProps<"/admin">) {
   return (
-    <Suspense fallback={<div className="min-h-screen animate-pulse bg-cream" />}>
+    <Suspense fallback={<div className="min-h-screen animate-pulse bg-background" />}>
       <AdminShell>{children}</AdminShell>
     </Suspense>
   );
@@ -27,7 +27,7 @@ async function AdminShell({ children }: { children: React.ReactNode }) {
   const counts = { orders: pendingOrders, reviews: pendingReviews, returns: openReturns };
   return (
     <div className="grid min-h-screen lg:grid-cols-[252px_1fr]">
-      <div className="hidden bg-ink lg:block print:hidden">
+      <div className="hidden bg-chrome lg:block print:hidden">
         <AdminSidebar role={user.role} counts={counts} className="flex" />
       </div>
       <div className="min-w-0">

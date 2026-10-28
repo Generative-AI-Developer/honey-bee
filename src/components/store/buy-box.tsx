@@ -39,7 +39,7 @@ export function BuyBox({ variants }: { variants: Variant[] }) {
       <div className="flex flex-wrap items-baseline gap-2.5" aria-live="polite">
         <span className="text-3xl font-bold">{formatPrice(v.price)}</span>
         {v.compareAtPrice && v.compareAtPrice > v.price && <s className="text-lg text-muted-foreground">{formatPrice(v.compareAtPrice)}</s>}
-        {off && <span className="rounded-full bg-clay-light px-2.5 py-0.5 text-sm font-semibold text-clay">Save {off}%</span>}
+        {off && <span className="rounded-full bg-destructive-soft px-2.5 py-0.5 text-sm font-semibold text-destructive">Save {off}%</span>}
       </div>
 
       {variants.length > 1 && (
@@ -63,7 +63,7 @@ export function BuyBox({ variants }: { variants: Variant[] }) {
                   }}
                   className={cn(
                     "grid rounded-xl border-[1.5px] bg-card p-2.5 text-center transition-colors",
-                    on ? "border-2 border-ink bg-honey-light" : "border-border hover:border-ink-2",
+                    on ? "border-2 border-foreground bg-accent text-accent-foreground" : "border-border hover:border-foreground-soft",
                     out && "cursor-not-allowed line-through opacity-50",
                   )}
                 >
@@ -76,7 +76,7 @@ export function BuyBox({ variants }: { variants: Variant[] }) {
         </fieldset>
       )}
 
-      <p className={cn("flex items-center gap-2 text-sm", v.stock <= 0 ? "text-clay" : v.stock <= v.lowStockThreshold ? "text-clay" : "text-sage")}>
+      <p className={cn("flex items-center gap-2 text-sm", v.stock <= 0 ? "text-destructive" : v.stock <= v.lowStockThreshold ? "text-destructive" : "text-success")}>
         {v.stock <= 0 ? <PackageX className="size-4" /> : <PackageCheck className="size-4" />}
         {v.stock <= 0 ? "Out of stock" : v.stock <= v.lowStockThreshold ? <>Only <b>{v.stock}</b> left in {v.name}</> : "In stock, ready to ship"}
       </p>

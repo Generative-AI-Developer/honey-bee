@@ -10,7 +10,7 @@ export default function NotFound() {
         <Logo />
         <HoneyJar tone="acacia" label="404" className="my-4 w-28" />
         <h1 className="text-4xl">This jar is empty</h1>
-        <p className="max-w-md text-ink-2">The page you&apos;re looking for doesn&apos;t exist or has moved.</p>
+        <p className="max-w-md text-foreground-soft">The page you&apos;re looking for doesn&apos;t exist or has moved.</p>
         <div className="mt-2 flex gap-3">
           <Button asChild>
             <Link href="/shop">Shop honey</Link>

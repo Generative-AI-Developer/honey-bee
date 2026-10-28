@@ -13,7 +13,7 @@ export default function TrackOrderPage() {
       footer={
         <>
           Have an account?{" "}
-          <Link href="/account/orders" className="font-semibold text-honey-dark">
+          <Link href="/account/orders" className="font-semibold text-primary-strong">
             See all your orders
           </Link>
         </>

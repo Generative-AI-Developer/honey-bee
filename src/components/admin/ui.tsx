@@ -86,7 +86,7 @@ export function StatCard({ label, value, hint, tone = "neutral" }: { label: stri
     <div className="grid gap-1 rounded-2xl border border-border bg-card p-5">
       <span className="text-sm text-muted-foreground">{label}</span>
       <b className="font-heading text-[1.75rem] leading-tight font-semibold">{value}</b>
-      {hint && <span className={cn("text-xs font-semibold", tone === "up" ? "text-sage" : tone === "down" ? "text-clay" : "text-muted-foreground")}>{hint}</span>}
+      {hint && <span className={cn("text-xs font-semibold", tone === "up" ? "text-success" : tone === "down" ? "text-destructive" : "text-muted-foreground")}>{hint}</span>}
     </div>
   );
 }

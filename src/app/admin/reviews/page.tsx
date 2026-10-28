@@ -34,7 +34,7 @@ export default async function ReviewsPage({ searchParams }: PageProps<"/admin/re
       <PageHeader title="Reviews" description="New reviews appear in the store only after you approve them." />
       <nav className="flex flex-wrap gap-2" aria-label="Review status">
         {TABS.map((t) => (
-          <Link key={t.key} href={`/admin/reviews?status=${t.key}`} className={cn("rounded-full border px-3.5 py-1.5 text-sm font-medium", status === t.key ? "border-ink bg-ink text-white" : "border-border bg-card")}>
+          <Link key={t.key} href={`/admin/reviews?status=${t.key}`} className={cn("rounded-full border px-3.5 py-1.5 text-sm font-medium", status === t.key ? "border-inverse bg-inverse text-inverse-foreground" : "border-border bg-card")}>
             {t.label} ({counts.find((c) => c.status === t.key)?._count ?? 0})
           </Link>
         ))}
@@ -46,7 +46,7 @@ export default async function ReviewsPage({ searchParams }: PageProps<"/admin/re
             <li key={r.id} className="grid gap-2 py-4 first:pt-0 last:pb-0">
               <div className="flex flex-wrap items-center gap-2 text-sm">
                 <Stars rating={r.rating} />
-                <Link href={`/products/${r.product.slug}`} target="_blank" className="font-semibold hover:text-honey-dark">
+                <Link href={`/products/${r.product.slug}`} target="_blank" className="font-semibold hover:text-primary-strong">
                   {r.product.name}
                 </Link>
                 {r.verifiedPurchase && (
@@ -57,7 +57,7 @@ export default async function ReviewsPage({ searchParams }: PageProps<"/admin/re
                 <span className="ml-auto text-muted-foreground">{r.createdAt.toLocaleDateString("en-PK", { dateStyle: "medium" })}</span>
               </div>
               {r.title && <b>{r.title}</b>}
-              <p className="text-ink-2">{r.body}</p>
+              <p className="text-foreground-soft">{r.body}</p>
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="text-xs text-muted-foreground">
                   {r.user.name} · {r.user.email}

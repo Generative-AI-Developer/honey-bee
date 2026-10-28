@@ -36,7 +36,7 @@ export default async function DiscountsPage() {
                     <Badge variant={!x.isActive ? "outline" : expired || used ? "destructive" : "success"}>{!x.isActive ? "paused" : expired ? "expired" : used ? "used up" : "active"}</Badge>
                     {x.firstOrderOnly && <Badge variant="info">first order</Badge>}
                   </div>
-                  <p className="text-sm text-ink-2">
+                  <p className="text-sm text-foreground-soft">
                     {x.type === "PERCENT" ? `${x.value}% off` : x.type === "FIXED" ? `${formatPrice(x.value)} off` : "Free delivery"}
                     {x.minSubtotal > 0 && ` · min ${formatPrice(x.minSubtotal)}`}
                     {x.maxDiscount && ` · max ${formatPrice(x.maxDiscount)}`}

@@ -21,15 +21,15 @@ export async function SiteHeader() {
   return (
     <>
       {settings.store.announcement && (
-        <div className="bg-ink px-4 py-2 text-center text-xs text-[#f3e6cc] sm:text-[0.8125rem]">{settings.store.announcement}</div>
+        <div className="bg-chrome px-4 py-2 text-center text-xs text-chrome-foreground sm:text-[0.8125rem]">{settings.store.announcement}</div>
       )}
-      <header className="sticky top-0 z-40 border-b border-border bg-cream/90 backdrop-blur supports-[backdrop-filter]:bg-cream/80">
+      <header className="sticky top-0 z-40 border-b border-border bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/80">
         <div className="container-page flex h-16 items-center gap-3 lg:h-[76px] lg:gap-7">
           <MobileNav nav={NAV} categories={categories.map((c) => ({ href: `/category/${c.slug}`, label: c.name }))} />
           <Logo className="text-xl lg:text-2xl" />
           <nav aria-label="Main" className="hidden items-center gap-6 text-[0.9rem] font-medium lg:flex">
             {NAV.map((n) => (
-              <Link key={n.href} href={n.href} className="transition-colors hover:text-honey-dark">
+              <Link key={n.href} href={n.href} className="transition-colors hover:text-primary-strong">
                 {n.label}
               </Link>
             ))}
@@ -72,7 +72,7 @@ async function AccountLink() {
   if (user && isStaff(user)) {
     return (
       <>
-        <Link href="/admin" className="hidden rounded-full bg-ink px-3 py-1.5 text-xs font-semibold text-white sm:inline-block">
+        <Link href="/admin" className="hidden rounded-full bg-inverse px-3 py-1.5 text-xs font-semibold text-inverse-foreground sm:inline-block">
           Admin
         </Link>
         <IconLink href="/account" label="My account" icon={<User className="size-5" />} />
@@ -91,7 +91,7 @@ function CartLink({ count }: { count: number }) {
   return (
     <IconLink href="/cart" label={`Cart, ${count} items`} icon={<ShoppingBag className="size-5" />}>
       {count > 0 && (
-        <span className="absolute top-0.5 right-0 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-honey px-1 text-[11px] font-bold text-ink">
+        <span className="absolute top-0.5 right-0 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-primary px-1 text-[11px] font-bold text-primary-foreground">
           {count > 99 ? "99+" : count}
         </span>
       )}

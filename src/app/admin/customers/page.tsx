@@ -54,7 +54,7 @@ export default async function CustomersPage({ searchParams }: PageProps<"/admin/
           <tbody>
             {users.length === 0 && <EmptyRow colSpan={5}>No customers found.</EmptyRow>}
             {users.map((u) => (
-              <tr key={u.id} className="hover:bg-cream/60">
+              <tr key={u.id} className="hover:bg-muted/60">
                 <Td>
                   <b>{u.name}</b> {!u.emailVerified && <Badge variant="warning">unverified</Badge>}
                   <span className="block text-xs text-muted-foreground">
@@ -65,7 +65,7 @@ export default async function CustomersPage({ searchParams }: PageProps<"/admin/
                 <Td className="text-muted-foreground">{u.createdAt.toLocaleDateString("en-PK", { dateStyle: "medium" })}</Td>
                 <Td className="text-right tabular-nums">
                   {u._count.orders > 0 ? (
-                    <Link href={`/admin/orders?q=${encodeURIComponent(u.email)}`} className="font-semibold text-honey-dark">
+                    <Link href={`/admin/orders?q=${encodeURIComponent(u.email)}`} className="font-semibold text-primary-strong">
                       {u._count.orders}
                     </Link>
                   ) : (

@@ -57,7 +57,7 @@ export default async function AdminProductsPage({ searchParams }: PageProps<"/ad
           ["DRAFT", "Drafts"],
           ["ARCHIVED", "Archived"],
         ].map(([key, label]) => (
-          <Link key={key} href={withParams("/admin/products", sp, { status: key || null })} className={cn("rounded-full border px-3.5 py-1.5 text-sm font-medium", (status ?? "") === key ? "border-ink bg-ink text-white" : "border-border bg-card hover:bg-muted")}>
+          <Link key={key} href={withParams("/admin/products", sp, { status: key || null })} className={cn("rounded-full border px-3.5 py-1.5 text-sm font-medium", (status ?? "") === key ? "border-inverse bg-inverse text-inverse-foreground" : "border-border bg-card hover:bg-muted")}>
             {label}
           </Link>
         ))}
@@ -89,15 +89,15 @@ export default async function AdminProductsPage({ searchParams }: PageProps<"/ad
               const stock = p.variants.reduce((s, v) => s + v.stock, 0);
               const low = p.variants.some((v) => v.stock <= v.lowStockThreshold);
               return (
-                <tr key={p.id} className="hover:bg-cream/60">
+                <tr key={p.id} className="hover:bg-muted/60">
                   <Td>
                     <Link href={`/admin/products/${p.id}`} className="flex items-center gap-3">
-                      <div className="relative size-11 shrink-0 overflow-hidden rounded-xl bg-cream-2">
+                      <div className="relative size-11 shrink-0 overflow-hidden rounded-xl bg-muted">
                         <ProductImage src={p.images[0]?.url} alt="" sizes="44px" />
                       </div>
-                      <span className="font-semibold hover:text-honey-dark">
+                      <span className="font-semibold hover:text-primary-strong">
                         {p.name}
-                        {p.featured && <Star className="ml-1.5 inline size-3.5 fill-honey text-honey" aria-label="Featured" />}
+                        {p.featured && <Star className="ml-1.5 inline size-3.5 fill-rating text-rating" aria-label="Featured" />}
                       </span>
                     </Link>
                   </Td>
@@ -106,7 +106,7 @@ export default async function AdminProductsPage({ searchParams }: PageProps<"/ad
                     <Badge variant={STATUS_TONE[p.status]}>{p.status.toLowerCase()}</Badge>
                   </Td>
                   <Td className="text-right tabular-nums">{formatPrice(p.minPrice)}</Td>
-                  <Td className={cn("text-right tabular-nums", low && "font-semibold text-clay")}>{stock}</Td>
+                  <Td className={cn("text-right tabular-nums", low && "font-semibold text-destructive")}>{stock}</Td>
                   <Td className="text-right text-muted-foreground tabular-nums">{p.soldCount}</Td>
                 </tr>
               );

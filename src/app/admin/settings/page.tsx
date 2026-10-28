@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { Palette } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { SettingsSection } from "@/components/admin/store-forms";
 import { PageHeader, Panel } from "@/components/admin/ui";
 import { Badge } from "@/components/ui/badge";
@@ -26,7 +29,17 @@ export default async function SettingsPage() {
   ];
   return (
     <>
-      <PageHeader title="Settings" description="Business details used across the store, emails and invoices." />
+      <PageHeader
+        title="Settings"
+        description="Business details used across the store, emails and invoices."
+        actions={
+          <Button asChild variant="subtle" size="sm">
+            <Link href="/admin/appearance">
+              <Palette /> Theme &amp; dark mode
+            </Link>
+          </Button>
+        }
+      />
       <SettingsSection
         settingsKey="store"
         title="Store"

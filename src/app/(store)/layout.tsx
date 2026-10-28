@@ -4,7 +4,7 @@ import { SiteHeader } from "@/components/store/site-header";
 export default function StoreLayout({ children }: LayoutProps<"/">) {
   return (
     <>
-      <a href="#main" className="sr-only z-50 rounded-full bg-ink px-4 py-2 text-white focus:not-sr-only focus:fixed focus:top-3 focus:left-3">
+      <a href="#main" className="sr-only z-50 rounded-full bg-inverse px-4 py-2 text-inverse-foreground focus:not-sr-only focus:fixed focus:top-3 focus:left-3">
         Skip to content
       </a>
       <SiteHeader />

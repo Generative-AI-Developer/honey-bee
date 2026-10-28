@@ -56,7 +56,7 @@ export function ReviewForm({ productId, productName }: { productId: string; prod
                   onMouseEnter={() => setHover(n)}
                   onClick={() => setRating(n)}
                 >
-                  <Star className={cn("size-8", (hover || rating) >= n ? "fill-honey text-honey" : "text-[#e3d6bf]")} />
+                  <Star className={cn("size-8", (hover || rating) >= n ? "fill-rating text-rating" : "text-rating-empty")} />
                 </button>
               ))}
             </div>
@@ -70,7 +70,7 @@ export function ReviewForm({ productId, productName }: { productId: string; prod
             <Textarea id="review-body" name="body" required minLength={10} maxLength={2000} rows={5} placeholder="Taste, texture, packaging, delivery…" />
           </div>
           {error && (
-            <p className="text-sm text-clay" role="alert">
+            <p className="text-sm text-destructive" role="alert">
               {error}
             </p>
           )}

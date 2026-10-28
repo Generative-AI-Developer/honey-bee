@@ -98,7 +98,7 @@ export function CatalogFilters({
                   type="button"
                   aria-pressed={on}
                   onClick={() => toggleSize(s)}
-                  className={cn("rounded-full border-[1.5px] px-3.5 py-1.5 text-sm font-medium", on ? "border-ink bg-ink text-white" : "border-border bg-card hover:border-ink-2")}
+                  className={cn("rounded-full border-[1.5px] px-3.5 py-1.5 text-sm font-medium", on ? "border-inverse bg-inverse text-inverse-foreground" : "border-border bg-card hover:border-foreground-soft")}
                 >
                   {s}
                 </button>
@@ -119,11 +119,11 @@ export function CatalogFilters({
               onClick={() => update({ rating: rating === r ? null : r })}
               className="flex items-center gap-2.5 py-1 text-sm"
             >
-              <span className={cn("grid size-[18px] place-items-center rounded-[5px] border-[1.5px]", rating === r ? "border-ink bg-ink text-white" : "border-[#cdbda2]")}>
+              <span className={cn("grid size-[18px] place-items-center rounded-[5px] border-[1.5px]", rating === r ? "border-inverse bg-inverse text-inverse-foreground" : "border-input")}>
                 {rating === r && <Check className="size-3" />}
               </span>
-              <span className="text-honey">{"★".repeat(Number(r))}</span>
-              <span className="text-[#e3d6bf]">{"★".repeat(5 - Number(r))}</span>& up
+              <span className="text-rating">{"★".repeat(Number(r))}</span>
+              <span className="text-rating-empty">{"★".repeat(5 - Number(r))}</span>& up
             </button>
           ))}
         </div>
@@ -138,7 +138,7 @@ export function CatalogFilters({
 
       {qs && (
         <div className="border-t border-border py-4">
-          <Link href={basePath} className="text-sm font-semibold text-honey-dark">
+          <Link href={basePath} className="text-sm font-semibold text-primary-strong">
             Clear all filters
           </Link>
         </div>
@@ -150,7 +150,7 @@ export function CatalogFilters({
 function FilterBlock({ title, children, last }: { title: string; children: ReactNode; last?: boolean }) {
   return (
     <div className={cn("py-5", !last && "border-b border-border")}>
-      <h2 className="mb-3 font-sans text-xs font-semibold tracking-[0.08em] text-ink-2 uppercase">{title}</h2>
+      <h2 className="mb-3 font-sans text-xs font-semibold tracking-[0.08em] text-foreground-soft uppercase">{title}</h2>
       {children}
     </div>
   );
@@ -158,8 +158,8 @@ function FilterBlock({ title, children, last }: { title: string; children: React
 
 function CategoryLink({ href, active, label, count }: { href: string; active: boolean; label: string; count: number }) {
   return (
-    <Link href={href} aria-current={active ? "page" : undefined} className={cn("flex items-center gap-2.5 rounded-lg py-1.5 text-sm", active ? "font-semibold" : "text-ink-2 hover:text-foreground")}>
-      <span className={cn("grid size-[18px] place-items-center rounded-[5px] border-[1.5px]", active ? "border-ink bg-ink text-white" : "border-[#cdbda2]")}>
+    <Link href={href} aria-current={active ? "page" : undefined} className={cn("flex items-center gap-2.5 rounded-lg py-1.5 text-sm", active ? "font-semibold" : "text-foreground-soft hover:text-foreground")}>
+      <span className={cn("grid size-[18px] place-items-center rounded-[5px] border-[1.5px]", active ? "border-inverse bg-inverse text-inverse-foreground" : "border-input")}>
         {active && <Check className="size-3" />}
       </span>
       {label}
@@ -190,7 +190,7 @@ export function CatalogToolbar({ sortOptions, filters }: { sortOptions: { value:
             <SlidersHorizontal /> Filters{pills.length ? ` (${pills.length})` : ""}
           </Button>
         </SheetTrigger>
-        <SheetContent side="left" className="w-[88vw] max-w-sm overflow-y-auto bg-cream p-4">
+        <SheetContent side="left" className="w-[88vw] max-w-sm overflow-y-auto bg-background p-4">
           <SheetHeader className="px-1">
             <SheetTitle>Filters</SheetTitle>
           </SheetHeader>
@@ -203,7 +203,7 @@ export function CatalogToolbar({ sortOptions, filters }: { sortOptions: { value:
             key={p.key}
             type="button"
             onClick={() => update(p.key === "price" ? { min: null, max: null } : { [p.key]: null })}
-            className="inline-flex items-center gap-1.5 rounded-full bg-honey-light px-3 py-1 text-sm font-medium"
+            className="inline-flex items-center gap-1.5 rounded-full bg-accent px-3 py-1 text-sm font-medium"
             aria-label={`Remove filter ${p.label}`}
           >
             {p.label} <X className="size-3" />

@@ -27,7 +27,7 @@ export default async function ReturnsPage() {
               <div className="text-sm">
                 <div className="flex flex-wrap items-center gap-2">
                   <Badge variant={r.status === "REQUESTED" ? "warning" : r.status === "REJECTED" ? "destructive" : "info"}>{r.status.toLowerCase()}</Badge>
-                  <Link href={`/admin/orders/${r.order.id}`} className="font-semibold hover:text-honey-dark">
+                  <Link href={`/admin/orders/${r.order.id}`} className="font-semibold hover:text-primary-strong">
                     {orderNumber(r.order.number)}
                   </Link>
                   <span className="text-muted-foreground">
@@ -36,7 +36,7 @@ export default async function ReturnsPage() {
                 </div>
                 <p className="mt-1">
                   <b>{r.reason}</b>
-                  {r.details && <span className="text-ink-2">: {r.details}</span>}
+                  {r.details && <span className="text-foreground-soft">: {r.details}</span>}
                 </p>
               </div>
               <div className="sm:w-80">

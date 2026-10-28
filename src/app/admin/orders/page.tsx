@@ -75,7 +75,7 @@ export default async function AdminOrdersPage({ searchParams }: PageProps<"/admi
           <Link
             key={f.key}
             href={withParams("/admin/orders", sp, { filter: f.key || null, page: null })}
-            className={cn("rounded-full border px-3.5 py-1.5 text-sm font-medium", filterKey === f.key ? "border-ink bg-ink text-white" : "border-border bg-card hover:bg-muted")}
+            className={cn("rounded-full border px-3.5 py-1.5 text-sm font-medium", filterKey === f.key ? "border-inverse bg-inverse text-inverse-foreground" : "border-border bg-card hover:bg-muted")}
           >
             {f.label}
           </Link>
@@ -106,9 +106,9 @@ export default async function AdminOrdersPage({ searchParams }: PageProps<"/admi
           <tbody>
             {orders.length === 0 && <EmptyRow colSpan={6}>No orders match.</EmptyRow>}
             {orders.map((o) => (
-              <tr key={o.id} className="hover:bg-cream/60">
+              <tr key={o.id} className="hover:bg-muted/60">
                 <Td>
-                  <Link href={`/admin/orders/${o.id}`} className="font-semibold hover:text-honey-dark">
+                  <Link href={`/admin/orders/${o.id}`} className="font-semibold hover:text-primary-strong">
                     {orderNumber(o.number)}
                   </Link>
                   <span className="block text-xs text-muted-foreground">{o._count.items} items</span>

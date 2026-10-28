@@ -38,7 +38,7 @@ export function OrderDetail({ order, settings, paymentNotice, canRequestReturn }
           <h1 className="text-3xl lg:text-4xl">
             {order.status === "CANCELLED" ? "Order cancelled" : order.status === "DELIVERED" ? "Delivered. Enjoy!" : awaitingOnline ? "Complete your payment" : "Thank you for your order!"}
           </h1>
-          <p className="mt-1 text-ink-2">
+          <p className="mt-1 text-foreground-soft">
             Placed {fmtDate(order.createdAt)} · Confirmation sent to {order.email}
           </p>
         </div>
@@ -49,9 +49,9 @@ export function OrderDetail({ order, settings, paymentNotice, canRequestReturn }
       </div>
 
       {awaitingOnline && (
-        <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border-2 border-honey bg-honey-light px-5 py-4">
+        <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border-2 border-primary bg-accent text-accent-foreground px-5 py-4">
           <p className="flex items-center gap-2.5 text-sm">
-            <Clock className="size-5 text-honey-dark" />
+            <Clock className="size-5 text-primary-strong" />
             <span>
               Your order is reserved{order.expiresAt ? ` until ${order.expiresAt.toLocaleTimeString("en-PK", { hour: "numeric", minute: "2-digit" })}` : ""}. Complete the{" "}
               {PAYMENT_LABELS[order.paymentMethod]} payment to confirm it.
@@ -74,9 +74,9 @@ export function OrderDetail({ order, settings, paymentNotice, canRequestReturn }
               return (
                 <li key={s.status} className="relative flex gap-3 pb-5 sm:flex-col sm:items-center sm:pb-0 sm:text-center">
                   {i < TRACKING_STEPS.length - 1 && (
-                    <span className={cn("absolute top-5 left-[11px] h-full w-0.5 sm:top-[11px] sm:left-1/2 sm:h-0.5 sm:w-full", i < stepIndex ? "bg-sage" : "bg-border")} aria-hidden />
+                    <span className={cn("absolute top-5 left-[11px] h-full w-0.5 sm:top-[11px] sm:left-1/2 sm:h-0.5 sm:w-full", i < stepIndex ? "bg-success" : "bg-border")} aria-hidden />
                   )}
-                  <span className={cn("relative z-10 grid size-6 shrink-0 place-items-center rounded-full border-2", done ? "border-sage bg-sage text-white" : "border-border bg-card")}>
+                  <span className={cn("relative z-10 grid size-6 shrink-0 place-items-center rounded-full border-2", done ? "border-success bg-success text-card" : "border-border bg-card")}>
                     {done && <CheckCircle2 className="size-4" />}
                   </span>
                   <div className="sm:mt-2">
@@ -88,7 +88,7 @@ export function OrderDetail({ order, settings, paymentNotice, canRequestReturn }
             })}
           </ol>
           {order.status === "SHIPPED" && order.trackingNumber && (
-            <p className="mt-5 flex items-center gap-2 rounded-xl bg-sky-light px-4 py-3 text-sm text-sky">
+            <p className="mt-5 flex items-center gap-2 rounded-xl bg-info-soft px-4 py-3 text-sm text-info">
               <Truck className="size-4" /> Shipped with <b>{order.courier ?? "courier"}</b> · Tracking number <b className="font-mono">{order.trackingNumber}</b>
             </p>
           )}
@@ -96,7 +96,7 @@ export function OrderDetail({ order, settings, paymentNotice, canRequestReturn }
       )}
 
       {order.status === "CANCELLED" && order.cancelReason && (
-        <p className="rounded-2xl bg-clay-light px-5 py-4 text-sm text-clay">Reason: {order.cancelReason}</p>
+        <p className="rounded-2xl bg-destructive-soft px-5 py-4 text-sm text-destructive">Reason: {order.cancelReason}</p>
       )}
 
       <div className="grid items-start gap-6 lg:grid-cols-[1.4fr_1fr]">
@@ -105,11 +105,11 @@ export function OrderDetail({ order, settings, paymentNotice, canRequestReturn }
           <ul className="divide-y divide-border">
             {order.items.map((i) => (
               <li key={i.id} className="flex items-center gap-4 py-3">
-                <div className="relative size-16 shrink-0 overflow-hidden rounded-xl bg-cream-2">
+                <div className="relative size-16 shrink-0 overflow-hidden rounded-xl bg-muted">
                   <ProductImage src={i.imageUrl} alt="" sizes="64px" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <Link href={`/products/${i.productSlug}`} className="font-semibold hover:text-honey-dark">
+                  <Link href={`/products/${i.productSlug}`} className="font-semibold hover:text-primary-strong">
                     {i.productName}
                   </Link>
                   <p className="text-sm text-muted-foreground">
@@ -121,19 +121,19 @@ export function OrderDetail({ order, settings, paymentNotice, canRequestReturn }
             ))}
           </ul>
           <dl className="mt-3 grid grid-cols-[1fr_auto] gap-y-2 border-t border-border pt-4 text-sm">
-            <dt className="text-ink-2">Subtotal</dt>
+            <dt className="text-foreground-soft">Subtotal</dt>
             <dd className="text-right font-semibold">{formatPrice(order.subtotal)}</dd>
             {order.discountTotal > 0 && (
               <>
-                <dt className="text-ink-2">Discount{order.discountCode ? ` (${order.discountCode})` : ""}</dt>
-                <dd className="text-right font-semibold text-sage">−{formatPrice(order.discountTotal)}</dd>
+                <dt className="text-foreground-soft">Discount{order.discountCode ? ` (${order.discountCode})` : ""}</dt>
+                <dd className="text-right font-semibold text-success">−{formatPrice(order.discountTotal)}</dd>
               </>
             )}
-            <dt className="text-ink-2">Delivery</dt>
+            <dt className="text-foreground-soft">Delivery</dt>
             <dd className="text-right font-semibold">{order.shippingTotal ? formatPrice(order.shippingTotal) : "Free"}</dd>
             {order.codFee > 0 && (
               <>
-                <dt className="text-ink-2">COD fee</dt>
+                <dt className="text-foreground-soft">COD fee</dt>
                 <dd className="text-right font-semibold">{formatPrice(order.codFee)}</dd>
               </>
             )}
@@ -145,7 +145,7 @@ export function OrderDetail({ order, settings, paymentNotice, canRequestReturn }
         <div className="grid gap-6">
           <section className="card-surface grid gap-4 p-5 text-sm sm:p-6">
             <div className="flex gap-3">
-              <MapPin className="mt-0.5 size-5 shrink-0 text-honey-dark" />
+              <MapPin className="mt-0.5 size-5 shrink-0 text-primary-strong" />
               <div>
                 <b className="block">Delivery address</b>
                 {address.fullName} · {address.phone}
@@ -156,14 +156,14 @@ export function OrderDetail({ order, settings, paymentNotice, canRequestReturn }
               </div>
             </div>
             <div className="flex gap-3">
-              <Package className="mt-0.5 size-5 shrink-0 text-honey-dark" />
+              <Package className="mt-0.5 size-5 shrink-0 text-primary-strong" />
               <div>
                 <b className="block">Delivery</b>
                 {order.shippingMethodName}
               </div>
             </div>
             <div className="flex gap-3">
-              <CreditCard className="mt-0.5 size-5 shrink-0 text-honey-dark" />
+              <CreditCard className="mt-0.5 size-5 shrink-0 text-primary-strong" />
               <div>
                 <b className="block">Payment</b>
                 {PAYMENT_LABELS[order.paymentMethod]} · {pay.label}
@@ -172,24 +172,24 @@ export function OrderDetail({ order, settings, paymentNotice, canRequestReturn }
           </section>
 
           {needsReceipt && (
-            <section className="grid gap-3 rounded-2xl border-2 border-honey bg-honey-light p-5 text-sm sm:p-6">
+            <section className="grid gap-3 rounded-2xl border-2 border-primary bg-accent text-accent-foreground p-5 text-sm sm:p-6">
               <h2 className="text-xl">Bank transfer details</h2>
               <p>
                 Please transfer <b>{formatPrice(order.total)}</b> and quote <b>{orderNumber(order.number)}</b> as the reference.
               </p>
               <dl className="grid grid-cols-[120px_1fr] gap-y-1">
-                <dt className="text-ink-2">Bank</dt>
+                <dt className="text-foreground-soft">Bank</dt>
                 <dd className="font-semibold">{settings.bankTransfer.bankName}</dd>
-                <dt className="text-ink-2">Account title</dt>
+                <dt className="text-foreground-soft">Account title</dt>
                 <dd className="font-semibold">{settings.bankTransfer.accountTitle}</dd>
-                <dt className="text-ink-2">Account no.</dt>
+                <dt className="text-foreground-soft">Account no.</dt>
                 <dd className="font-mono font-semibold">{settings.bankTransfer.accountNumber}</dd>
-                <dt className="text-ink-2">IBAN</dt>
+                <dt className="text-foreground-soft">IBAN</dt>
                 <dd className="font-mono font-semibold break-all">{settings.bankTransfer.iban}</dd>
               </dl>
-              <p className="text-ink-2">{settings.bankTransfer.instructions}</p>
+              <p className="text-foreground-soft">{settings.bankTransfer.instructions}</p>
               {latestPayment?.receiptUrl ? (
-                <p className="flex items-center gap-2 font-semibold text-sage">
+                <p className="flex items-center gap-2 font-semibold text-success">
                   <CheckCircle2 className="size-4" /> Receipt uploaded. We&apos;ll confirm shortly.
                 </p>
               ) : (
@@ -202,7 +202,7 @@ export function OrderDetail({ order, settings, paymentNotice, canRequestReturn }
 
           {canRequestReturn && order.status === "DELIVERED" && !openReturn && <ReturnRequestForm orderId={order.id} days={settings.orders.returnWindowDays} />}
           {openReturn && (
-            <p className="rounded-2xl bg-sky-light px-5 py-4 text-sm text-sky">
+            <p className="rounded-2xl bg-info-soft px-5 py-4 text-sm text-info">
               Return request: <b>{openReturn.status.toLowerCase()}</b>
               {openReturn.adminNote ? `. ${openReturn.adminNote}` : ""}
             </p>
@@ -216,12 +216,12 @@ export function OrderDetail({ order, settings, paymentNotice, canRequestReturn }
 function PaymentNotice({ notice }: { notice?: string }) {
   if (!notice) return null;
   const map: Record<string, { tone: string; text: string; icon: typeof CheckCircle2 }> = {
-    success: { tone: "bg-sage-light text-sage", text: "Payment received. Your order is confirmed!", icon: CheckCircle2 },
-    review: { tone: "bg-honey-light text-[#8a5605]", text: "We've received your payment details and are confirming them. You'll get an email shortly.", icon: Clock },
-    pending: { tone: "bg-honey-light text-[#8a5605]", text: "We're waiting for confirmation from the payment provider. This page will update once it arrives.", icon: Clock },
-    cancelled: { tone: "bg-clay-light text-clay", text: "Payment was cancelled. You can try again below.", icon: AlertTriangle },
-    failed: { tone: "bg-clay-light text-clay", text: "Payment didn't go through. You can try again or choose another method.", icon: AlertTriangle },
-    error: { tone: "bg-clay-light text-clay", text: "We couldn't reach the payment provider. Please try again in a moment.", icon: AlertTriangle },
+    success: { tone: "bg-success-soft text-success", text: "Payment received. Your order is confirmed!", icon: CheckCircle2 },
+    review: { tone: "bg-warning-soft text-warning", text: "We've received your payment details and are confirming them. You'll get an email shortly.", icon: Clock },
+    pending: { tone: "bg-warning-soft text-warning", text: "We're waiting for confirmation from the payment provider. This page will update once it arrives.", icon: Clock },
+    cancelled: { tone: "bg-destructive-soft text-destructive", text: "Payment was cancelled. You can try again below.", icon: AlertTriangle },
+    failed: { tone: "bg-destructive-soft text-destructive", text: "Payment didn't go through. You can try again or choose another method.", icon: AlertTriangle },
+    error: { tone: "bg-destructive-soft text-destructive", text: "We couldn't reach the payment provider. Please try again in a moment.", icon: AlertTriangle },
   };
   const n = map[notice];
   if (!n) return null;

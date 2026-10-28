@@ -46,7 +46,7 @@ async function Results({ searchParams, category, basePath }: { searchParams: Sea
       <div className="grid place-items-center rounded-3xl border border-dashed border-border bg-card px-6 py-16 text-center">
         <SearchX className="mb-3 size-10 text-muted-foreground" aria-hidden />
         <h2 className="text-2xl">No honey matches that</h2>
-        <p className="mt-2 max-w-sm text-ink-2">{filter.q ? `We couldn't find anything for “${filter.q}”.` : "Try removing a filter or two."}</p>
+        <p className="mt-2 max-w-sm text-foreground-soft">{filter.q ? `We couldn't find anything for “${filter.q}”.` : "Try removing a filter or two."}</p>
         <Button asChild variant="outline" className="mt-6">
           <Link href={basePath}>Clear filters</Link>
         </Button>
@@ -100,7 +100,7 @@ async function Results({ searchParams, category, basePath }: { searchParams: Sea
 function PageLink({ href, children, active, disabled, label }: { href: string; children: React.ReactNode; active?: boolean; disabled?: boolean; label: string }) {
   const cls = cn(
     "grid size-10 place-items-center rounded-full border border-border bg-card text-sm font-semibold",
-    active && "border-ink bg-ink text-white",
+    active && "border-inverse bg-inverse text-inverse-foreground",
     disabled && "pointer-events-none opacity-40",
   );
   if (disabled) return <span className={cls} aria-hidden>{children}</span>;

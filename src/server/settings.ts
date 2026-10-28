@@ -2,6 +2,7 @@ import "server-only";
 import { cacheLife, cacheTag } from "next/cache";
 import { z } from "zod";
 import { db } from "@/lib/db";
+import { COLOR_MODES, DEFAULT_THEME, THEME_IDS } from "@/lib/themes";
 
 // Business settings editable in Admin → Settings. Each key is validated and merged
 // over defaults, so a missing or partially-filled row never breaks the store.
@@ -39,6 +40,11 @@ export const settingsSchemas = {
     instagram: z.string().max(200),
     youtube: z.string().max(200),
   }),
+  // Global colour scheme for the whole site (Admin → Appearance)
+  appearance: z.object({
+    theme: z.enum(THEME_IDS),
+    mode: z.enum(COLOR_MODES),
+  }),
 } as const;
 
 export type SettingsKey = keyof typeof settingsSchemas;
@@ -64,6 +70,7 @@ export const defaultSettings: Settings = {
   },
   orders: { paymentWindowMinutes: 60, returnWindowDays: 7 },
   social: { facebook: "", instagram: "", youtube: "" },
+  appearance: { ...DEFAULT_THEME },
 };
 
 export async function getSettings(): Promise<Settings> {

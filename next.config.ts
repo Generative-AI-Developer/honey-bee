@@ -34,6 +34,9 @@ const nextConfig: NextConfig = {
   output: "standalone",
   poweredByHeader: false,
   turbopack: {
+    // Pin the project root: a stray package-lock.json in a parent folder otherwise makes
+    // Turbopack watch too widely (it then reacts to its own dev log and reload-loops).
+    root: import.meta.dirname,
     rules: {
       "*.css": {
         loaders: ["@tailwindcss/turbopack"],

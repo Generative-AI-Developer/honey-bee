@@ -12,7 +12,7 @@ export default function ErrorPage({ error, reset }: { error: Error & { digest?: 
     <main className="grid min-h-[60vh] place-items-center px-4 py-16 text-center">
       <div className="grid justify-items-center gap-4">
         <h1 className="text-4xl">Something went wrong</h1>
-        <p className="max-w-md text-ink-2">Sorry, we hit a sticky patch. Please try again; if it keeps happening, contact us on WhatsApp.</p>
+        <p className="max-w-md text-foreground-soft">Sorry, we hit a sticky patch. Please try again; if it keeps happening, contact us on WhatsApp.</p>
         {error.digest && <p className="text-xs text-muted-foreground">Reference: {error.digest}</p>}
         <div className="flex gap-3">
           <Button onClick={reset}>Try again</Button>

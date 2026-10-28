@@ -27,19 +27,19 @@ export default async function HelpPage() {
         <ol className="grid gap-4">
           {STEPS.map((s, i) => (
             <li key={s.title} className="flex gap-4">
-              <span className="grid size-8 shrink-0 place-items-center rounded-full bg-honey font-bold">{i + 1}</span>
+              <span className="grid size-8 shrink-0 place-items-center rounded-full bg-primary font-bold text-primary-foreground">{i + 1}</span>
               <div>
-                <Link href={s.href} className="font-semibold hover:text-honey-dark">
+                <Link href={s.href} className="font-semibold hover:text-primary-strong">
                   {s.title} →
                 </Link>
-                <p className="text-sm text-ink-2">{s.text}</p>
+                <p className="text-sm text-foreground-soft">{s.text}</p>
               </div>
             </li>
           ))}
         </ol>
       </Panel>
       <Panel title="Daily routine">
-        <ul className="list-disc space-y-1 pl-5 text-sm text-ink-2">
+        <ul className="list-disc space-y-1 pl-5 text-sm text-foreground-soft">
           <li>Open Orders → <b>Needs action</b>: confirm new orders and verify bank-transfer receipts.</li>
           <li>When a parcel is handed to the courier, mark it <b>Shipped</b> and add the tracking number. The customer is emailed automatically.</li>
           <li>Approve new reviews and handle return requests.</li>

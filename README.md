@@ -14,6 +14,7 @@ Built with **Next.js 16** (App Router, Cache Components), **TypeScript**, **Tail
 | Customers | Sign-up with email verification, Google sign-in (optional), password reset, order history & tracking, cancellation, return requests, address book |
 | Admin | Sales dashboard, orders (status flow, courier tracking, invoices, CSV export), products & images, categories, inventory with audit log, customers & roles, review moderation, discount codes, banners & pages, shipping zones, returns, reports, settings |
 | Emails | Verification, password reset, order confirmation, status updates (with tracking), returns, new-order alerts to the owner |
+| Themes | Three colour schemes (Golden / Champagne, Indigo / Violet, Midnight / Electric Blue), each with light and dark mode, chosen in Admin → Appearance with live preview; applies to the whole site for every visitor |
 | SEO | Clean URLs, per-page metadata, Product/Breadcrumb/Organization structured data, sitemap.xml, robots.txt |
 | Security | Server-side validation (Zod) and role checks on every action, atomic stock reservation, signed payment callbacks, rate limiting, CSP and security headers, open-redirect protection |
 

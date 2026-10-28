@@ -37,10 +37,10 @@ export default async function InventoryPage({ searchParams }: PageProps<"/admin/
     <>
       <PageHeader title="Inventory" description={`${totalUnits.toLocaleString()} jars in stock · ${lowCount} low-stock alerts. Every change is logged.`} />
       <div className="flex flex-wrap items-center gap-2">
-        <Link href={withParams("/admin/inventory", sp, { low: null })} className={cn("rounded-full border px-3.5 py-1.5 text-sm font-medium", !lowOnly ? "border-ink bg-ink text-white" : "border-border bg-card")}>
+        <Link href={withParams("/admin/inventory", sp, { low: null })} className={cn("rounded-full border px-3.5 py-1.5 text-sm font-medium", !lowOnly ? "border-inverse bg-inverse text-inverse-foreground" : "border-border bg-card")}>
           All
         </Link>
-        <Link href={withParams("/admin/inventory", sp, { low: "1" })} className={cn("rounded-full border px-3.5 py-1.5 text-sm font-medium", lowOnly ? "border-ink bg-ink text-white" : "border-border bg-card")}>
+        <Link href={withParams("/admin/inventory", sp, { low: "1" })} className={cn("rounded-full border px-3.5 py-1.5 text-sm font-medium", lowOnly ? "border-inverse bg-inverse text-inverse-foreground" : "border-border bg-card")}>
           Low stock ({lowCount})
         </Link>
         <form className="ml-auto flex gap-2" action="/admin/inventory">
@@ -69,9 +69,9 @@ export default async function InventoryPage({ searchParams }: PageProps<"/admin/
             {rows.map((v) => {
               const low = v.stock <= v.lowStockThreshold;
               return (
-                <tr key={v.id} className="hover:bg-cream/60">
+                <tr key={v.id} className="hover:bg-muted/60">
                   <Td>
-                    <Link href={`/admin/products/${v.product.id}`} className="font-semibold hover:text-honey-dark">
+                    <Link href={`/admin/products/${v.product.id}`} className="font-semibold hover:text-primary-strong">
                       {v.product.name}
                     </Link>
                     <span className="ml-1.5 text-muted-foreground">· {v.name}</span>
@@ -82,7 +82,7 @@ export default async function InventoryPage({ searchParams }: PageProps<"/admin/
                     )}
                   </Td>
                   <Td className="font-mono text-xs">{v.sku}</Td>
-                  <Td className={cn("text-right font-semibold tabular-nums", v.stock === 0 ? "text-clay" : low && "text-[#8a5605]")}>{v.stock}</Td>
+                  <Td className={cn("text-right font-semibold tabular-nums", v.stock === 0 ? "text-destructive" : low && "text-warning")}>{v.stock}</Td>
                   <Td className="text-right text-muted-foreground tabular-nums">{v.lowStockThreshold}</Td>
                   <Td className="text-right">
                     <StockAdjuster variantId={v.id} stock={v.stock} />
@@ -115,7 +115,7 @@ export default async function InventoryPage({ searchParams }: PageProps<"/admin/
                   {REASON_LABEL[m.reason]}
                   {m.note && <span className="text-muted-foreground"> · {m.note}</span>}
                 </Td>
-                <Td className={cn("text-right font-semibold tabular-nums", m.delta > 0 ? "text-sage" : "text-clay")}>
+                <Td className={cn("text-right font-semibold tabular-nums", m.delta > 0 ? "text-success" : "text-destructive")}>
                   {m.delta > 0 ? "+" : ""}
                   {m.delta}
                 </Td>

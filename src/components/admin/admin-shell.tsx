@@ -13,6 +13,7 @@ import {
   LogOut,
   Menu,
   Package,
+  Palette,
   RotateCcw,
   Settings,
   Star,
@@ -41,6 +42,7 @@ const NAV = [
   { href: "/admin/content", label: "Banners & pages", icon: ImageIcon },
   { href: "/admin/shipping", label: "Shipping zones", icon: Truck },
   { href: "/admin/reports", label: "Reports", icon: BarChart3 },
+  { href: "/admin/appearance", label: "Appearance", icon: Palette, adminOnly: true },
   { href: "/admin/settings", label: "Settings", icon: Settings, adminOnly: true },
 ];
 
@@ -59,11 +61,11 @@ function NavLinks({ role, counts, onNavigate }: { role: string; counts: Counts; 
             aria-current={active ? "page" : undefined}
             className={cn(
               "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors",
-              active ? "bg-[#3d2c18] text-white shadow-[inset_3px_0_var(--color-honey)]" : "text-[#d9c9ae] hover:bg-[#35261a] hover:text-white",
+              active ? "bg-chrome-hover text-chrome-foreground shadow-[inset_3px_0_var(--chrome-accent)]" : "text-chrome-muted hover:bg-chrome-hover hover:text-chrome-foreground",
             )}
           >
             <Icon className="size-[18px]" /> {label}
-            {n > 0 && <span className="ml-auto rounded-full bg-honey px-2 text-[11px] font-bold text-ink">{n}</span>}
+            {n > 0 && <span className="ml-auto rounded-full bg-primary px-2 text-[11px] font-bold text-primary-foreground">{n}</span>}
           </Link>
         );
       })}
@@ -73,15 +75,15 @@ function NavLinks({ role, counts, onNavigate }: { role: string; counts: Counts; 
 
 export function AdminSidebar({ role, counts, className }: { role: string; counts: Counts; className?: string }) {
   return (
-    <aside className={cn("sticky top-0 h-screen print:hidden flex-col gap-2 overflow-y-auto bg-ink px-3.5 py-5", className)}>
+    <aside className={cn("sticky top-0 h-screen print:hidden flex-col gap-2 overflow-y-auto bg-chrome px-3.5 py-5 text-chrome-foreground", className)}>
       <Logo inverted href="/admin" className="px-2.5 text-[1.375rem]" />
-      <span className="mx-3 mt-1 mb-4 text-[11px] font-semibold tracking-[0.14em] text-honey uppercase">Admin</span>
+      <span className="mx-3 mt-1 mb-4 text-[11px] font-semibold tracking-[0.14em] text-chrome-accent uppercase">Admin</span>
       <NavLinks role={role} counts={counts} />
-      <div className="mt-auto grid gap-1 border-t border-[#4a3a27] pt-3">
-        <Link href="/" className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm text-[#d9c9ae] hover:text-white">
+      <div className="mt-auto grid gap-1 border-t border-chrome-border pt-3">
+        <Link href="/" className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm text-chrome-muted hover:text-chrome-foreground">
           <ExternalLink className="size-4" /> View store
         </Link>
-        <Link href="/admin/help" className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm text-[#d9c9ae] hover:text-white">
+        <Link href="/admin/help" className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm text-chrome-muted hover:text-chrome-foreground">
           <FileText className="size-4" /> Setup guide
         </Link>
       </div>
@@ -97,7 +99,7 @@ export function AdminTopbar({ user, counts }: { user: { name: string; role: stri
         <SheetTrigger className="grid size-10 place-items-center rounded-full hover:bg-muted lg:hidden" aria-label="Open admin menu">
           <Menu className="size-5" />
         </SheetTrigger>
-        <SheetContent side="left" className="w-72 bg-ink p-4 text-white">
+        <SheetContent side="left" className="w-72 border-chrome-border bg-chrome p-4 text-chrome-foreground">
           <SheetTitle className="sr-only">Admin menu</SheetTitle>
           <Logo inverted href="/admin" className="mb-4 px-2" />
           <NavLinks role={user.role} counts={counts} />
@@ -107,14 +109,14 @@ export function AdminTopbar({ user, counts }: { user: { name: string; role: stri
         <label className="sr-only" htmlFor="admin-search">
           Search orders
         </label>
-        <input id="admin-search" name="q" placeholder="Search orders by number, phone or email…" className="h-10 w-full rounded-full border-[1.5px] border-border bg-cream px-4 text-sm outline-none focus:border-ring" />
+        <input id="admin-search" name="q" placeholder="Search orders by number, phone or email…" className="h-10 w-full rounded-full border-[1.5px] border-border bg-background px-4 text-sm outline-none focus:border-ring" />
       </form>
       <div className="ml-auto flex items-center gap-3">
         <div className="hidden text-right text-sm sm:block">
           <b className="block leading-tight">{user.name}</b>
           <span className="text-xs text-muted-foreground capitalize">{user.role.toLowerCase()}</span>
         </div>
-        <div className="grid size-10 place-items-center rounded-full bg-honey text-sm font-bold">{initials(user.name)}</div>
+        <div className="grid size-10 place-items-center rounded-full bg-primary text-sm font-bold text-primary-foreground">{initials(user.name)}</div>
         <button
           type="button"
           aria-label="Sign out"

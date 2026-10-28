@@ -9,7 +9,7 @@ import { Stars } from "@/components/store/stars";
 export function ProductCard({ product, priority }: { product: Card; priority?: boolean }) {
   return (
     <article className="group card-surface flex flex-col overflow-hidden">
-      <Link href={`/products/${product.slug}`} className="relative block aspect-square overflow-hidden bg-cream-2" aria-label={product.name}>
+      <Link href={`/products/${product.slug}`} className="relative block aspect-square overflow-hidden bg-muted" aria-label={product.name}>
         <ProductImage
           src={product.image?.url}
           alt={product.image?.alt ?? product.name}
@@ -31,7 +31,7 @@ export function ProductCard({ product, priority }: { product: Card; priority?: b
       <div className="flex flex-1 flex-col gap-1 p-3 sm:p-4">
         {product.origin && <p className="truncate text-[0.7rem] font-medium tracking-[0.08em] text-muted-foreground uppercase">{product.origin}</p>}
         <h3 className="text-base leading-snug sm:text-lg">
-          <Link href={`/products/${product.slug}`} className="hover:text-honey-dark">
+          <Link href={`/products/${product.slug}`} className="hover:text-primary-strong">
             {product.name}
           </Link>
         </h3>
@@ -63,7 +63,7 @@ export function ProductGridSkeleton({ count = 8, columns = 4 }: { count?: number
     <div className={columns === 3 ? "grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3" : "grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4"}>
       {Array.from({ length: count }).map((_, i) => (
         <div key={i} className="card-surface overflow-hidden">
-          <div className="aspect-square animate-pulse bg-cream-2" />
+          <div className="aspect-square animate-pulse bg-muted" />
           <div className="space-y-2 p-4">
             <div className="h-3 w-1/3 animate-pulse rounded bg-muted" />
             <div className="h-5 w-3/4 animate-pulse rounded bg-muted" />

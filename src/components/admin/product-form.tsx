@@ -121,7 +121,7 @@ export function ProductForm({ initial, categories, images = [], isAdmin }: { ini
             </Button>
           }
         >
-          {err("variants") && <p className="text-sm text-clay">{err("variants")}</p>}
+          {err("variants") && <p className="text-sm text-destructive">{err("variants")}</p>}
           <div className="grid gap-3">
             {v.variants.map((x, i) => (
               <div key={x.id ?? `new-${i}`} className={cn("grid grid-cols-2 gap-3 rounded-xl border border-border p-3 sm:grid-cols-3", !x.isActive && "opacity-60")}>
@@ -193,7 +193,7 @@ export function ProductForm({ initial, categories, images = [], isAdmin }: { ini
           <Field label="Tags" hint="bestseller, new, limited, premium, gift show as badges.">
             <div className="flex flex-wrap gap-1.5">
               {v.tags.map((t) => (
-                <button key={t} type="button" onClick={() => set("tags", v.tags.filter((x) => x !== t))} className="inline-flex items-center gap-1 rounded-full bg-honey-light px-2.5 py-1 text-xs font-semibold">
+                <button key={t} type="button" onClick={() => set("tags", v.tags.filter((x) => x !== t))} className="inline-flex items-center gap-1 rounded-full bg-accent px-2.5 py-1 text-xs font-semibold">
                   {t} <X className="size-3" />
                 </button>
               ))}
@@ -216,7 +216,7 @@ export function ProductForm({ initial, categories, images = [], isAdmin }: { ini
             {saving && <Loader2 className="animate-spin" />} {v.id ? "Save changes" : "Create product"}
           </Button>
           {v.id && v.status === "ACTIVE" && (
-            <Link href={`/products/${v.slug}`} target="_blank" className="text-center text-sm font-semibold text-honey-dark">
+            <Link href={`/products/${v.slug}`} target="_blank" className="text-center text-sm font-semibold text-primary-strong">
               View in store ↗
             </Link>
           )}
@@ -243,9 +243,9 @@ function ImageManager({ productId, images, uploading, startUpload }: { productId
     <Card title="Images" description="JPG, PNG or WebP up to 5 MB. The first image is the main photo.">
       <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {images.map((img, i) => (
-          <li key={img.id} className="group relative aspect-square overflow-hidden rounded-xl border border-border bg-cream-2">
+          <li key={img.id} className="group relative aspect-square overflow-hidden rounded-xl border border-border bg-muted">
             <ProductImage src={img.url} alt={img.alt} sizes="160px" />
-            {i === 0 && <span className="absolute top-2 left-2 rounded-full bg-ink px-2 py-0.5 text-[10px] font-bold text-white">MAIN</span>}
+            {i === 0 && <span className="absolute top-2 left-2 rounded-full bg-inverse px-2 py-0.5 text-[10px] font-bold text-inverse-foreground">MAIN</span>}
             <div className="absolute inset-x-0 bottom-0 flex justify-end gap-1 bg-gradient-to-t from-black/50 p-1.5 opacity-0 transition-opacity group-focus-within:opacity-100 group-hover:opacity-100">
               {i > 0 && (
                 <Button type="button" size="icon-xs" variant="subtle" disabled={busy} aria-label="Make main image" onClick={() => startBusy(async () => void (await updateImageMeta({ imageId: img.id, alt: img.alt, makePrimary: true })))}>
@@ -265,13 +265,13 @@ function ImageManager({ productId, images, uploading, startUpload }: { productId
                   })
                 }
               >
-                <Trash2 className="text-clay" />
+                <Trash2 className="text-destructive" />
               </Button>
             </div>
           </li>
         ))}
         <li>
-          <label className={cn("grid aspect-square cursor-pointer place-items-center rounded-xl border-2 border-dashed border-border text-center text-sm text-muted-foreground hover:border-ink-2", uploading && "pointer-events-none opacity-60")}>
+          <label className={cn("grid aspect-square cursor-pointer place-items-center rounded-xl border-2 border-dashed border-border text-center text-sm text-muted-foreground hover:border-foreground-soft", uploading && "pointer-events-none opacity-60")}>
             <span className="grid justify-items-center gap-1">
               {uploading ? <Loader2 className="size-6 animate-spin" /> : <Upload className="size-6" />}
               {uploading ? "Uploading…" : "Add images"}
@@ -350,7 +350,7 @@ function Field({ label, hint, error, children, compact }: { label: string; hint?
         <span className={cn("text-sm font-medium", compact && "text-xs text-muted-foreground")}>{label}</span>
         {children}
       </label>
-      {error ? <p className="text-xs text-clay">{error}</p> : hint ? <p className="text-xs text-muted-foreground">{hint}</p> : null}
+      {error ? <p className="text-xs text-destructive">{error}</p> : hint ? <p className="text-xs text-muted-foreground">{hint}</p> : null}
     </div>
   );
 }

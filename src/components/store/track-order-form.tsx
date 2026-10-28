@@ -34,7 +34,7 @@ export function TrackOrderForm() {
         <Input id="contact" name="contact" required autoComplete="email" />
       </div>
       {error && (
-        <p className="rounded-xl bg-clay-light px-3 py-2 text-sm text-clay" role="alert">
+        <p className="rounded-xl bg-destructive-soft px-3 py-2 text-sm text-destructive" role="alert">
           {error}
         </p>
       )}

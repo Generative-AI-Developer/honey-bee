@@ -120,7 +120,7 @@ export function CheckoutForm({
       <div className="grid gap-5">
         <Section title="Contact">
           {user ? (
-            <p className="text-ink-2">
+            <p className="text-foreground-soft">
               Signed in as <b className="text-foreground">{user.email}</b>
             </p>
           ) : (
@@ -130,7 +130,7 @@ export function CheckoutForm({
               </Field>
               <p className="text-sm text-muted-foreground">
                 Have an account?{" "}
-                <Link href="/login?next=/checkout" className="font-semibold text-honey-dark">
+                <Link href="/login?next=/checkout" className="font-semibold text-primary-strong">
                   Log in
                 </Link>{" "}
                 for faster checkout.
@@ -147,7 +147,7 @@ export function CheckoutForm({
                   key={a.id}
                   type="button"
                   onClick={() => setAddr({ fullName: a.fullName, phone: a.phone, line1: a.line1, line2: a.line2 ?? "", city: a.city, province: a.province, postalCode: a.postalCode ?? "" })}
-                  className={cn("rounded-xl border-[1.5px] px-3 py-2 text-left text-sm", addr.line1 === a.line1 && addr.city === a.city ? "border-ink bg-honey-light" : "border-border bg-card hover:border-ink-2")}
+                  className={cn("rounded-xl border-[1.5px] px-3 py-2 text-left text-sm", addr.line1 === a.line1 && addr.city === a.city ? "border-foreground bg-accent text-accent-foreground" : "border-border bg-card hover:border-foreground-soft")}
                 >
                   <b className="block">{a.city}</b>
                   <span className="text-muted-foreground">{a.line1.slice(0, 32)}</span>
@@ -209,12 +209,12 @@ export function CheckoutForm({
             <div className="grid gap-2.5" role="radiogroup" aria-label="Delivery method">
               {quote.shippingOptions.map((o) => (
                 <Choice key={o.id} selected={rateId === o.id} onSelect={() => setRateId(o.id)} title={`${o.name}${o.carrier ? ` · ${o.carrier}` : ""}`} subtitle={`${o.minDays === 0 ? "Same day" : o.minDays}–${o.maxDays} working days`}>
-                  <b className={o.fee === 0 ? "text-sage" : ""}>{o.fee === 0 ? "Free" : formatPrice(o.fee)}</b>
+                  <b className={o.fee === 0 ? "text-success" : ""}>{o.fee === 0 ? "Free" : formatPrice(o.fee)}</b>
                 </Choice>
               ))}
             </div>
           )}
-          {err("rateId") && <p className="text-sm text-clay">{err("rateId")}</p>}
+          {err("rateId") && <p className="text-sm text-destructive">{err("rateId")}</p>}
         </Section>
 
         <Section title="Payment">
@@ -226,12 +226,12 @@ export function CheckoutForm({
               const Icon = METHOD_ICON[m.id];
               return (
                 <Choice key={m.id} selected={method === m.id} onSelect={() => setMethod(m.id)} title={m.label} subtitle={m.id === "COD" && codFee ? `${m.description} ${formatPrice(codFee)} COD fee.` : m.description}>
-                  <Icon className="size-5 text-ink-2" aria-hidden />
+                  <Icon className="size-5 text-foreground-soft" aria-hidden />
                 </Choice>
               );
             })}
           </div>
-          {methods.length === 0 && <p className="text-sm text-clay">No payment methods are available. Please contact us.</p>}
+          {methods.length === 0 && <p className="text-sm text-destructive">No payment methods are available. Please contact us.</p>}
           <Field label="Order notes (optional)">
             <Textarea rows={2} maxLength={500} value={note} onChange={(e) => setNote(e.target.value)} placeholder="Delivery instructions, gift message…" />
           </Field>
@@ -243,11 +243,11 @@ export function CheckoutForm({
         <ul className="grid gap-3">
           {lines.map((l) => (
             <li key={l.id} className="flex items-center gap-3 text-sm">
-              <div className="relative size-14 shrink-0 rounded-lg bg-cream-2">
+              <div className="relative size-14 shrink-0 rounded-lg bg-muted">
                 <div className="absolute inset-0 overflow-hidden rounded-lg">
                   <ProductImage src={l.image?.url} alt="" sizes="56px" />
                 </div>
-                <span className="absolute -top-1.5 -right-1.5 grid size-5 place-items-center rounded-full bg-ink text-[11px] text-white">{l.quantity}</span>
+                <span className="absolute -top-1.5 -right-1.5 grid size-5 place-items-center rounded-full bg-inverse text-[11px] text-inverse-foreground">{l.quantity}</span>
               </div>
               <div className="min-w-0 flex-1">
                 <b className="block truncate">{l.productName}</b>
@@ -259,7 +259,7 @@ export function CheckoutForm({
         </ul>
 
         {quote.discount ? (
-          <div className="flex items-center justify-between rounded-xl bg-sage-light px-3 py-2 text-sm text-sage">
+          <div className="flex items-center justify-between rounded-xl bg-success-soft px-3 py-2 text-sm text-success">
             <span className="flex items-center gap-2">
               <Tag className="size-4" /> <b>{quote.discount.code}</b> applied
             </span>
@@ -280,19 +280,19 @@ export function CheckoutForm({
         )}
 
         <dl className={cn("grid grid-cols-[1fr_auto] gap-y-2 border-t border-border pt-4 text-[0.95rem] transition-opacity", quoting && "opacity-60")}>
-          <dt className="text-ink-2">Subtotal</dt>
+          <dt className="text-foreground-soft">Subtotal</dt>
           <dd className="text-right font-semibold">{formatPrice(t.subtotal)}</dd>
           {t.discountTotal > 0 && (
             <>
-              <dt className="text-ink-2">Discount</dt>
-              <dd className="text-right font-semibold text-sage">−{formatPrice(t.discountTotal)}</dd>
+              <dt className="text-foreground-soft">Discount</dt>
+              <dd className="text-right font-semibold text-success">−{formatPrice(t.discountTotal)}</dd>
             </>
           )}
-          <dt className="text-ink-2">Delivery</dt>
-          <dd className="text-right font-semibold">{!addr.city ? "—" : t.shippingTotal === 0 ? <span className="text-sage">Free</span> : formatPrice(t.shippingTotal)}</dd>
+          <dt className="text-foreground-soft">Delivery</dt>
+          <dd className="text-right font-semibold">{!addr.city ? "—" : t.shippingTotal === 0 ? <span className="text-success">Free</span> : formatPrice(t.shippingTotal)}</dd>
           {t.codFee > 0 && (
             <>
-              <dt className="text-ink-2">COD fee</dt>
+              <dt className="text-foreground-soft">COD fee</dt>
               <dd className="text-right font-semibold">{formatPrice(t.codFee)}</dd>
             </>
           )}
@@ -301,7 +301,7 @@ export function CheckoutForm({
         </dl>
 
         {formError && (
-          <p className="rounded-xl bg-clay-light px-3 py-2 text-sm text-clay" role="alert">
+          <p className="rounded-xl bg-destructive-soft px-3 py-2 text-sm text-destructive" role="alert">
             {formError}
           </p>
         )}
@@ -339,10 +339,10 @@ function Field({ label, error, hint, children, className }: { label: string; err
     <div className={cn("grid gap-1.5", className)}>
       {/* the label wraps its control so they're associated for screen readers and clicks */}
       <label className="grid gap-1.5">
-        <span className="text-sm font-medium text-ink-2">{label}</span>
+        <span className="text-sm font-medium text-foreground-soft">{label}</span>
         {children}
       </label>
-      {error ? <p className="text-xs text-clay">{error}</p> : hint ? <p className="text-xs text-muted-foreground">{hint}</p> : null}
+      {error ? <p className="text-xs text-destructive">{error}</p> : hint ? <p className="text-xs text-muted-foreground">{hint}</p> : null}
     </div>
   );
 }
@@ -354,9 +354,9 @@ function Choice({ selected, onSelect, title, subtitle, children }: { selected: b
       role="radio"
       aria-checked={selected}
       onClick={onSelect}
-      className={cn("flex items-center gap-3.5 rounded-2xl border-[1.5px] px-4 py-3.5 text-left transition-colors", selected ? "border-2 border-ink bg-[#fffbf2]" : "border-border hover:border-ink-2")}
+      className={cn("flex items-center gap-3.5 rounded-2xl border-[1.5px] px-4 py-3.5 text-left transition-colors", selected ? "border-2 border-foreground bg-accent/40" : "border-border hover:border-foreground-soft")}
     >
-      <span className={cn("size-5 shrink-0 rounded-full border-[1.5px] border-[#cdbda2]", selected && "border-[6px] border-ink")} aria-hidden />
+      <span className={cn("size-5 shrink-0 rounded-full border-[1.5px] border-input", selected && "border-[6px] border-foreground")} aria-hidden />
       <span className="grid flex-1">
         <b className="text-[0.95rem]">{title}</b>
         <span className="text-sm text-muted-foreground">{subtitle}</span>

@@ -38,7 +38,7 @@ function PasswordInput(props: React.ComponentProps<"input">) {
 
 function ErrorText({ children }: { children: React.ReactNode }) {
   return (
-    <p className="rounded-xl bg-clay-light px-3 py-2 text-sm text-clay" role="alert">
+    <p className="rounded-xl bg-destructive-soft px-3 py-2 text-sm text-destructive" role="alert">
       {children}
     </p>
   );
@@ -125,7 +125,7 @@ export function LoginForm({ next: rawNext, googleEnabled }: { next?: string; goo
           id="password"
           label="Password"
           action={
-            <Link href="/forgot-password" className="text-sm font-medium text-honey-dark">
+            <Link href="/forgot-password" className="text-sm font-medium text-primary-strong">
               Forgot password?
             </Link>
           }
@@ -134,11 +134,11 @@ export function LoginForm({ next: rawNext, googleEnabled }: { next?: string; goo
         </Field>
         {error && <ErrorText>{error}</ErrorText>}
         {unverified && (
-          <div className="rounded-xl bg-honey-light px-3 py-2.5 text-sm">
+          <div className="rounded-xl bg-accent px-3 py-2.5 text-sm">
             Please confirm your email first. Check your inbox for the link.{" "}
             <button
               type="button"
-              className="font-semibold text-honey-dark underline"
+              className="font-semibold text-primary-strong underline"
               onClick={async () => {
                 const { error } = await authClient.sendVerificationEmail({ email, callbackURL: next });
                 if (error) toast.error("Couldn't send the email. Please try again later.");
@@ -166,9 +166,9 @@ export function RegisterForm({ googleEnabled, next: rawNext }: { googleEnabled: 
   if (sentTo) {
     return (
       <div className="grid justify-items-center gap-3 text-center">
-        <MailCheck className="size-12 text-sage" />
+        <MailCheck className="size-12 text-success" />
         <h2 className="text-xl">Check your inbox</h2>
-        <p className="text-ink-2">
+        <p className="text-foreground-soft">
           We sent a confirmation link to <b>{sentTo}</b>. Click it to activate your account.
         </p>
       </div>
@@ -243,7 +243,7 @@ export function ForgotPasswordForm() {
   const [sent, setSent] = useState(false);
   const [pending, start] = useTransition();
   if (sent) {
-    return <p className="rounded-xl bg-sage-light px-4 py-3 text-sage">If an account exists for that email, we&apos;ve sent a link to reset your password.</p>;
+    return <p className="rounded-xl bg-success-soft px-4 py-3 text-success">If an account exists for that email, we&apos;ve sent a link to reset your password.</p>;
   }
   return (
     <form

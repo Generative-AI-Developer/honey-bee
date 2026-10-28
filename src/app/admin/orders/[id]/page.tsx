@@ -79,7 +79,7 @@ export default async function AdminOrderPage({ params }: PageProps<"/admin/order
             <ul className="divide-y divide-border">
               {order.items.map((i) => (
                 <li key={i.id} className="flex items-center gap-4 py-3 text-sm">
-                  <div className="relative size-12 shrink-0 overflow-hidden rounded-lg bg-cream-2">
+                  <div className="relative size-12 shrink-0 overflow-hidden rounded-lg bg-muted">
                     <ProductImage src={i.imageUrl} alt="" sizes="48px" />
                   </div>
                   <div className="min-w-0 flex-1">
@@ -136,11 +136,11 @@ export default async function AdminOrderPage({ params }: PageProps<"/admin/order
           <Panel title="Customer">
             <div className="grid gap-1 text-sm">
               <b>{order.customerName}</b>
-              <a href={`mailto:${order.email}`} className="text-honey-dark">
+              <a href={`mailto:${order.email}`} className="text-primary-strong">
                 {order.email}
               </a>
               <a href={`tel:${order.phone}`}>{order.phone}</a>
-              <a href={`https://wa.me/${order.phone.replace(/\D/g, "")}`} target="_blank" rel="noreferrer" className="text-sage">
+              <a href={`https://wa.me/${order.phone.replace(/\D/g, "")}`} target="_blank" rel="noreferrer" className="text-success">
                 WhatsApp customer
               </a>
               {order.user ? (
@@ -168,7 +168,7 @@ export default async function AdminOrderPage({ params }: PageProps<"/admin/order
                 )}
               </p>
             </div>
-            {order.customerNote && <p className="mt-4 rounded-xl bg-honey-light p-3 text-sm">“{order.customerNote}”</p>}
+            {order.customerNote && <p className="mt-4 rounded-xl bg-accent p-3 text-sm">“{order.customerNote}”</p>}
           </Panel>
 
           <Panel title="Payment" description={PAYMENT_LABELS[order.paymentMethod]}>
@@ -180,12 +180,12 @@ export default async function AdminOrderPage({ params }: PageProps<"/admin/order
                 </div>
               ))}
               {latest?.receiptUrl && (
-                <a href={latest.receiptUrl} target="_blank" rel="noreferrer" className="font-semibold text-honey-dark underline">
+                <a href={latest.receiptUrl} target="_blank" rel="noreferrer" className="font-semibold text-primary-strong underline">
                   View uploaded receipt
                 </a>
               )}
               {order.paymentMethod === "EASYPAISA" && canVerify && (
-                <p className="rounded-xl bg-honey-light p-3 text-xs">Check this payment in the Easypaisa merchant portal before confirming.</p>
+                <p className="rounded-xl bg-accent p-3 text-xs">Check this payment in the Easypaisa merchant portal before confirming.</p>
               )}
             </div>
             <PaymentControls orderId={order.id} canVerify={canVerify} canRefund={staff.role === "ADMIN" && order.paymentStatus === "PAID" && (order.status === "CANCELLED" || order.status === "RETURNED")} />
@@ -200,7 +200,7 @@ export default async function AdminOrderPage({ params }: PageProps<"/admin/order
                       <Badge variant="info">{r.status.toLowerCase()}</Badge>
                       <b>{r.reason}</b>
                     </div>
-                    {r.details && <p className="text-ink-2">{r.details}</p>}
+                    {r.details && <p className="text-foreground-soft">{r.details}</p>}
                     {r.adminNote && <p className="text-muted-foreground">Note: {r.adminNote}</p>}
                     <ReturnControls returnId={r.id} status={r.status} />
                   </li>

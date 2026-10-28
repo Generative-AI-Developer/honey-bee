@@ -42,7 +42,7 @@ export function ProfileForm({ name, phone, email }: { name: string; phone: strin
           <Input id="phone" name="phone" type="tel" defaultValue={phone ?? ""} placeholder="0300 1234567" autoComplete="tel" />
         </div>
       </div>
-      {error && <p className="text-sm text-clay">{error}</p>}
+      {error && <p className="text-sm text-destructive">{error}</p>}
       <Button type="submit" disabled={pending} className="justify-self-start">
         {pending && <Loader2 className="animate-spin" />} Save changes
       </Button>
@@ -82,7 +82,7 @@ export function ChangePasswordForm() {
           <Input id="new" name="new" type="password" required minLength={8} autoComplete="new-password" />
         </div>
       </div>
-      {error && <p className="text-sm text-clay">{error}</p>}
+      {error && <p className="text-sm text-destructive">{error}</p>}
       <Button type="submit" variant="secondary" disabled={pending} className="justify-self-start">
         {pending && <Loader2 className="animate-spin" />} Update password
       </Button>

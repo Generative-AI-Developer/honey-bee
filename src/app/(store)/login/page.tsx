@@ -19,7 +19,7 @@ export default function LoginPage({ searchParams }: PageProps<"/login">) {
       footer={
         <>
           New to Honey Bee?{" "}
-          <Link href="/register" className="font-semibold text-honey-dark">
+          <Link href="/register" className="font-semibold text-primary-strong">
             Create an account
           </Link>
         </>

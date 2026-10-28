@@ -54,7 +54,7 @@ export function StatusControls({ orderId, next, courier, trackingNumber }: { ord
       </div>
       {to && (
         <form
-          className="grid gap-3 rounded-xl bg-cream p-4"
+          className="grid gap-3 rounded-xl bg-background p-4"
           onSubmit={(e) => {
             e.preventDefault();
             run(() => updateOrderStatus({ orderId, to: to as never, note: note || undefined, courier: c || undefined, trackingNumber: t || undefined, notify }), () => {

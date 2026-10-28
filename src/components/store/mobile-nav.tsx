@@ -16,7 +16,7 @@ export function MobileNav({ nav, categories }: { nav: NavItem[]; categories: Nav
       <SheetTrigger className="grid size-10 place-items-center rounded-full hover:bg-muted lg:hidden" aria-label="Open menu">
         <Menu className="size-5" />
       </SheetTrigger>
-      <SheetContent side="left" className="w-[86vw] max-w-sm bg-cream p-0">
+      <SheetContent side="left" className="w-[86vw] max-w-sm bg-background p-0">
         <SheetHeader className="border-b border-border p-5">
           <SheetTitle asChild>
             <div onClick={close}>
@@ -42,7 +42,7 @@ export function MobileNav({ nav, categories }: { nav: NavItem[]; categories: Nav
           <p className="eyebrow mt-6 mb-2 px-3">Categories</p>
           <nav aria-label="Categories" className="grid gap-1">
             {categories.map((c) => (
-              <Link key={c.href} href={c.href} onClick={close} className="rounded-xl px-3 py-2 text-ink-2 hover:bg-muted">
+              <Link key={c.href} href={c.href} onClick={close} className="rounded-xl px-3 py-2 text-foreground-soft hover:bg-muted">
                 {c.label}
               </Link>
             ))}

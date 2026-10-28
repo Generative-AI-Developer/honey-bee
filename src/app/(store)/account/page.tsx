@@ -26,7 +26,7 @@ export default async function AccountOverviewPage() {
       <section className="card-surface p-5 sm:p-6">
         <div className="mb-2 flex items-center justify-between">
           <h2 className="text-xl">Recent orders</h2>
-          <Link href="/account/orders" className="text-sm font-semibold text-honey-dark">
+          <Link href="/account/orders" className="text-sm font-semibold text-primary-strong">
             View all
           </Link>
         </div>
@@ -39,7 +39,7 @@ export default async function AccountOverviewPage() {
 function Stat({ icon: Icon, label, value, href }: { icon: typeof Package; label: string; value: string; href?: string }) {
   const inner = (
     <>
-      <Icon className="size-10 rounded-xl bg-honey-light p-2.5 text-honey-dark" />
+      <Icon className="size-10 rounded-xl bg-accent p-2.5 text-primary-strong" />
       <div>
         <span className="text-sm text-muted-foreground">{label}</span>
         <b className="block font-heading text-2xl">{value}</b>
@@ -47,7 +47,7 @@ function Stat({ icon: Icon, label, value, href }: { icon: typeof Package; label:
     </>
   );
   return href ? (
-    <Link href={href} className="card-surface flex items-center gap-4 p-5 hover:border-ink-2">
+    <Link href={href} className="card-surface flex items-center gap-4 p-5 hover:border-foreground-soft">
       {inner}
     </Link>
   ) : (

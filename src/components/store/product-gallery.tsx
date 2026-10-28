@@ -9,7 +9,7 @@ export function ProductGallery({ images, name, badge }: { images: { url: string;
   const current = images[index];
   return (
     <div>
-      <div className="relative aspect-square overflow-hidden rounded-3xl bg-cream-2">
+      <div className="relative aspect-square overflow-hidden rounded-3xl bg-muted">
         <ProductImage src={current?.url} alt={current?.alt ?? name} sizes="(max-width: 1024px) 100vw, 50vw" priority />
         {badge && <div className="absolute top-4 left-4">{badge}</div>}
       </div>
@@ -23,7 +23,7 @@ export function ProductGallery({ images, name, badge }: { images: { url: string;
               aria-selected={i === index}
               aria-label={`Show image ${i + 1}`}
               onClick={() => setIndex(i)}
-              className={cn("relative aspect-square overflow-hidden rounded-2xl border-2 bg-cream-2", i === index ? "border-ink" : "border-transparent hover:border-border")}
+              className={cn("relative aspect-square overflow-hidden rounded-2xl border-2 bg-muted", i === index ? "border-foreground" : "border-transparent hover:border-border")}
             >
               <ProductImage src={img.url} alt="" sizes="120px" />
             </button>

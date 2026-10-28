@@ -8,18 +8,18 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        // honey-gold call to action
+        // brand call to action (theme primary)
         default:
-          "bg-primary text-primary-foreground shadow-[0_6px_16px_-8px_rgba(201,127,6,0.8)] hover:bg-honey-dark hover:text-white",
-        // dark comb-brown
-        secondary: "bg-secondary text-secondary-foreground hover:bg-ink-2",
+          "bg-primary text-primary-foreground shadow-[0_6px_16px_-8px_color-mix(in_oklab,var(--primary)_80%,transparent)] hover:bg-primary/88",
+        // highest-contrast solid button (dark in light mode, light in dark mode)
+        secondary: "bg-inverse text-inverse-foreground hover:bg-inverse/85",
         outline:
           "border-[1.5px] border-foreground bg-transparent hover:bg-foreground hover:text-background aria-expanded:bg-muted",
         subtle: "border-border bg-card hover:bg-muted aria-expanded:bg-muted",
         ghost: "hover:bg-muted hover:text-foreground aria-expanded:bg-muted",
         destructive:
           "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20",
-        link: "rounded-none px-0 text-honey-dark underline-offset-4 hover:underline",
+        link: "rounded-none px-0 text-primary-strong underline-offset-4 hover:underline",
       },
       size: {
         default: "h-11 gap-2 px-5",

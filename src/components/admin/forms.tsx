@@ -33,7 +33,7 @@ export function CategoryEditor({ category, onDone }: { category: Category; onDon
   const { pending, run } = useAction();
   return (
     <form
-      className="grid gap-3 rounded-xl bg-cream p-4 sm:grid-cols-2"
+      className="grid gap-3 rounded-xl bg-background p-4 sm:grid-cols-2"
       onSubmit={(e) => {
         e.preventDefault();
         run(() => saveCategory({ ...c, id: c.id, slug: c.slug || undefined }), () => onDone?.());
@@ -96,7 +96,7 @@ export function CategoryRow({ category, productCount }: { category: Category & {
         <Pencil />
       </Button>
       <Button size="icon-sm" variant="ghost" disabled={pending} onClick={() => run(() => deleteCategory({ id: category.id }))} aria-label={`Delete ${category.name}`}>
-        <Trash2 className="text-clay" />
+        <Trash2 className="text-destructive" />
       </Button>
     </div>
   );
@@ -178,7 +178,7 @@ export function ReviewActions({ id, status, canDelete }: { id: string; status: s
         </Button>
       )}
       {canDelete && (
-        <Button size="sm" variant="ghost" className="text-clay" disabled={pending} onClick={() => run(() => deleteReview({ id }))}>
+        <Button size="sm" variant="ghost" className="text-destructive" disabled={pending} onClick={() => run(() => deleteReview({ id }))}>
           Delete
         </Button>
       )}

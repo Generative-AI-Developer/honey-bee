@@ -13,7 +13,7 @@ export default async function ProfilePage() {
   return (
     <>
       <ProfileForm name={fresh?.name ?? user.name} phone={fresh?.phone ?? null} email={user.email} />
-      {hasPassword ? <ChangePasswordForm /> : <p className="card-surface p-5 text-sm text-ink-2">You sign in with Google, so there&apos;s no password to change.</p>}
+      {hasPassword ? <ChangePasswordForm /> : <p className="card-surface p-5 text-sm text-foreground-soft">You sign in with Google, so there&apos;s no password to change.</p>}
     </>
   );
 }
