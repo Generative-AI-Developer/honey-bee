@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Markdown } from "@/lib/markdown";
@@ -16,7 +17,15 @@ export async function generateMetadata({ params }: PageProps<"/[slug]">): Promis
   return { title: page.title, description: page.seoDescription ?? undefined, alternates: { canonical: `/${slug}` } };
 }
 
-export default async function ContentPage({ params }: PageProps<"/[slug]">) {
+export default function ContentPage({ params }: PageProps<"/[slug]">) {
+  return (
+    <Suspense fallback={<div className="container-page max-w-3xl py-16"><div className="h-96 animate-pulse rounded-2xl bg-card" /></div>}>
+      <Content params={params} />
+    </Suspense>
+  );
+}
+
+async function Content({ params }: Pick<PageProps<"/[slug]">, "params">) {
   const { slug } = await params;
   const page = await getPage(slug);
   if (!page) notFound();

@@ -4,6 +4,9 @@ import { AdminSidebar, AdminTopbar } from "@/components/admin/admin-shell";
 import { db } from "@/lib/db";
 import { requireStaff } from "@/server/auth";
 
+// Private, session-gated area: navigations may block on the server.
+export const instant = false;
+
 export const metadata: Metadata = { title: { default: "Admin", template: "%s · Admin" }, robots: { index: false, follow: false } };
 
 export default function AdminLayout({ children }: LayoutProps<"/admin">) {
@@ -24,7 +27,9 @@ async function AdminShell({ children }: { children: React.ReactNode }) {
   const counts = { orders: pendingOrders, reviews: pendingReviews, returns: openReturns };
   return (
     <div className="grid min-h-screen lg:grid-cols-[252px_1fr]">
-      <AdminSidebar role={user.role} counts={counts} className="hidden lg:flex" />
+      <div className="hidden bg-ink lg:block print:hidden">
+        <AdminSidebar role={user.role} counts={counts} className="flex" />
+      </div>
       <div className="min-w-0">
         <AdminTopbar user={{ name: user.name, role: user.role }} counts={counts} />
         <main className="mx-auto grid max-w-[1400px] gap-6 p-4 sm:p-6 lg:p-8">{children}</main>

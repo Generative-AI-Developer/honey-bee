@@ -4,6 +4,9 @@ import { AccountNav } from "@/components/account/account-nav";
 import { initials } from "@/lib/utils";
 import { requireUser } from "@/server/auth";
 
+// Private, session-gated area: navigations may block on the server.
+export const instant = false;
+
 export const metadata: Metadata = { title: "My account", robots: { index: false, follow: false } };
 
 export default function AccountLayout({ children }: LayoutProps<"/account">) {

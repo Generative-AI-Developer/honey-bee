@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -23,7 +24,15 @@ export async function generateMetadata({ params }: PageProps<"/category/[slug]">
   };
 }
 
-export default async function CategoryPage({ params, searchParams }: PageProps<"/category/[slug]">) {
+export default function CategoryPage({ params, searchParams }: PageProps<"/category/[slug]">) {
+  return (
+    <Suspense fallback={<div className="container-page py-10"><div className="h-[600px] animate-pulse rounded-2xl bg-card" /></div>}>
+      <Category params={params} searchParams={searchParams} />
+    </Suspense>
+  );
+}
+
+async function Category({ params, searchParams }: Pick<PageProps<"/category/[slug]">, "params" | "searchParams">) {
   const { slug } = await params;
   const category = await getCategoryBySlug(slug);
   if (!category) notFound();

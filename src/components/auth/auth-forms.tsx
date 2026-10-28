@@ -99,11 +99,17 @@ export function LoginForm({ next: rawNext, googleEnabled }: { next?: string; goo
           start(async () => {
             const { error } = await authClient.signIn.email({ email: String(fd.get("email")), password: String(fd.get("password")), rememberMe: true });
             if (error) {
-              if (error.code === "EMAIL_NOT_VERIFIED" || error.status === 403) {
+              if (error.code === "EMAIL_NOT_VERIFIED") {
                 setUnverified(true);
                 return;
               }
-              setError(error.status === 429 ? "Too many attempts. Please wait a minute and try again." : "Incorrect email or password.");
+              setError(
+                error.status === 429
+                  ? "Too many attempts. Please wait a minute and try again."
+                  : error.status === 401 || error.code === "INVALID_EMAIL_OR_PASSWORD"
+                    ? "Incorrect email or password."
+                    : "We couldn't log you in right now. Please try again.",
+              );
               return;
             }
             await mergeCartAfterLogin({});

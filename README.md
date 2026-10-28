@@ -21,6 +21,8 @@ Built with **Next.js 16** (App Router, Cache Components), **TypeScript**, **Tail
 
 Requirements: **Node.js 22+** and **PostgreSQL 16** (local or hosted).
 
+No admin rights to create a database user? `npm run db:dev` starts a private PostgreSQL 16 for development on `localhost:5433` (user/password/db `honeybee`) using the PostgreSQL already installed. Run it again after a reboot.
+
 ```bash
 # 1. Install
 npm install
@@ -34,6 +36,7 @@ npm run db:seed             # sample honey catalogue + admin account from SEED_A
 
 # 4. Run
 npm run dev                 # http://localhost:3000  ·  admin at /admin
+                            # (if port 3000 is taken: npx next dev -p 3001, and set NEXT_PUBLIC_SITE_URL/BETTER_AUTH_URL to match)
 ```
 
 In development, without `RESEND_API_KEY`, emails are not sent. They're printed in the terminal (including the verification link) and saved as HTML files in `.emails/`.
@@ -46,7 +49,7 @@ In development, without `RESEND_API_KEY`, emails are not sent. They're printed i
 | `npm run build` / `npm start` | Production build / run the production server |
 | `npm run typecheck` · `npm run lint` | Type and lint checks |
 | `npm test` | Unit tests (Vitest); `npx vitest run tests/unit/pricing.test.ts` runs one file |
-| `npm run test:e2e` | End-to-end tests (Playwright) against a running server |
+| `npm run test:e2e` | End-to-end tests (Playwright) against a running dev server: `E2E_BASE_URL=http://localhost:3001 E2E_CHROME_PATH=/usr/bin/google-chrome npm run test:e2e` (add `E2E_NO_EMAIL=1` against `next start`) |
 | `npm run db:migrate` | Create/apply migrations in development |
 | `npm run db:deploy` | Apply migrations in production |
 | `npm run db:seed` | Load sample data (safe to re-run) |

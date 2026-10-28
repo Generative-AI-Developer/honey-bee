@@ -5,7 +5,6 @@ import { Check, Loader2, Pencil, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
@@ -40,30 +39,30 @@ export function CategoryEditor({ category, onDone }: { category: Category; onDon
         run(() => saveCategory({ ...c, id: c.id, slug: c.slug || undefined }), () => onDone?.());
       }}
     >
-      <div className="grid gap-1.5">
-        <Label>Name</Label>
+      <label className="grid gap-1.5">
+        <span className="text-sm font-medium">Name</span>
         <Input value={c.name} onChange={(e) => setC({ ...c, name: e.target.value })} required />
-      </div>
-      <div className="grid gap-1.5">
-        <Label>URL slug</Label>
+      </label>
+      <label className="grid gap-1.5">
+        <span className="text-sm font-medium">URL slug</span>
         <Input value={c.slug} onChange={(e) => setC({ ...c, slug: e.target.value })} placeholder="auto" />
-      </div>
-      <div className="grid gap-1.5 sm:col-span-2">
-        <Label>Description</Label>
+      </label>
+      <label className="grid gap-1.5 sm:col-span-2">
+        <span className="text-sm font-medium">Description</span>
         <Textarea rows={2} value={c.description} onChange={(e) => setC({ ...c, description: e.target.value })} />
-      </div>
-      <div className="grid gap-1.5">
-        <Label>SEO title</Label>
+      </label>
+      <label className="grid gap-1.5">
+        <span className="text-sm font-medium">SEO title</span>
         <Input value={c.seoTitle} maxLength={70} onChange={(e) => setC({ ...c, seoTitle: e.target.value })} />
-      </div>
-      <div className="grid gap-1.5">
-        <Label>Sort order</Label>
+      </label>
+      <label className="grid gap-1.5">
+        <span className="text-sm font-medium">Sort order</span>
         <Input type="number" value={c.sortOrder} onChange={(e) => setC({ ...c, sortOrder: Number(e.target.value) })} />
-      </div>
-      <div className="grid gap-1.5 sm:col-span-2">
-        <Label>Meta description</Label>
+      </label>
+      <label className="grid gap-1.5 sm:col-span-2">
+        <span className="text-sm font-medium">Meta description</span>
         <Textarea rows={2} maxLength={170} value={c.seoDescription} onChange={(e) => setC({ ...c, seoDescription: e.target.value })} />
-      </div>
+      </label>
       <label className="flex items-center gap-2 text-sm">
         <Switch checked={c.isActive} onCheckedChange={(v) => setC({ ...c, isActive: v })} /> Visible in store
       </label>

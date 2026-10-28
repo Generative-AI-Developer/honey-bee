@@ -37,7 +37,29 @@ export async function generateMetadata({ params }: PageProps<"/products/[slug]">
   };
 }
 
-export default async function ProductPage({ params }: PageProps<"/products/[slug]">) {
+export default function ProductPage({ params }: PageProps<"/products/[slug]">) {
+  return (
+    <Suspense fallback={<ProductSkeleton />}>
+      <Product params={params} />
+    </Suspense>
+  );
+}
+
+function ProductSkeleton() {
+  return (
+    <div className="container-page grid gap-8 py-10 lg:grid-cols-[1.1fr_1fr] lg:gap-14" aria-busy="true">
+      <div className="aspect-square animate-pulse rounded-3xl bg-cream-2" />
+      <div className="grid content-start gap-4">
+        <div className="h-4 w-1/3 animate-pulse rounded bg-muted" />
+        <div className="h-12 w-3/4 animate-pulse rounded bg-muted" />
+        <div className="h-24 animate-pulse rounded-2xl bg-muted" />
+        <div className="h-14 animate-pulse rounded-full bg-muted" />
+      </div>
+    </div>
+  );
+}
+
+async function Product({ params }: Pick<PageProps<"/products/[slug]">, "params">) {
   const { slug } = await params;
   const product = await getProductBySlug(slug);
   if (!product) notFound();

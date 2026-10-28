@@ -162,8 +162,7 @@ async function searchProductIds(q: string): Promise<string[]> {
   const rows = await db.$queryRaw<{ id: string }[]>`
     SELECT p.id FROM "Product" p
     WHERE p.status = 'ACTIVE' AND (
-      to_tsvector('english', p.name || ' ' || coalesce(p."shortDescription", '') || ' ' || coalesce(p."floralSource", '') || ' ' || coalesce(p.origin, '') || ' ' || array_to_string(p.tags, ' '))
-        @@ websearch_to_tsquery('english', ${q})
+      hb_product_search(p.name, p."shortDescription", p."floralSource", p.origin, p.tags) @@ websearch_to_tsquery('english', ${q})
       OR p.name ILIKE ${"%" + q + "%"}
       OR p."floralSource" ILIKE ${"%" + q + "%"}
     )
@@ -306,6 +305,15 @@ export async function getHomeReviews(limit = 3) {
     select: { id: true, rating: true, body: true, verifiedPurchase: true, user: { select: { name: true } }, product: { select: { name: true, slug: true } } },
   });
   return rows.map((r) => ({ ...r, author: shortName(r.user.name) }));
+}
+
+/** Store-wide rating from approved reviews only. */
+export async function getStoreRating() {
+  "use cache";
+  cacheTag(tags.products);
+  cacheLife("hours");
+  const agg = await db.review.aggregate({ where: { status: "APPROVED" }, _avg: { rating: true }, _count: true });
+  return { average: agg._avg.rating ?? 0, count: agg._count };
 }
 
 export async function getBanners(placement: "ANNOUNCEMENT" | "HERO" | "PROMO") {

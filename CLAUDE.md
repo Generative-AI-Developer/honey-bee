@@ -13,13 +13,14 @@ npm run lint
 npm test                    # Vitest unit tests; one file: npx vitest run tests/unit/pricing.test.ts
 npm run test:e2e            # Playwright, against a running server
 npm run db:migrate          # prisma migrate dev; npm run db:seed loads sample data + admin
-npm run build               # requires a reachable database (cached catalog pages are prerendered)
+npm run build               # requires a reachable database; don't run during routine development (owner's preference), only before deploying
+E2E_BASE_URL=http://localhost:3001 E2E_CHROME_PATH=/usr/bin/google-chrome npx playwright test   # e2e vs dev server
 ```
 
 ## Fixed decisions (agreed with the owner; don't revisit without asking)
 
 - **Market:** Pakistan only, PKR, English only. **Money is integer paisa everywhere** (`src/lib/money.ts`). Admin forms take rupees and convert with `rupees()`.
-- **No Docker** anywhere. Dev DB: local PostgreSQL 16, `localhost:5432`, db/user `honeybee`. Production: hosted Postgres via `DATABASE_URL` (pooled) + `DIRECT_URL` (migrations).
+- **No Docker** anywhere. Dev DB: a private PostgreSQL 16 started with `npm run db:dev` on `localhost:5433` (db/user/password `honeybee`, data in `~/.local/share/honeybee-pg`; no sudo needed). Dev server runs on **port 3001** (`npx next dev -p 3001`) because another app uses 3000; `.env` URLs match. Production: hosted Postgres via `DATABASE_URL` (pooled) + `DIRECT_URL` (migrations).
 - **Hosting undecided:** stay host-agnostic (`output: "standalone"`, PM2 config `ecosystem.config.cjs`). Shared cPanel was judged unsuitable; a VPS is recommended.
 - **Payments:** COD, bank transfer, JazzCash, Easypaisa, Safepay, Stripe (off by default; Stripe doesn't onboard Pakistan-registered businesses).
 - Keep `.gitignore` updated when adding generated files/tools; never add a global `*.sql` ignore (migrations are committed).

@@ -14,8 +14,6 @@ export const metadata: Metadata = {
   applicationName: site.name,
   openGraph: { type: "website", siteName: site.name, locale: site.locale, url: site.url },
   twitter: { card: "summary_large_image" },
-  robots: { index: true, follow: true },
-  alternates: { canonical: "/" },
 };
 
 export const viewport: Viewport = {

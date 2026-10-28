@@ -5,7 +5,7 @@ export function BarList({ rows, format }: { rows: { label: string; value: number
   return (
     <ul className="grid gap-2.5">
       {rows.map((r) => (
-        <li key={r.label} className="grid grid-cols-[110px_1fr_auto] items-center gap-3 text-sm" title={`${r.label}: ${r.display ?? format?.(r.value) ?? r.value}`}>
+        <li key={r.label} className="grid grid-cols-[minmax(0,140px)_1fr_auto] items-center gap-3 text-sm" title={`${r.label}: ${r.display ?? format?.(r.value) ?? r.value}`}>
           <span className="truncate text-ink-2">{r.label}</span>
           <span className="h-2.5 overflow-hidden rounded-full bg-cream-2">
             <span className="block h-full rounded-full bg-honey-dark" style={{ width: `${(r.value / max) * 100}%` }} />

@@ -8,7 +8,6 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { ProductImage } from "@/components/store/product-image";
 import { formatPrice } from "@/lib/money";
@@ -338,8 +337,11 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 function Field({ label, error, hint, children, className }: { label: string; error?: string; hint?: string; children: React.ReactNode; className?: string }) {
   return (
     <div className={cn("grid gap-1.5", className)}>
-      <Label className="text-ink-2">{label}</Label>
-      {children}
+      {/* the label wraps its control so they're associated for screen readers and clicks */}
+      <label className="grid gap-1.5">
+        <span className="text-sm font-medium text-ink-2">{label}</span>
+        {children}
+      </label>
       {error ? <p className="text-xs text-clay">{error}</p> : hint ? <p className="text-xs text-muted-foreground">{hint}</p> : null}
     </div>
   );

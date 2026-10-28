@@ -7,7 +7,6 @@ import { GripVertical, Loader2, Plus, Star, Trash2, Upload, X } from "lucide-rea
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { ProductImage } from "@/components/store/product-image";
@@ -125,7 +124,7 @@ export function ProductForm({ initial, categories, images = [], isAdmin }: { ini
           {err("variants") && <p className="text-sm text-clay">{err("variants")}</p>}
           <div className="grid gap-3">
             {v.variants.map((x, i) => (
-              <div key={x.id ?? `new-${i}`} className={cn("grid gap-3 rounded-xl border border-border p-3 sm:grid-cols-[1fr_1.2fr_1fr_1fr_0.8fr_0.8fr_auto]", !x.isActive && "opacity-60")}>
+              <div key={x.id ?? `new-${i}`} className={cn("grid grid-cols-2 gap-3 rounded-xl border border-border p-3 sm:grid-cols-3", !x.isActive && "opacity-60")}>
                 <Field label="Size" compact error={err(`variants.${i}.name`)}>
                   <Input className="h-9" value={x.name} onChange={(e) => setVariant(i, { name: e.target.value })} placeholder="500g" />
                 </Field>
@@ -150,7 +149,8 @@ export function ProductForm({ initial, categories, images = [], isAdmin }: { ini
                 <Field label="Weight (g)" compact error={err(`variants.${i}.weightGrams`)}>
                   <Input className="h-9" inputMode="numeric" value={x.weightGrams} onChange={(e) => setVariant(i, { weightGrams: e.target.value.replace(/\D/g, "") })} placeholder="packed" />
                 </Field>
-                <div className="flex items-end gap-1 pb-0.5">
+                <div className="col-span-full flex items-center justify-end gap-2 border-t border-border pt-2 text-xs text-muted-foreground">
+                  <span className="mr-auto">{x.isDefault ? "Shown first" : ""}{!x.isActive ? " Not for sale" : ""}</span>
                   <Button type="button" size="icon-sm" variant={x.isDefault ? "default" : "ghost"} onClick={() => setVariant(i, { isDefault: true })} aria-label="Default size shown first" title="Default size">
                     <Star className={cn(x.isDefault && "fill-current")} />
                   </Button>
@@ -346,8 +346,10 @@ function Card({ title, description, actions, children }: { title: string; descri
 function Field({ label, hint, error, children, compact }: { label: string; hint?: string; error?: string; children: React.ReactNode; compact?: boolean }) {
   return (
     <div className="grid gap-1.5">
-      <Label className={cn(compact && "text-xs text-muted-foreground")}>{label}</Label>
-      {children}
+      <label className="grid gap-1.5">
+        <span className={cn("text-sm font-medium", compact && "text-xs text-muted-foreground")}>{label}</span>
+        {children}
+      </label>
       {error ? <p className="text-xs text-clay">{error}</p> : hint ? <p className="text-xs text-muted-foreground">{hint}</p> : null}
     </div>
   );

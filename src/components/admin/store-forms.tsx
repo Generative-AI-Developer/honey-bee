@@ -5,7 +5,6 @@ import { Loader2, Plus, Trash2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { useAction } from "@/components/admin/forms";
@@ -14,8 +13,10 @@ import { deleteBanner, deleteShippingZone, saveBanner, saveDiscount, savePage, s
 function F({ label, hint, children, className }: { label: string; hint?: string; children: React.ReactNode; className?: string }) {
   return (
     <div className={`grid gap-1.5 ${className ?? ""}`}>
-      <Label>{label}</Label>
-      {children}
+      <label className="grid gap-1.5">
+        <span className="text-sm font-medium">{label}</span>
+        {children}
+      </label>
       {hint && <p className="text-xs text-muted-foreground">{hint}</p>}
     </div>
   );

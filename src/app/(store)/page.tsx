@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, BadgeCheck, Banknote, Check, ChevronRight, Leaf, RotateCcw, ShieldCheck, Truck } from "lucide-react";
@@ -8,12 +9,14 @@ import { Stars } from "@/components/store/stars";
 import { JsonLd } from "@/components/seo/json-ld";
 import { formatPrice } from "@/lib/money";
 import { site } from "@/lib/site";
-import { getBanners, getCategories, getFeaturedProducts, getHomeReviews } from "@/server/queries/catalog";
+import { getBanners, getCategories, getFeaturedProducts, getHomeReviews, getStoreRating } from "@/server/queries/catalog";
 import { getFreeShippingThreshold } from "@/server/queries/shipping";
 import { getSettings } from "@/server/settings";
 
+export const metadata: Metadata = { alternates: { canonical: "/" } };
+
 export default async function HomePage() {
-  const [hero, promo, categories, bestsellers, reviews, freeOver, settings] = await Promise.all([
+  const [hero, promo, categories, bestsellers, reviews, freeOver, settings, storeRating] = await Promise.all([
     getBanners("HERO"),
     getBanners("PROMO"),
     getCategories(),
@@ -21,6 +24,7 @@ export default async function HomePage() {
     getHomeReviews(3),
     getFreeShippingThreshold(),
     getSettings(),
+    getStoreRating(),
   ]);
   const heroBanner = hero[0];
   const promoBanner = promo[0];
@@ -59,18 +63,15 @@ export default async function HomePage() {
                 <Link href="/about">Our story</Link>
               </Button>
             </div>
-            <div className="flex items-center gap-3 text-sm">
-              <div className="flex" aria-hidden>
-                {["from-[#D9A86B] to-[#8A5A2B]", "from-[#E9C89A] to-[#A4743F]", "from-[#C08A57] to-[#6B4220]", "from-honey to-honey"].map((g, i) => (
-                  <span key={g} className={`size-9 rounded-full border-[3px] border-cream bg-gradient-to-br ${g} ${i ? "-ml-2.5" : ""}`} />
-                ))}
-              </div>
-              <div>
-                <Stars rating={5} /> <b>4.9/5</b>
-                <br />
-                <span className="text-muted-foreground">from 2,300+ happy families</span>
-              </div>
-            </div>
+            {/* Social proof comes only from real, approved reviews; hidden until there are some. */}
+            {storeRating.count > 0 && (
+              <a href="#reviews" className="flex items-center gap-3 text-sm">
+                <Stars rating={storeRating.average} />
+                <span>
+                  <b>{storeRating.average.toFixed(1)}/5</b> <span className="text-muted-foreground">from {storeRating.count.toLocaleString()} customer reviews</span>
+                </span>
+              </a>
+            )}
           </div>
           <div className="relative order-1 h-[300px] sm:h-[400px] lg:order-2 lg:h-[520px]" aria-hidden>
             <div className="absolute top-1/2 left-1/2 size-[280px] -translate-1/2 rounded-full bg-gradient-to-br from-[#f6c55a] to-[#e39a12] sm:size-[380px] lg:size-[440px]" />
@@ -207,7 +208,7 @@ export default async function HomePage() {
 
       {/* Reviews */}
       {reviews.length > 0 && (
-        <section className="bg-cream-2 py-14 lg:py-20">
+        <section id="reviews" className="bg-cream-2 py-14 lg:py-20">
           <div className="container-page">
             <div className="mb-8 text-center">
               <span className="eyebrow mb-2">Reviews</span>
