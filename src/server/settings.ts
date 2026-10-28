@@ -40,6 +40,16 @@ export const settingsSchemas = {
     instagram: z.string().max(200),
     youtube: z.string().max(200),
   }),
+  // Video shown in the home page banner (Admin → Banners & pages)
+  homeVideo: z.object({
+    enabled: z.boolean(),
+    src: z.string().max(500).refine((v) => v === "" || v.startsWith("/") || v.startsWith("https://res.cloudinary.com/"), "Video must be uploaded to this site."),
+    poster: z.string().max(500).refine((v) => v === "" || v.startsWith("/") || v.startsWith("https://res.cloudinary.com/"), "Invalid cover image."),
+    caption: z.string().trim().max(120),
+    speed: z.union([z.literal(0.25), z.literal(0.5), z.literal(0.75), z.literal(1)]),
+    // combo: full screen on phones + right half on computers · half: half on computers, large block on phones · frame: small framed video
+    layout: z.enum(["combo", "half", "frame"]),
+  }),
   // Global colour scheme for the whole site (Admin → Appearance)
   appearance: z.object({
     theme: z.enum(THEME_IDS),
@@ -70,6 +80,14 @@ export const defaultSettings: Settings = {
   },
   orders: { paymentWindowMinutes: 60, returnWindowDays: 7 },
   social: { facebook: "", instagram: "", youtube: "" },
+  homeVideo: {
+    enabled: true,
+    src: "/videos/home-page-video.mp4",
+    poster: "/videos/home-page-video-poster.jpg",
+    caption: "Straight from our honey shop",
+    speed: 0.5,
+    layout: "combo",
+  },
   appearance: { ...DEFAULT_THEME },
 };
 

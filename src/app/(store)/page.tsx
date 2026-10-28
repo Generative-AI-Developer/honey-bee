@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, BadgeCheck, Banknote, Check, ChevronRight, Leaf, RotateCcw, ShieldCheck, Truck } from "lucide-react";
+import { ArrowRight, BadgeCheck, Banknote, Check, ChevronRight, RotateCcw, ShieldCheck, Truck } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { HomeHero } from "@/components/store/home-hero";
 import { HoneyJar } from "@/components/store/honey-jar";
 import { ProductGrid } from "@/components/store/product-card";
 import { Stars } from "@/components/store/stars";
@@ -42,52 +43,17 @@ export default async function HomePage() {
       />
 
       {/* Hero */}
-      <section className="overflow-hidden bg-[radial-gradient(1200px_500px_at_80%_20%,var(--hero-glow)_0,transparent_60%)]">
-        <div className="container-page grid items-center gap-6 py-8 lg:min-h-[600px] lg:grid-cols-[1.05fr_1fr] lg:gap-10 lg:py-12">
-          <div className="order-2 lg:order-1">
-            <span className="eyebrow mb-3">
-              <Leaf className="size-4" aria-hidden /> Fresh harvest now in stock
-            </span>
-            <h1 className="mb-5 text-[2.6rem] leading-[1.05] sm:text-5xl lg:text-[3.5rem]">{heroBanner?.title ?? site.tagline}</h1>
-            <p className="max-w-xl text-base text-foreground-soft sm:text-lg">
-              {heroBanner?.subtitle ??
-                "Unheated, unfiltered and lab-tested. Sourced directly from beekeepers in Karak, Swat and Kashmir and delivered to your door anywhere in Pakistan."}
-            </p>
-            <div className="my-7 flex flex-wrap gap-3 lg:my-8">
-              <Button asChild size="lg" className="flex-1 sm:flex-none">
-                <Link href={heroBanner?.ctaHref ?? "/shop"}>
-                  {heroBanner?.ctaLabel ?? "Shop all honey"} <ChevronRight />
-                </Link>
-              </Button>
-              <Button asChild size="lg" variant="outline" className="flex-1 sm:flex-none">
-                <Link href="/about">Our story</Link>
-              </Button>
-            </div>
-            {/* Social proof comes only from real, approved reviews; hidden until there are some. */}
-            {storeRating.count > 0 && (
-              <a href="#reviews" className="flex items-center gap-3 text-sm">
-                <Stars rating={storeRating.average} />
-                <span>
-                  <b>{storeRating.average.toFixed(1)}/5</b> <span className="text-muted-foreground">from {storeRating.count.toLocaleString()} customer reviews</span>
-                </span>
-              </a>
-            )}
-          </div>
-          <div className="relative order-1 h-[300px] sm:h-[400px] lg:order-2 lg:h-[520px]" aria-hidden>
-            <div className="absolute top-1/2 left-1/2 size-[280px] -translate-1/2 rounded-full bg-gradient-to-br from-hero-from to-hero-to sm:size-[380px] lg:size-[440px]" />
-            <div className="comb-pattern absolute top-1/2 left-1/2 size-[280px] -translate-1/2 rounded-full opacity-35 sm:size-[380px] lg:size-[440px]" />
-            <HoneyJar tone="forest" label="FOREST" className="absolute bottom-6 left-[4%] w-[26%] lg:bottom-12 lg:left-[8%]" />
-            <HoneyJar tone="sidr" label="SIDR" className="absolute bottom-4 left-1/2 w-[36%] -translate-x-1/2 lg:bottom-9" />
-            <HoneyJar tone="acacia" label="ACACIA" className="absolute right-[4%] bottom-6 w-[26%] lg:right-[8%] lg:bottom-12" />
-            <div className="absolute top-2 right-0 grid gap-0.5 rounded-2xl bg-card px-4 py-3 text-xs shadow-card lg:top-10 lg:text-sm">
-              <b className="flex items-center gap-1.5 text-success">
-                <ShieldCheck className="size-4" /> Lab-tested
-              </b>
-              <span>Every batch, report included</span>
-            </div>
-          </div>
-        </div>
-      </section>
+      <HomeHero
+        title={heroBanner?.title ?? site.tagline}
+        subtitle={
+          heroBanner?.subtitle ??
+          "Unheated, unfiltered and lab-tested. Sourced directly from beekeepers in Karak, Swat and Kashmir and delivered to your door anywhere in Pakistan."
+        }
+        ctaLabel={heroBanner?.ctaLabel ?? "Shop all honey"}
+        ctaHref={heroBanner?.ctaHref ?? "/shop"}
+        rating={storeRating}
+        video={settings.homeVideo}
+      />
 
       {/* Trust strip */}
       <section className="border-y border-border bg-card" aria-label="Why shop with us">

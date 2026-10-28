@@ -10,6 +10,7 @@ const csp = [
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https://res.cloudinary.com",
   "font-src 'self' data:",
+  "media-src 'self' blob: https://res.cloudinary.com",
   "connect-src 'self'",
   "frame-src 'self' https://*.getsafepay.com https://checkout.stripe.com",
   "form-action 'self' https://*.jazzcash.com.pk https://*.easypaisa.com.pk https://*.getsafepay.com https://checkout.stripe.com",

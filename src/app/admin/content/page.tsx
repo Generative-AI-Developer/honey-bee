@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { HomeVideoSettings } from "@/components/admin/home-video-settings";
 import { BannerEditorToggle, PageEditorToggle } from "@/components/admin/store-forms";
 import { PageHeader, Panel } from "@/components/admin/ui";
 import { Badge } from "@/components/ui/badge";
 import { db } from "@/lib/db";
 import { requireStaff } from "@/server/auth";
+import { getSettings } from "@/server/settings";
 
 // Private, session-gated page: navigation may wait for the server.
 export const instant = false;
@@ -14,11 +16,17 @@ export const metadata: Metadata = { title: "Banners & pages" };
 const d = (v: Date | null) => (v ? v.toISOString().slice(0, 10) : "");
 
 export default async function ContentPage() {
-  await requireStaff();
-  const [banners, pages] = await Promise.all([db.banner.findMany({ where: { placement: { not: "ANNOUNCEMENT" } }, orderBy: [{ placement: "asc" }, { sortOrder: "asc" }] }), db.page.findMany({ orderBy: { title: "asc" } })]);
+  const staff = await requireStaff();
+  const [settings, banners, pages] = await Promise.all([
+    getSettings(),db.banner.findMany({ where: { placement: { not: "ANNOUNCEMENT" } }, orderBy: [{ placement: "asc" }, { sortOrder: "asc" }] }), db.page.findMany({ orderBy: { title: "asc" } })]);
   return (
     <>
       <PageHeader title="Banners & pages" description="The announcement bar text is in Settings → Store." />
+      {staff.role === "ADMIN" && (
+        <Panel title="Home page video" description="Plays silently on a loop in the top banner of the home page (slow motion by default); visitors can turn the sound on.">
+          <HomeVideoSettings initial={settings.homeVideo} />
+        </Panel>
+      )}
       <Panel
         title="Home page banners"
         description="The first active banner of each type is shown. Schedule seasonal offers with dates."

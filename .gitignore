@@ -65,3 +65,6 @@ Thumbs.db
 .cache/
 .turbo/
 .eslintcache
+
+# raw media sources (the site serves the copies in public/videos)
+/video/
