@@ -10,10 +10,11 @@ import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { ProductImage } from "@/components/store/product-image";
+import { newVariant, type VariantFormValues } from "@/lib/product-defaults";
 import { cn, slugify } from "@/lib/utils";
 import { archiveProduct, deleteProductImage, saveProduct, updateImageMeta, uploadProductImages, type ProductFormInput } from "@/server/actions/admin/products";
 
-type Variant = { id?: string; name: string; sku: string; price: string; compareAtPrice: string; stock: string; lowStockThreshold: string; weightGrams: string; isActive: boolean; isDefault: boolean };
+type Variant = VariantFormValues;
 type Image = { id: string; url: string; alt: string };
 
 export type ProductFormValues = {
@@ -35,7 +36,6 @@ export type ProductFormValues = {
   variants: Variant[];
 };
 
-const newVariant = (name = ""): Variant => ({ name, sku: "", price: "", compareAtPrice: "", stock: "0", lowStockThreshold: "5", weightGrams: "", isActive: true, isDefault: false });
 
 export function ProductForm({ initial, categories, images = [], isAdmin }: { initial: ProductFormValues; categories: { id: string; name: string }[]; images?: Image[]; isAdmin: boolean }) {
   const router = useRouter();
@@ -355,4 +355,3 @@ function Field({ label, hint, error, children, compact }: { label: string; hint?
   );
 }
 
-export { newVariant };

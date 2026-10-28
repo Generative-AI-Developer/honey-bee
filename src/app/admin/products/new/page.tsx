@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { ProductForm, newVariant } from "@/components/admin/product-form";
+import { ProductForm } from "@/components/admin/product-form";
+import { newVariant } from "@/lib/product-defaults";
 import { PageHeader } from "@/components/admin/ui";
 import { db } from "@/lib/db";
 import { requireStaff } from "@/server/auth";
