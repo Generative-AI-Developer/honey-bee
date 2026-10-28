@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useMemo, useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { GripVertical, Loader2, Plus, Star, Trash2, Upload, X } from "lucide-react";
+import { Loader2, Plus, Star, Trash2, Upload, X } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -44,6 +44,8 @@ export function ProductForm({ initial, categories, images = [], isAdmin }: { ini
   const [saving, startSave] = useTransition();
   const [uploading, startUpload] = useTransition();
   const [tagInput, setTagInput] = useState("");
+  // New products: photos chosen before the first save are uploaded right after it's created.
+  const [pendingPhotos, setPendingPhotos] = useState<File[]>([]);
   const set = <K extends keyof ProductFormValues>(k: K, val: ProductFormValues[K]) => setV((p) => ({ ...p, [k]: val }));
   const setVariant = (i: number, patch: Partial<Variant>) => set("variants", v.variants.map((x, j) => (j === i ? { ...x, ...patch } : patch.isDefault ? { ...x, isDefault: false } : x)));
   const err = (k: string) => errors[k]?.[0];
@@ -75,6 +77,13 @@ export function ProductForm({ initial, categories, images = [], isAdmin }: { ini
         return;
       }
       setErrors({});
+      if (!v.id && pendingPhotos.length) {
+        const fd = new FormData();
+        fd.set("productId", res.data.id);
+        for (const f of pendingPhotos) fd.append("images", f);
+        const up = await uploadProductImages(fd);
+        if (!up.ok) toast.error(`Product created, but the photos didn't upload: ${up.error}`);
+      }
       toast.success(res.message);
       if (!v.id) router.push(`/admin/products/${res.data.id}`);
     });
@@ -129,7 +138,7 @@ export function ProductForm({ initial, categories, images = [], isAdmin }: { ini
                   <Input className="h-9" value={x.name} onChange={(e) => setVariant(i, { name: e.target.value })} placeholder="500g" />
                 </Field>
                 <Field label="SKU" compact error={err(`variants.${i}.sku`)}>
-                  <Input className="h-9 uppercase" value={x.sku} onChange={(e) => setVariant(i, { sku: e.target.value.toUpperCase() })} placeholder="HB-SIDR-500" />
+                  <Input className="h-9 uppercase" value={x.sku} onChange={(e) => setVariant(i, { sku: e.target.value.toUpperCase() })} placeholder="Auto" title="Leave blank to generate automatically" />
                 </Field>
                 <Field label="Price (Rs)" compact error={err(`variants.${i}.price`)}>
                   <Input className="h-9" inputMode="numeric" value={x.price} onChange={(e) => setVariant(i, { price: e.target.value.replace(/[^\d.]/g, "") })} />
@@ -164,7 +173,7 @@ export function ProductForm({ initial, categories, images = [], isAdmin }: { ini
           </div>
         </Card>
 
-        {v.id && <ImageManager productId={v.id} images={images} uploading={uploading} startUpload={startUpload} />}
+        {v.id ? <ImageManager productId={v.id} images={images} uploading={uploading} startUpload={startUpload} /> : <PendingPhotos files={pendingPhotos} onChange={setPendingPhotos} />}
       </div>
 
       <div className="grid gap-6 xl:sticky xl:top-24">
@@ -248,8 +257,8 @@ function ImageManager({ productId, images, uploading, startUpload }: { productId
             {i === 0 && <span className="absolute top-2 left-2 rounded-full bg-inverse px-2 py-0.5 text-[10px] font-bold text-inverse-foreground">MAIN</span>}
             <div className="absolute inset-x-0 bottom-0 flex justify-end gap-1 bg-gradient-to-t from-black/50 p-1.5 opacity-0 transition-opacity group-focus-within:opacity-100 group-hover:opacity-100">
               {i > 0 && (
-                <Button type="button" size="icon-xs" variant="subtle" disabled={busy} aria-label="Make main image" onClick={() => startBusy(async () => void (await updateImageMeta({ imageId: img.id, alt: img.alt, makePrimary: true })))}>
-                  <GripVertical />
+                <Button type="button" size="xs" variant="subtle" disabled={busy} aria-label="Make main image" title="Make main image" onClick={() => startBusy(async () => void (await updateImageMeta({ imageId: img.id, alt: img.alt, makePrimary: true })))}>
+                  <Star /> Main
                 </Button>
               )}
               <Button
@@ -297,6 +306,52 @@ function ImageManager({ productId, images, uploading, startUpload }: { productId
             />
           </label>
         </li>
+      </ul>
+    </Card>
+  );
+}
+
+const ACCEPT = "image/jpeg,image/png,image/webp,image/avif";
+
+function PendingPhotos({ files, onChange }: { files: File[]; onChange: (f: File[]) => void }) {
+  const previews = useMemo(() => files.map((f) => URL.createObjectURL(f)), [files]);
+  useEffect(() => () => previews.forEach((u) => URL.revokeObjectURL(u)), [previews]);
+  return (
+    <Card title="Photos" description="JPG, PNG or WebP up to 5 MB each. The first photo is the main one. Photos upload when you click Create product.">
+      <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        {previews.map((src, i) => (
+          <li key={src} className="group relative aspect-square overflow-hidden rounded-xl border border-border bg-muted">
+            {/* eslint-disable-next-line @next/next/no-img-element -- local blob preview */}
+            <img src={src} alt={`Selected photo ${i + 1}`} className="size-full object-cover" />
+            {i === 0 && <span className="absolute top-2 left-2 rounded-full bg-inverse px-2 py-0.5 text-[10px] font-bold text-inverse-foreground">MAIN</span>}
+            <Button type="button" size="icon-xs" variant="subtle" className="absolute top-2 right-2" aria-label={`Remove photo ${i + 1}`} onClick={() => onChange(files.filter((_, j) => j !== i))}>
+              <X />
+            </Button>
+          </li>
+        ))}
+        {files.length < 10 && (
+          <li>
+            <label className="grid aspect-square cursor-pointer place-items-center rounded-xl border-2 border-dashed border-border text-center text-sm text-muted-foreground hover:border-foreground-soft focus-within:ring-3 focus-within:ring-ring/50">
+              <span className="grid justify-items-center gap-1">
+                <Upload className="size-6" />
+                Add photos
+              </span>
+              <input
+                type="file"
+                multiple
+                accept={ACCEPT}
+                className="sr-only"
+                onChange={(e) => {
+                  const picked = Array.from(e.target.files ?? []);
+                  e.target.value = "";
+                  const tooBig = picked.filter((f) => f.size > 5 * 1024 * 1024);
+                  if (tooBig.length) toast.error("Photos must be 5 MB or smaller.");
+                  onChange([...files, ...picked.filter((f) => f.size <= 5 * 1024 * 1024)].slice(0, 10));
+                }}
+              />
+            </label>
+          </li>
+        )}
       </ul>
     </Card>
   );

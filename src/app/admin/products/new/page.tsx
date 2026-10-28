@@ -15,7 +15,7 @@ export default async function NewProductPage() {
   const categories = await db.category.findMany({ orderBy: { sortOrder: "asc" }, select: { id: true, name: true } });
   return (
     <>
-      <PageHeader back={{ href: "/admin/products", label: "Products" }} title="New product" description="Save the product first, then add photos." />
+      <PageHeader back={{ href: "/admin/products", label: "Products" }} title="New product" description="Fill in the details, add photos and sizes, then click Create product. It goes live in the store straight away." />
       <ProductForm
         isAdmin={staff.role === "ADMIN"}
         categories={categories}
@@ -25,8 +25,8 @@ export default async function NewProductPage() {
           shortDescription: "",
           description: "",
           categoryId: categories[0]?.id ?? "",
-          status: "DRAFT",
-          featured: false,
+          status: "ACTIVE",
+          featured: true,
           origin: "",
           floralSource: "",
           harvest: "",

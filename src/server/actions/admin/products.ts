@@ -1,12 +1,13 @@
 "use server";
 
-import { refresh, updateTag } from "next/cache";
+import { refresh } from "next/cache";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { rupees } from "@/lib/money";
 import { slugify } from "@/lib/utils";
 import { action, ok, UserError } from "@/server/action";
 import { assertStaff } from "@/server/auth";
+import { refreshStore } from "@/server/revalidate";
 import { tags } from "@/server/queries/catalog";
 import { deleteImage, storeImage } from "@/services/storage";
 
@@ -15,7 +16,13 @@ const money = z.coerce.number().min(0).max(10_000_000);
 const variantSchema = z.object({
   id: z.string().max(40).optional(),
   name: z.string().trim().min(1, "Each size needs a name (e.g. 500g).").max(40),
-  sku: z.string().trim().min(2, "Each size needs a SKU.").max(40).regex(/^[A-Za-z0-9-_]+$/, "SKUs may only contain letters, numbers, - and _."),
+  // Optional: generated from the product name and size when left blank.
+  sku: z
+    .string()
+    .trim()
+    .max(40)
+    .refine((v) => v === "" || /^[A-Za-z0-9-_]{2,}$/.test(v), "SKUs may only contain letters, numbers, - and _ (2+ characters).")
+    .default(""),
   price: money.refine((v) => v > 0, "Price must be more than 0."),
   compareAtPrice: money.optional().nullable(),
   stock: z.coerce.number().int().min(0).max(100_000).optional(),
@@ -54,6 +61,19 @@ export const saveProduct = action(productSchema, async (input) => {
   const clash = await db.product.findFirst({ where: { slug, NOT: input.id ? { id: input.id } : undefined }, select: { id: true } });
   if (clash) throw new UserError(`Another product already uses the URL "/products/${slug}". Change the URL slug.`);
 
+  // Fill in blank SKUs, e.g. "Sidr Royal Honey" + "500g" → "HB-SRH-500G", made unique if needed.
+  const initials = slug.split("-").filter(Boolean).map((w) => w[0]).join("").toUpperCase().slice(0, 6) || "P";
+  const taken = new Set(
+    (await db.productVariant.findMany({ where: { NOT: input.id ? { productId: input.id } : undefined }, select: { sku: true } })).map((v) => v.sku),
+  );
+  for (const v of input.variants) {
+    if (v.sku) continue;
+    const base = `HB-${initials}-${v.name.replace(/[^0-9a-z]/gi, "").toUpperCase() || "STD"}`.slice(0, 36);
+    let candidate = base;
+    for (let n = 2; taken.has(candidate) || input.variants.some((o) => o !== v && o.sku.toUpperCase() === candidate); n++) candidate = `${base}-${n}`;
+    v.sku = candidate;
+    taken.add(candidate);
+  }
   const skus = input.variants.map((v) => v.sku.toUpperCase());
   if (new Set(skus).size !== skus.length) throw new UserError("Each size must have a different SKU.");
   const skuClash = await db.productVariant.findFirst({
@@ -120,10 +140,10 @@ export const saveProduct = action(productSchema, async (input) => {
     return p;
   });
 
-  updateTag(tags.products);
-  updateTag(tags.product(product.slug));
-  if (previous && previous.slug !== product.slug) updateTag(tags.product(previous.slug));
-  updateTag(tags.categories);
+  refreshStore(tags.products);
+  refreshStore(tags.product(product.slug));
+  if (previous && previous.slug !== product.slug) refreshStore(tags.product(previous.slug));
+  refreshStore(tags.categories);
   refresh();
   return ok({ id: product.id, slug: product.slug }, input.id ? "Product saved" : "Product created");
 });
@@ -137,12 +157,24 @@ export async function uploadProductImages(formData: FormData) {
     const files = formData.getAll("images").filter((f): f is File => f instanceof File && f.size > 0);
     if (files.length === 0) return { ok: false as const, error: "Choose at least one image." };
     if (product._count.images + files.length > 10) return { ok: false as const, error: "A product can have up to 10 images." };
-    for (const [i, file] of files.entries()) {
-      const stored = await storeImage(file, "products");
-      await db.productImage.create({ data: { productId, url: stored.url, publicId: stored.publicId, alt: product.name, sortOrder: product._count.images + i } });
-    }
-    updateTag(tags.products);
-    updateTag(tags.product(product.slug));
+    // Real photos are placed before the sample placeholder images, so the first upload becomes the main photo.
+    const existing = await db.productImage.findMany({ where: { productId }, orderBy: { sortOrder: "asc" } });
+    const stored = [];
+    for (const file of files) stored.push(await storeImage(file, "products"));
+    const ordered = [
+      ...existing.filter((img) => !img.url.startsWith("/images/products/")).map((img) => ({ id: img.id })),
+      ...stored.map((st) => ({ new: st })),
+      ...existing.filter((img) => img.url.startsWith("/images/products/")).map((img) => ({ id: img.id })),
+    ];
+    await db.$transaction(
+      ordered.map((item, i) =>
+        "id" in item
+          ? db.productImage.update({ where: { id: item.id }, data: { sortOrder: i } })
+          : db.productImage.create({ data: { productId, url: item.new.url, publicId: item.new.publicId, alt: product.name, sortOrder: i } }),
+      ),
+    );
+    refreshStore(tags.products);
+    refreshStore(tags.product(product.slug));
     refresh();
     return { ok: true as const, message: `${files.length} image${files.length > 1 ? "s" : ""} uploaded` };
   } catch (e) {
@@ -154,8 +186,8 @@ export const deleteProductImage = action(z.object({ imageId: z.string().max(40) 
   await assertStaff();
   const image = await db.productImage.delete({ where: { id: imageId }, include: { product: { select: { slug: true } } } });
   await deleteImage(image.publicId);
-  updateTag(tags.products);
-  updateTag(tags.product(image.product.slug));
+  refreshStore(tags.products);
+  refreshStore(tags.product(image.product.slug));
   refresh();
   return ok(undefined, "Image removed");
 });
@@ -168,8 +200,8 @@ export const updateImageMeta = action(z.object({ imageId: z.string().max(40), al
     const ordered = [image, ...all.filter((i) => i.id !== image.id)];
     await db.$transaction(ordered.map((img, i) => db.productImage.update({ where: { id: img.id }, data: { sortOrder: i } })));
   }
-  updateTag(tags.products);
-  updateTag(tags.product(image.product.slug));
+  refreshStore(tags.products);
+  refreshStore(tags.product(image.product.slug));
   refresh();
   return ok(undefined, makePrimary ? "Main image updated" : "Saved");
 });
@@ -185,9 +217,9 @@ export const archiveProduct = action(z.object({ id: z.string().max(40) }), async
     await db.product.delete({ where: { id } });
     await Promise.all(images.map((i) => deleteImage(i.publicId)));
   }
-  updateTag(tags.products);
-  updateTag(tags.product(p.slug));
-  updateTag(tags.categories);
+  refreshStore(tags.products);
+  refreshStore(tags.product(p.slug));
+  refreshStore(tags.categories);
   refresh();
   return ok(undefined, p._count.variants > 0 ? "Product archived (it has past orders)" : "Product deleted");
 });

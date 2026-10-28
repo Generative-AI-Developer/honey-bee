@@ -1,11 +1,12 @@
 "use server";
 
 import { after } from "next/server";
-import { refresh, updateTag } from "next/cache";
+import { refresh } from "next/cache";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { action, ok, UserError } from "@/server/action";
 import { assertStaff } from "@/server/auth";
+import { refreshStore } from "@/server/revalidate";
 import { sendOrderPlacedEmails, sendOrderStatusEmail, sendReturnUpdateEmail } from "@/server/notifications";
 import { changeOrderStatus } from "@/server/orders";
 import { tags } from "@/server/queries/catalog";
@@ -32,7 +33,7 @@ export const updateOrderStatus = action(
       courier: courier || undefined,
       trackingNumber: trackingNumber || undefined,
     });
-    if (to === "CANCELLED" || to === "RETURNED") updateTag(tags.products); // stock changed
+    if (to === "CANCELLED" || to === "RETURNED") refreshStore(tags.products); // stock changed
     if (notify) after(() => sendOrderStatusEmail(orderId, note));
     refresh();
     return ok(undefined, `Order marked as ${to.toLowerCase()}`);
@@ -111,7 +112,7 @@ export const updateReturnRequest = action(
     await db.returnRequest.update({ where: { id: returnId }, data: { status, adminNote: adminNote || r.adminNote } });
     if (status === "RECEIVED" && (r.order.status === "DELIVERED" || r.order.status === "SHIPPED")) {
       await changeOrderStatus({ orderId: r.orderId, to: "RETURNED", actorId: staff.id, note: `Return received: ${r.reason}` });
-      updateTag(tags.products);
+      refreshStore(tags.products);
     }
     if (status === "REFUNDED" && r.order.paymentStatus === "PAID") {
       await db.order.update({ where: { id: r.orderId }, data: { paymentStatus: "REFUNDED" } });

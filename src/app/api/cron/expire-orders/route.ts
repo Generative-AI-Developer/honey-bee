@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { env } from "@/lib/env";
 import { cancelExpiredOrders } from "@/server/orders";
+import { tags } from "@/server/queries/catalog";
+import { refreshStoreInBackground } from "@/server/revalidate";
 
 // Cancels unpaid online orders after the payment window and puts their stock back.
 // Call every 10–15 minutes from your host's cron (see docs/DEPLOYMENT.md):
@@ -10,5 +12,6 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   const cancelled = await cancelExpiredOrders();
+  if (cancelled > 0) refreshStoreInBackground(tags.products); // released stock
   return NextResponse.json({ cancelled });
 }

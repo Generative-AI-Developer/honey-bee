@@ -127,7 +127,10 @@ test("sign-up requires email verification, then the account works", async ({ pag
   await expect(page.getByRole("heading", { name: /Assalam-o-Alaikum, Ayesha/ })).toBeVisible();
 });
 
-test("admin can create a product with sizes", async ({ page }) => {
+test("admin can create a product with a photo and it appears on the home page", async ({ page, browser }) => {
+  // a shopper has the home page open first, so a stale stored copy of it would be caught
+  const guest = await browser.newPage();
+  await guest.goto("/");
   await login(page, ADMIN.email, ADMIN.password, "/admin");
   await page.goto("/admin/products/new");
   await expect(page.getByRole("heading", { name: "New product" })).toBeVisible();
@@ -135,14 +138,27 @@ test("admin can create a product with sizes", async ({ page }) => {
   await page.getByLabel("Product name").fill(name);
   await page.getByLabel("Short description").fill("A test honey created by the end-to-end suite.");
   await page.getByLabel("Full description").fill("This product exists only to check that the product editor saves correctly.");
-  const skus = page.getByLabel("SKU");
+  // SKUs left blank on purpose: they are generated automatically
   const prices = page.getByLabel("Price (Rs)");
-  for (let i = 0; i < 3; i++) {
-    await skus.nth(i).fill(`E2E-${Date.now()}-${i}`);
-    await prices.nth(i).fill(String(1000 + i * 500));
-  }
+  for (let i = 0; i < 3; i++) await prices.nth(i).fill(String(1000 + i * 500));
+  await page.locator('input[type="file"]').setInputFiles("tests/e2e/fixtures/honey-photo.jpg");
+  await expect(page.getByAltText("Selected photo 1")).toBeVisible();
   await page.getByRole("button", { name: "Create product" }).click();
   await page.waitForURL(/\/admin\/products\/(?!new)[^/]+$/);
   await expect(page.getByRole("heading", { name })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Images" })).toBeVisible();
+  await expect(page.getByLabel("SKU").first()).toHaveValue(/^HB-TH\d*-250G$/);
+
+  // visible to shoppers right away: on the home page, with the uploaded photo as the main image
+  await guest.goto("/");
+  const card = guest.locator("article", { hasText: name });
+  await expect(card).toBeVisible();
+  await expect(card.locator("img").first()).toHaveAttribute("src", /uploads%2Fproducts|uploads\/products/);
+
+  // clean up through the admin (confirm dialog accepted); it must disappear from the store too
+  page.once("dialog", (d) => d.accept());
+  await page.getByRole("button", { name: /Archive \/ delete/ }).click();
+  await page.waitForURL(/\/admin\/products$/);
+  await guest.goto("/");
+  await expect(guest.locator("article", { hasText: name })).toHaveCount(0);
+  await guest.close();
 });

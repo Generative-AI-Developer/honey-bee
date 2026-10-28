@@ -1,11 +1,12 @@
 "use server";
 
-import { refresh, updateTag } from "next/cache";
+import { refresh } from "next/cache";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { slugify } from "@/lib/utils";
 import { action, ok, UserError } from "@/server/action";
 import { assertStaff } from "@/server/auth";
+import { refreshStore } from "@/server/revalidate";
 import { tags } from "@/server/queries/catalog";
 
 // ───────────── categories ─────────────
@@ -29,8 +30,8 @@ export const saveCategory = action(
     const data = { ...input, slug, description: input.description || null, seoTitle: input.seoTitle || null, seoDescription: input.seoDescription || null };
     if (id) await db.category.update({ where: { id }, data });
     else await db.category.create({ data });
-    updateTag(tags.categories);
-    updateTag(tags.products);
+    refreshStore(tags.categories);
+    refreshStore(tags.products);
     refresh();
     return ok(undefined, "Category saved");
   },
@@ -41,7 +42,7 @@ export const deleteCategory = action(z.object({ id: z.string().max(40) }), async
   const count = await db.product.count({ where: { categoryId: id } });
   if (count > 0) throw new UserError(`Move this category's ${count} product(s) to another category first.`);
   await db.category.delete({ where: { id } });
-  updateTag(tags.categories);
+  refreshStore(tags.categories);
   refresh();
   return ok(undefined, "Category deleted");
 });
@@ -67,8 +68,8 @@ export const adjustStock = action(
       await tx.inventoryMovement.create({ data: { variantId, delta, reason, note: note || null, createdById: staff.id } });
       return tx.productVariant.update({ where: { id: variantId }, data: { stock: { increment: delta } }, include: { product: { select: { slug: true } } } });
     });
-    updateTag(tags.products);
-    updateTag(tags.product(updated.product.slug));
+    refreshStore(tags.products);
+    refreshStore(tags.product(updated.product.slug));
     refresh();
     return ok({ stock: updated.stock }, `Stock is now ${updated.stock}`);
   },
@@ -79,9 +80,9 @@ export const adjustStock = action(
 async function recomputeRating(productId: string) {
   const agg = await db.review.aggregate({ where: { productId, status: "APPROVED" }, _avg: { rating: true }, _count: true });
   const p = await db.product.update({ where: { id: productId }, data: { ratingAvg: agg._avg.rating ?? 0, ratingCount: agg._count }, select: { slug: true } });
-  updateTag(tags.reviews(productId));
-  updateTag(tags.product(p.slug));
-  updateTag(tags.products);
+  refreshStore(tags.reviews(productId));
+  refreshStore(tags.product(p.slug));
+  refreshStore(tags.products);
 }
 
 export const moderateReview = action(z.object({ id: z.string().max(40), status: z.enum(["APPROVED", "REJECTED"]) }), async ({ id, status }) => {

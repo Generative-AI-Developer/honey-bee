@@ -1,12 +1,13 @@
 "use server";
 
-import { refresh, updateTag } from "next/cache";
+import { refresh } from "next/cache";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { rupees } from "@/lib/money";
 import { normalizeCity, slugify } from "@/lib/utils";
 import { action, ok, UserError } from "@/server/action";
 import { assertStaff } from "@/server/auth";
+import { refreshStore } from "@/server/revalidate";
 import { tags } from "@/server/queries/catalog";
 import { settingsSchemas, type SettingsKey } from "@/server/settings";
 import type { Prisma } from "@/generated/prisma/client";
@@ -101,7 +102,7 @@ export const saveBanner = action(
     const data = { ...d, subtitle: d.subtitle || null, ctaLabel: d.ctaLabel || null, ctaHref: d.ctaHref || null };
     if (id) await db.banner.update({ where: { id }, data });
     else await db.banner.create({ data });
-    updateTag(tags.banners);
+    refreshStore(tags.banners);
     refresh();
     return ok(undefined, "Banner saved");
   },
@@ -110,7 +111,7 @@ export const saveBanner = action(
 export const deleteBanner = action(z.object({ id: z.string().max(40) }), async ({ id }) => {
   await assertStaff();
   await db.banner.delete({ where: { id } });
-  updateTag(tags.banners);
+  refreshStore(tags.banners);
   refresh();
   return ok(undefined, "Banner deleted");
 });
@@ -137,9 +138,9 @@ export const savePage = action(
     const previous = id ? await db.page.findUnique({ where: { id }, select: { slug: true } }) : null;
     if (id) await db.page.update({ where: { id }, data });
     else await db.page.create({ data });
-    updateTag(tags.pages);
-    updateTag(tags.page(slug));
-    if (previous) updateTag(tags.page(previous.slug));
+    refreshStore(tags.pages);
+    refreshStore(tags.page(slug));
+    if (previous) refreshStore(tags.page(previous.slug));
     refresh();
     return ok(undefined, "Page saved");
   },
@@ -197,7 +198,7 @@ export const saveShippingZone = action(
       }
       if ((await tx.shippingZone.count({ where: { isDefault: true } })) === 0) throw new UserError("Keep one default zone so every city can be delivered to.");
     });
-    updateTag(tags.shipping);
+    refreshStore(tags.shipping);
     refresh();
     return ok(undefined, "Shipping zone saved");
   },
@@ -208,7 +209,7 @@ export const deleteShippingZone = action(z.object({ id: z.string().max(40) }), a
   const zone = await db.shippingZone.findUnique({ where: { id } });
   if (zone?.isDefault) throw new UserError("You can't delete the default zone.");
   await db.shippingZone.delete({ where: { id } });
-  updateTag(tags.shipping);
+  refreshStore(tags.shipping);
   refresh();
   return ok(undefined, "Zone deleted");
 });
@@ -220,7 +221,7 @@ export const saveSettings = action(z.object({ key: z.enum(Object.keys(settingsSc
   const parsed = settingsSchemas[key].safeParse(value);
   if (!parsed.success) throw new UserError(parsed.error.issues[0]?.message ?? "Please check the values.");
   await db.storeSetting.upsert({ where: { key }, update: { value: parsed.data as Prisma.InputJsonValue }, create: { key, value: parsed.data as Prisma.InputJsonValue } });
-  updateTag("settings");
+  refreshStore("settings");
   refresh();
   return ok(undefined, "Settings saved");
 });
@@ -248,7 +249,7 @@ export const saveAppearance = action(settingsSchemas.appearance, async (value) =
   await db.storeSetting.upsert({ where: { key: "appearance" }, update: { value }, create: { key: "appearance", value } });
   // Every page's shell reads the theme through the cached getSettings() (tag "settings"),
   // so expiring the tag re-renders the whole site with the new colours for all visitors.
-  updateTag("settings");
+  refreshStore("settings");
   refresh();
   return ok(value, "Theme applied to the whole website");
 });

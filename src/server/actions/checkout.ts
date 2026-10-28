@@ -11,7 +11,9 @@ import { quoteCheckout } from "@/server/checkout";
 import { sendOrderPlacedEmails } from "@/server/notifications";
 import { orderAccessToken, orderUrl } from "@/server/order-access";
 import { placeOrder } from "@/server/orders";
+import { tags } from "@/server/queries/catalog";
 import { rateLimit } from "@/server/rate-limit";
+import { refreshStore } from "@/server/revalidate";
 import { getSettings } from "@/server/settings";
 import { enabledPaymentMethods, isOnlineMethod } from "@/services/payments";
 
@@ -77,6 +79,9 @@ export const placeOrderAction = action(
       const duplicate = await db.address.findFirst({ where: { userId: user.id, line1: address.line1, city: address.city } });
       if (!duplicate && count < 10) await db.address.create({ data: { ...address, userId: user.id, isDefault: count === 0 } });
     }
+
+    // stock and "sold" counts changed: refresh product listings and pages
+    refreshStore(tags.products);
 
     const online = isOnlineMethod(input.paymentMethod);
     if (!online) after(() => sendOrderPlacedEmails(order.id));

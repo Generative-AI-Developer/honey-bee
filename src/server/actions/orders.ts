@@ -9,7 +9,9 @@ import { assertUser, getCurrentUser } from "@/server/auth";
 import { sendOrderStatusEmail, sendReturnUpdateEmail } from "@/server/notifications";
 import { verifyOrderAccessToken } from "@/server/order-access";
 import { changeOrderStatus } from "@/server/orders";
+import { tags } from "@/server/queries/catalog";
 import { rateLimit } from "@/server/rate-limit";
+import { refreshStore } from "@/server/revalidate";
 import { getSettings } from "@/server/settings";
 import { storeImage } from "@/services/storage";
 
@@ -27,6 +29,7 @@ export const cancelMyOrder = action(z.object({ orderId: z.string().max(40), toke
   const order = await loadOwnedOrder(orderId, token);
   if (!["PENDING", "CONFIRMED"].includes(order.status)) throw new UserError("This order is already being prepared. Please contact us on WhatsApp to change it.");
   await changeOrderStatus({ orderId, to: "CANCELLED", note: reason ? `Cancelled by customer: ${reason}` : "Cancelled by customer" });
+  refreshStore(tags.products); // items went back into stock
   after(() => sendOrderStatusEmail(orderId));
   refresh();
   return ok(undefined, "Your order has been cancelled.");
