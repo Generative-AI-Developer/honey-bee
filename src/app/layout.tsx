@@ -25,7 +25,9 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${inter.variable} ${fraunces.variable} h-full`}>
-      <body className="flex min-h-full flex-col">
+      {/* Browser extensions (e.g. ColorZilla, Grammarly) add attributes to <body> before React loads;
+          this ignores those attribute differences on <body> only. Mismatches inside the page still show. */}
+      <body className="flex min-h-full flex-col" suppressHydrationWarning>
         {children}
         <Toaster position="top-center" richColors />
       </body>
