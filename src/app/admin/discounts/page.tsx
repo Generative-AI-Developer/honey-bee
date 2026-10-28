@@ -6,6 +6,9 @@ import { db } from "@/lib/db";
 import { formatPrice } from "@/lib/money";
 import { requireStaff } from "@/server/auth";
 
+// Private, session-gated page: navigation may wait for the server.
+export const instant = false;
+
 export const metadata: Metadata = { title: "Discounts" };
 
 const d = (v: Date | null) => (v ? v.toISOString().slice(0, 10) : "");

@@ -12,6 +12,9 @@ import type { OrderStatus, PaymentStatus, Prisma } from "@/generated/prisma/clie
 import { requireStaff } from "@/server/auth";
 import { PAYMENT_LABELS } from "@/services/payments";
 
+// Private, session-gated page: navigation may wait for the server.
+export const instant = false;
+
 export const metadata: Metadata = { title: "Orders" };
 const PER_PAGE = 25;
 

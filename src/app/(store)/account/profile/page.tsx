@@ -2,6 +2,9 @@ import { ChangePasswordForm, ProfileForm } from "@/components/account/profile-fo
 import { db } from "@/lib/db";
 import { requireUser } from "@/server/auth";
 
+// Private, session-gated page: navigation may wait for the server.
+export const instant = false;
+
 export default async function ProfilePage() {
   const user = await requireUser("/account/profile");
   // Read fresh from the database (the session cookie caches profile fields for a few minutes).

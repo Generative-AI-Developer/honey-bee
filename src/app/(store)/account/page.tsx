@@ -6,6 +6,9 @@ import { formatPrice } from "@/lib/money";
 import { requireUser } from "@/server/auth";
 import { getMyOrders } from "@/server/queries/orders";
 
+// Private, session-gated page: navigation may wait for the server.
+export const instant = false;
+
 export default async function AccountOverviewPage() {
   const user = await requireUser("/account");
   const [orders, addressCount, spent] = await Promise.all([

@@ -14,6 +14,9 @@ import { requireStaff } from "@/server/auth";
 import { getBestSellers, getDailySeries, getLowStock, getOrdersByStatus, getPaymentSplit, getSalesSummary, pctChange, previousRange, rangeFromDays } from "@/server/queries/reports";
 import { PAYMENT_LABELS } from "@/services/payments";
 
+// Private, session-gated page: navigation may wait for the server.
+export const instant = false;
+
 const RANGES = [7, 30, 90] as const;
 
 export default async function AdminDashboard({ searchParams }: PageProps<"/admin">) {

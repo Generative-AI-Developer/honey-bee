@@ -16,6 +16,9 @@ import { orderUrl } from "@/server/order-access";
 import { STATUS_FLOW, type ShippingAddress } from "@/server/orders";
 import { PAYMENT_LABELS } from "@/services/payments";
 
+// Private, session-gated page: navigation may wait for the server.
+export const instant = false;
+
 export const metadata: Metadata = { title: "Order" };
 
 export default async function AdminOrderPage({ params }: PageProps<"/admin/orders/[id]">) {

@@ -9,6 +9,9 @@ import type { ShippingAddress } from "@/server/orders";
 import { getSettings } from "@/server/settings";
 import { PAYMENT_LABELS } from "@/services/payments";
 
+// Private, session-gated page: navigation may wait for the server.
+export const instant = false;
+
 export default async function InvoicePage({ params }: PageProps<"/admin/orders/[id]/invoice">) {
   await requireStaff();
   const { id } = await params;

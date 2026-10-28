@@ -10,6 +10,9 @@ import { cn } from "@/lib/utils";
 import type { ReviewStatus } from "@/generated/prisma/client";
 import { requireStaff } from "@/server/auth";
 
+// Private, session-gated page: navigation may wait for the server.
+export const instant = false;
+
 export const metadata: Metadata = { title: "Reviews" };
 
 const TABS: { key: ReviewStatus; label: string }[] = [

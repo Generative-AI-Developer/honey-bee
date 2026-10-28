@@ -2,6 +2,7 @@ import "server-only";
 import { cache } from "react";
 import { headers } from "next/headers";
 import { notFound, redirect } from "next/navigation";
+import { connection } from "next/server";
 import { auth } from "@/lib/auth";
 
 export type AppRole = "CUSTOMER" | "STAFF" | "ADMIN";
@@ -22,7 +23,11 @@ export type CurrentUser = {
  * so proxy/UI checks are never the only line of defence.
  */
 export const getCurrentUser = cache(async (): Promise<CurrentUser | null> => {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const requestHeaders = await headers();
+  // Session validation compares expiry times (new Date()), so it must run per request,
+  // never inside a prerendered or prefetched shell.
+  await connection();
+  const session = await auth.api.getSession({ headers: requestHeaders });
   if (!session) return null;
   const u = session.user as typeof session.user & { role?: string; phone?: string | null };
   return {

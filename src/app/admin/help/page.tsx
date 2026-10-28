@@ -3,6 +3,9 @@ import Link from "next/link";
 import { PageHeader, Panel } from "@/components/admin/ui";
 import { requireStaff } from "@/server/auth";
 
+// Private, session-gated page: navigation may wait for the server.
+export const instant = false;
+
 export const metadata: Metadata = { title: "Setup guide" };
 
 const STEPS = [

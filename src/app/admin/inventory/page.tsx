@@ -9,6 +9,9 @@ import { cn } from "@/lib/utils";
 import type { Prisma } from "@/generated/prisma/client";
 import { requireStaff } from "@/server/auth";
 
+// Private, session-gated page: navigation may wait for the server.
+export const instant = false;
+
 export const metadata: Metadata = { title: "Inventory" };
 
 const REASON_LABEL = { SALE: "Sale", RESTOCK: "Restock", ADJUSTMENT: "Adjustment", RETURN: "Return", CANCEL: "Order cancelled" } as const;

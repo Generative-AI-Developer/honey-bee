@@ -11,6 +11,9 @@ import { cn } from "@/lib/utils";
 import type { Prisma, ProductStatus } from "@/generated/prisma/client";
 import { requireStaff } from "@/server/auth";
 
+// Private, session-gated page: navigation may wait for the server.
+export const instant = false;
+
 export const metadata: Metadata = { title: "Products" };
 
 const STATUS_TONE = { ACTIVE: "success", DRAFT: "warning", ARCHIVED: "outline" } as const;

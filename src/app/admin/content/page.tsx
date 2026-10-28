@@ -6,6 +6,9 @@ import { Badge } from "@/components/ui/badge";
 import { db } from "@/lib/db";
 import { requireStaff } from "@/server/auth";
 
+// Private, session-gated page: navigation may wait for the server.
+export const instant = false;
+
 export const metadata: Metadata = { title: "Banners & pages" };
 
 const d = (v: Date | null) => (v ? v.toISOString().slice(0, 10) : "");

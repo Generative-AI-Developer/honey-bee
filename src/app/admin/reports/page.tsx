@@ -10,6 +10,9 @@ import { requireStaff } from "@/server/auth";
 import { getBestSellers, getDailySeries, getPaymentSplit, getSalesSummary, type Range } from "@/server/queries/reports";
 import { PAYMENT_LABELS } from "@/services/payments";
 
+// Private, session-gated page: navigation may wait for the server.
+export const instant = false;
+
 export const metadata: Metadata = { title: "Reports" };
 
 const iso = (d: Date) => d.toISOString().slice(0, 10);

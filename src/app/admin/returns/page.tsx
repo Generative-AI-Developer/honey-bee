@@ -8,6 +8,9 @@ import { formatPrice } from "@/lib/money";
 import { orderNumber } from "@/lib/utils";
 import { requireStaff } from "@/server/auth";
 
+// Private, session-gated page: navigation may wait for the server.
+export const instant = false;
+
 export const metadata: Metadata = { title: "Returns" };
 
 export default async function ReturnsPage() {

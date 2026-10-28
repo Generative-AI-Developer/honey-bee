@@ -6,6 +6,9 @@ import { requireStaff } from "@/server/auth";
 import { getSettings } from "@/server/settings";
 import { configuredGateways } from "@/services/payments";
 
+// Private, session-gated page: navigation may wait for the server.
+export const instant = false;
+
 export const metadata: Metadata = { title: "Settings" };
 
 export default async function SettingsPage() {

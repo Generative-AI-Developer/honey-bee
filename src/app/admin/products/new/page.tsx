@@ -5,6 +5,9 @@ import { PageHeader } from "@/components/admin/ui";
 import { db } from "@/lib/db";
 import { requireStaff } from "@/server/auth";
 
+// Private, session-gated page: navigation may wait for the server.
+export const instant = false;
+
 export const metadata: Metadata = { title: "New product" };
 
 export default async function NewProductPage() {

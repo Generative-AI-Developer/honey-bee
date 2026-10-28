@@ -9,6 +9,9 @@ import { formatPrice } from "@/lib/money";
 import type { Prisma } from "@/generated/prisma/client";
 import { requireStaff } from "@/server/auth";
 
+// Private, session-gated page: navigation may wait for the server.
+export const instant = false;
+
 export const metadata: Metadata = { title: "Customers" };
 const PER_PAGE = 30;
 
