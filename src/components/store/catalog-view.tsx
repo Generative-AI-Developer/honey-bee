@@ -2,7 +2,8 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight, SearchX } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { CatalogFilters, CatalogFiltersSkeleton, CatalogToolbar } from "@/components/store/catalog-filters";
+import { CatalogFilterBar, CatalogFilterBarSkeleton } from "@/components/store/catalog-filters";
+import { CategoryBadgeList, CategoryBadges } from "@/components/store/category-badges";
 import { ProductGrid, ProductGridSkeleton } from "@/components/store/product-card";
 import { parseCatalogParams } from "@/lib/catalog-params";
 import { cn } from "@/lib/utils";
@@ -10,29 +11,23 @@ import { getAvailableSizes, getCatalog, getCategories, SORTS } from "@/server/qu
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
-/** Shared catalogue layout for /shop and /category/[slug]. Static shell + streamed results. */
+/** Shared catalogue layout for /shop and /category/[slug]: category badges, filter bar, streamed results. */
 export async function CatalogView({ searchParams, category, basePath }: { searchParams: SearchParams; category?: string; basePath: string }) {
   const [categories, sizes] = await Promise.all([getCategories(), getAvailableSizes()]);
   const sortOptions = Object.entries(SORTS).map(([value, s]) => ({ value, label: s.label }));
+  const badges = categories.map((c) => ({ slug: c.slug, name: c.name, count: c.productCount }));
   return (
-    <div className="grid gap-8 pb-20 lg:grid-cols-[260px_1fr] lg:gap-9">
-      <aside className="hidden lg:block" aria-label="Filters">
-        <Suspense fallback={<CatalogFiltersSkeleton />}>
-          <CatalogFilters categories={categories.map((c) => ({ slug: c.slug, name: c.name, count: c.productCount }))} sizes={sizes} basePath={basePath} lockedCategory={category} />
-        </Suspense>
-      </aside>
-      <section aria-label="Products">
-        <Suspense fallback={<div className="mb-5 h-11" />}>
-          <CatalogToolbar
-            sortOptions={sortOptions}
-            filters={<CatalogFilters categories={categories.map((c) => ({ slug: c.slug, name: c.name, count: c.productCount }))} sizes={sizes} basePath={basePath} lockedCategory={category} />}
-          />
-        </Suspense>
-        <Suspense fallback={<ProductGridSkeleton count={9} columns={3} />}>
-          <Results searchParams={searchParams} category={category} basePath={basePath} />
-        </Suspense>
-      </section>
-    </div>
+    <section aria-label="Products" className="pb-20">
+      <Suspense fallback={<CategoryBadgeList categories={badges} active={category} />}>
+        <CategoryBadges categories={badges} active={category} />
+      </Suspense>
+      <Suspense fallback={<CatalogFilterBarSkeleton />}>
+        <CatalogFilterBar sortOptions={sortOptions} sizes={sizes} />
+      </Suspense>
+      <Suspense fallback={<ProductGridSkeleton count={8} columns={4} />}>
+        <Results searchParams={searchParams} category={category} basePath={basePath} />
+      </Suspense>
+    </section>
   );
 }
 
@@ -75,7 +70,7 @@ async function Results({ searchParams, category, basePath }: { searchParams: Sea
           </>
         )}
       </p>
-      <ProductGrid products={items} columns={3} priorityCount={3} />
+      <ProductGrid products={items} columns={4} priorityCount={4} />
       {pageCount > 1 && (
         <nav className="mt-10 flex items-center justify-center gap-2" aria-label="Pagination">
           <PageLink href={href(page - 1)} disabled={page <= 1} label="Previous page">

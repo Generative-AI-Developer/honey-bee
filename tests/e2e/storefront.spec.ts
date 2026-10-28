@@ -20,6 +20,36 @@ test("search and filters narrow the shop", async ({ page }) => {
   await expect(page.getByRole("link", { name: /Harvest Gift Box/ }).first()).toBeVisible();
 });
 
+test("category badges and the filter bar sit above the products", async ({ page }, info) => {
+  await page.goto("/shop?sort=price-asc");
+  const categories = page.getByRole("navigation", { name: "Categories" });
+  await expect(categories.getByRole("link", { name: /All honey/ })).toHaveAttribute("aria-current", "page");
+  // switching category keeps the sort
+  await categories.getByRole("link", { name: /Gift Boxes/ }).click();
+  await expect(page).toHaveURL(/\/category\/gift-boxes\?sort=price-asc/);
+  await expect(categories.getByRole("link", { name: /Gift Boxes/ })).toHaveAttribute("aria-current", "page");
+
+  await page.goto("/shop");
+  if (info.project.name === "mobile") {
+    await page.getByRole("button", { name: /Filters/ }).click();
+    await page.getByRole("button", { name: "500g", exact: true }).click();
+    await expect(page).toHaveURL(/size=500g/);
+    await page.getByRole("button", { name: "Show results" }).click();
+  } else {
+    await page.getByRole("button", { name: /^Jar size/ }).click();
+    await page.getByRole("button", { name: "500g", exact: true }).click();
+    await expect(page).toHaveURL(/size=500g/);
+    await page.keyboard.press("Escape");
+    await page.getByLabel("In stock only").click();
+    await expect(page).toHaveURL(/stock=1/);
+  }
+  const active = page.getByRole("group", { name: "Active filters" });
+  await expect(active.getByRole("button", { name: "Remove filter 500g" })).toBeVisible();
+  await active.getByRole("button", { name: "Clear all" }).click();
+  await expect(page).toHaveURL(/\/shop$/);
+  await expect(active).toHaveCount(0);
+});
+
 test("product page lets you pick a size and add it to the cart", async ({ page }) => {
   await page.goto("/products/wild-forest-honey");
   await page.getByRole("button", { name: /^1kg/ }).click();
