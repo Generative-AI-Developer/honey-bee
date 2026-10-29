@@ -198,20 +198,6 @@ export async function getCatalog(filter: CatalogFilter) {
   return { items: rows.map(toCard), total, page, pageCount: Math.max(1, Math.ceil(total / PAGE_SIZE)) };
 }
 
-/** Distinct jar sizes for the size filter. */
-export async function getAvailableSizes(): Promise<string[]> {
-  "use cache";
-  cacheTag(tags.products);
-  cacheLife("days");
-  const rows = await db.productVariant.findMany({
-    where: { isActive: true, product: { status: "ACTIVE" } },
-    distinct: ["name"],
-    select: { name: true, weightGrams: true },
-    orderBy: { weightGrams: "asc" },
-  });
-  return rows.map((r) => r.name);
-}
-
 export async function getProductBySlug(slug: string) {
   "use cache";
   cacheTag(tags.products, tags.product(slug));

@@ -20,8 +20,8 @@ export function CategoryBadgeList({ categories, active, query = "" }: { categori
   const qs = query ? `?${query}` : "";
   const total = categories.reduce((s, c) => s + c.count, 0);
   return (
-    <nav aria-label="Categories" className="-mx-4 mb-4 sm:mx-0">
-      <ul className="flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:flex-wrap sm:overflow-visible sm:px-0 [&::-webkit-scrollbar]:hidden">
+    <nav aria-label="Categories" className="mb-8">
+      <ul className="flex flex-wrap justify-center gap-2">
         <li className="shrink-0">
           <Badge href={`/shop${qs}`} active={!active} label="All honey" count={total} />
         </li>
@@ -42,7 +42,7 @@ function Badge({ href, active, label, count }: { href: string; active: boolean; 
       scroll={false}
       aria-current={active ? "page" : undefined}
       className={cn(
-        "inline-flex h-10 items-center gap-2 rounded-full border-[1.5px] pr-2 pl-4 text-sm font-medium whitespace-nowrap transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
+        "inline-flex h-9 items-center gap-2 rounded-full sm:h-10 border-[1.5px] pr-2 pl-4 text-sm font-medium whitespace-nowrap transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
         active ? "border-inverse bg-inverse text-inverse-foreground" : "border-border bg-card text-foreground hover:border-foreground-soft hover:bg-muted",
       )}
     >

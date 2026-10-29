@@ -2,27 +2,22 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight, SearchX } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { CatalogFilterBar, CatalogFilterBarSkeleton } from "@/components/store/catalog-filters";
 import { CategoryBadgeList, CategoryBadges } from "@/components/store/category-badges";
 import { ProductGrid, ProductGridSkeleton } from "@/components/store/product-card";
 import { parseCatalogParams } from "@/lib/catalog-params";
 import { cn } from "@/lib/utils";
-import { getAvailableSizes, getCatalog, getCategories, SORTS } from "@/server/queries/catalog";
+import { getCatalog, getCategories } from "@/server/queries/catalog";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
-/** Shared catalogue layout for /shop and /category/[slug]: category badges, filter bar, streamed results. */
+/** Shared catalogue layout for /shop and /category/[slug]: centred category badges above the streamed results. */
 export async function CatalogView({ searchParams, category, basePath }: { searchParams: SearchParams; category?: string; basePath: string }) {
-  const [categories, sizes] = await Promise.all([getCategories(), getAvailableSizes()]);
-  const sortOptions = Object.entries(SORTS).map(([value, s]) => ({ value, label: s.label }));
+  const categories = await getCategories();
   const badges = categories.map((c) => ({ slug: c.slug, name: c.name, count: c.productCount }));
   return (
     <section aria-label="Products" className="pb-20">
       <Suspense fallback={<CategoryBadgeList categories={badges} active={category} />}>
         <CategoryBadges categories={badges} active={category} />
-      </Suspense>
-      <Suspense fallback={<CatalogFilterBarSkeleton />}>
-        <CatalogFilterBar sortOptions={sortOptions} sizes={sizes} />
       </Suspense>
       <Suspense fallback={<ProductGridSkeleton count={8} columns={4} />}>
         <Results searchParams={searchParams} category={category} basePath={basePath} />
