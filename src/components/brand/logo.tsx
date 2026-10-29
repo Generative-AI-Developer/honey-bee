@@ -11,12 +11,13 @@ export function LogoMark({ className }: { className?: string }) {
   );
 }
 
-export function Logo({ className, inverted = false, href = "/" }: { className?: string; inverted?: boolean; href?: string }) {
+/** `inverted`: on dark chrome bands. `onHeader`: on the storefront header colour. */
+export function Logo({ className, inverted = false, onHeader = false, href = "/" }: { className?: string; inverted?: boolean; onHeader?: boolean; href?: string }) {
   return (
-    <Link href={href} className={cn("inline-flex items-center gap-2.5 font-heading text-2xl font-semibold", inverted ? "text-chrome-foreground" : "text-foreground", className)}>
+    <Link href={href} className={cn("inline-flex items-center gap-2.5 font-heading text-2xl font-semibold", inverted ? "text-chrome-foreground" : onHeader ? "text-header-foreground" : "text-foreground", className)}>
       <LogoMark />
       <span>
-        Honey<b className={cn("font-bold", inverted ? "text-chrome-accent" : "text-primary-strong")}>Bee</b>
+        Honey<b className={cn("font-bold", inverted ? "text-chrome-accent" : onHeader ? "text-header-accent" : "text-primary-strong")}>Bee</b>
       </span>
       <span className="sr-only">home</span>
     </Link>

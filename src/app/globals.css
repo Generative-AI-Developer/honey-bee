@@ -51,6 +51,11 @@
   --color-chrome-border: var(--chrome-border);
   --color-chrome-hover: var(--chrome-hover);
   --color-chrome-accent: var(--chrome-accent);
+  --color-header: var(--header);
+  --color-header-foreground: var(--header-foreground);
+  --color-header-accent: var(--header-accent);
+  --color-header-hover: var(--header-hover);
+  --color-header-border: var(--header-border);
   --color-inverse: var(--inverse);
   --color-inverse-foreground: var(--inverse-foreground);
   --color-rating: var(--rating);

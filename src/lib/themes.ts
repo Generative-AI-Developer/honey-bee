@@ -46,6 +46,11 @@ export type Palette = {
   "chrome-border": string;
   "chrome-hover": string;
   "chrome-accent": string;
+  header: string; // storefront top bar (logo, menu, search, cart)
+  "header-foreground": string;
+  "header-accent": string; // brand text on the header ("Bee" in the logo)
+  "header-hover": string;
+  "header-border": string;
   inverse: string; // strongest-contrast fill: dark buttons, active chips
   "inverse-foreground": string;
   rating: string;
@@ -131,6 +136,11 @@ export const THEMES: Record<ThemeId, ThemeDefinition> = {
       "chrome-border": "#46403A",
       "chrome-hover": "#3A3530",
       "chrome-accent": "#D9B640",
+      header: "#FCAE05",
+      "header-foreground": "#1C1917",
+      "header-accent": "#5C3D00",
+      "header-hover": "#EBA000",
+      "header-border": "#E09B04",
       inverse: "#292524",
       "inverse-foreground": "#FFFFFF",
       rating: "#C9A227",
@@ -173,6 +183,11 @@ export const THEMES: Record<ThemeId, ThemeDefinition> = {
       "chrome-border": "#2E281C",
       "chrome-hover": "#221D14",
       "chrome-accent": "#E3C25A",
+      header: "#FCAE05",
+      "header-foreground": "#1C1917",
+      "header-accent": "#5C3D00",
+      "header-hover": "#EBA000",
+      "header-border": "#E09B04",
       inverse: "#F3EEE2",
       "inverse-foreground": "#17140D",
       rating: "#E3C25A",
@@ -221,6 +236,11 @@ export const THEMES: Record<ThemeId, ThemeDefinition> = {
       "chrome-border": "#35317A",
       "chrome-hover": "#2B2766",
       "chrome-accent": "#A5B4FC",
+      header: "#FCAE05",
+      "header-foreground": "#1C1917",
+      "header-accent": "#312E81",
+      "header-hover": "#EBA000",
+      "header-border": "#E09B04",
       inverse: "#1E293B",
       "inverse-foreground": "#FFFFFF",
       rating: "#D98E04",
@@ -263,6 +283,11 @@ export const THEMES: Record<ThemeId, ThemeDefinition> = {
       "chrome-border": "#24264A",
       "chrome-hover": "#17183A",
       "chrome-accent": "#A5B4FC",
+      header: "#FCAE05",
+      "header-foreground": "#1C1917",
+      "header-accent": "#312E81",
+      "header-hover": "#EBA000",
+      "header-border": "#E09B04",
       inverse: "#E7E9FB",
       "inverse-foreground": "#0F1024",
       rating: "#FBBF24",
@@ -311,6 +336,11 @@ export const THEMES: Record<ThemeId, ThemeDefinition> = {
       "chrome-border": "#1F2B47",
       "chrome-hover": "#15203A",
       "chrome-accent": "#60A5FA",
+      header: "#FCAE05",
+      "header-foreground": "#1C1917",
+      "header-accent": "#1E3A8A",
+      "header-hover": "#EBA000",
+      "header-border": "#E09B04",
       inverse: "#0F172A",
       "inverse-foreground": "#FFFFFF",
       rating: "#D98E04",
@@ -354,6 +384,11 @@ export const THEMES: Record<ThemeId, ThemeDefinition> = {
       "chrome-border": "#1A2440",
       "chrome-hover": "#101A30",
       "chrome-accent": "#93C5FD",
+      header: "#FCAE05",
+      "header-foreground": "#1C1917",
+      "header-accent": "#1E3A8A",
+      "header-hover": "#EBA000",
+      "header-border": "#E09B04",
       inverse: "#E2E8F0",
       "inverse-foreground": "#0B1220",
       rating: "#FBBF24",

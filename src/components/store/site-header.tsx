@@ -23,13 +23,13 @@ export async function SiteHeader() {
       {settings.store.announcement && (
         <div className="bg-chrome px-4 py-2 text-center text-xs text-chrome-foreground sm:text-[0.8125rem]">{settings.store.announcement}</div>
       )}
-      <header className="sticky top-0 z-40 border-b border-border bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+      <header className="sticky top-0 z-40 border-b border-header-border bg-header text-header-foreground">
         <div className="container-page flex h-16 items-center gap-3 lg:h-[76px] lg:gap-7">
           <MobileNav nav={NAV} categories={categories.map((c) => ({ href: `/category/${c.slug}`, label: c.name }))} />
-          <Logo className="text-xl lg:text-2xl" />
+          <Logo className="text-xl lg:text-2xl" onHeader />
           <nav aria-label="Main" className="hidden items-center gap-6 text-[0.9rem] font-medium lg:flex">
             {NAV.map((n) => (
-              <Link key={n.href} href={n.href} className="transition-colors hover:text-primary-strong">
+              <Link key={n.href} href={n.href} className="underline-offset-8 decoration-2 transition-colors hover:underline">
                 {n.label}
               </Link>
             ))}
@@ -42,7 +42,7 @@ export async function SiteHeader() {
             </label>
           </form>
           <div className="ml-auto flex items-center gap-1 md:ml-0">
-            <Link href="/shop?focus=search" className="grid size-10 place-items-center rounded-full hover:bg-muted md:hidden" aria-label="Search">
+            <Link href="/shop?focus=search" className="grid size-10 place-items-center rounded-full hover:bg-header-hover md:hidden" aria-label="Search">
               <Search className="size-5" />
             </Link>
             <Suspense fallback={<IconLink href="/account" label="Account" icon={<User className="size-5" />} />}>
@@ -60,7 +60,7 @@ export async function SiteHeader() {
 
 function IconLink({ href, label, icon, children }: { href: string; label: string; icon: React.ReactNode; children?: React.ReactNode }) {
   return (
-    <Link href={href} aria-label={label} className="relative grid size-10 place-items-center rounded-full hover:bg-muted">
+    <Link href={href} aria-label={label} className="relative grid size-10 place-items-center rounded-full hover:bg-header-hover">
       {icon}
       {children}
     </Link>

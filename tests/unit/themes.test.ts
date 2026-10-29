@@ -35,6 +35,8 @@ const PAIRS: Pair[] = [
   ["chrome-foreground", "chrome", 4.5],
   ["chrome-muted", "chrome", 4.5],
   ["chrome-accent", "chrome", 4.5],
+  ["header-foreground", "header", 4.5],
+  ["header-accent", "header", 4.5],
   ["destructive", "card", 4.5],
   ["destructive", "destructive-soft", 4.5],
   ["success", "card", 4.5],

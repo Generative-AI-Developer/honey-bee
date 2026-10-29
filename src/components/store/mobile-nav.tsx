@@ -13,7 +13,7 @@ export function MobileNav({ nav, categories }: { nav: NavItem[]; categories: Nav
   const close = () => setOpen(false);
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger className="grid size-10 place-items-center rounded-full hover:bg-muted lg:hidden" aria-label="Open menu">
+      <SheetTrigger className="grid size-10 place-items-center rounded-full hover:bg-header-hover lg:hidden" aria-label="Open menu">
         <Menu className="size-5" />
       </SheetTrigger>
       <SheetContent side="left" className="w-[86vw] max-w-sm bg-background p-0">
