@@ -67,6 +67,8 @@ Required: `NEXT_PUBLIC_SITE_URL` (your https domain), `DATABASE_URL`, `BETTER_AU
 
 Strongly recommended: `RESEND_API_KEY` + `EMAIL_FROM` (on a verified domain), `ADMIN_NOTIFY_EMAIL`, and Cloudinary keys. Without Cloudinary, image uploads are disabled in production.
 
+WhatsApp new-order alerts: set either the Meta Cloud API keys (`WHATSAPP_TOKEN`, `WHATSAPP_PHONE_NUMBER_ID`, plus an approved `WHATSAPP_TEMPLATE`) or a free `CALLMEBOT_API_KEY`. See `.env.example` for setup. Then enter the admin's number in Admin → Settings → WhatsApp order alerts and press **Send test message**.
+
 Payments: add each gateway's keys when your merchant account is approved; the checkout shows a method only when its keys are present. Keep the `*_ENV` values on `sandbox` until you have tested a full payment.
 
 ## 5. Scheduled job: release unpaid orders

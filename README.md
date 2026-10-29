@@ -40,7 +40,7 @@ npm run dev                 # http://localhost:3000  ·  admin at /admin
                             # (if port 3000 is taken: npx next dev -p 3001, and set NEXT_PUBLIC_SITE_URL/BETTER_AUTH_URL to match)
 ```
 
-In development, without `RESEND_API_KEY`, emails are not sent. They're printed in the terminal (including the verification link) and saved as HTML files in `.emails/`.
+In development, without `RESEND_API_KEY`, emails are not sent. They're printed in the terminal (including the verification link) and saved as HTML files in `.emails/`. WhatsApp new-order alerts to the admin are printed in the terminal the same way until WhatsApp keys are set (see `.env.example`).
 
 ## Useful commands
 

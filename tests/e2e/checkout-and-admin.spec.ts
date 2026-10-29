@@ -162,3 +162,19 @@ test("admin can create a product with a photo and it appears on the home page", 
   await expect(guest.locator("article", { hasText: name })).toHaveCount(0);
   await guest.close();
 });
+
+test("admin sets up WhatsApp order alerts and sends a test message", async ({ page }) => {
+  await login(page, ADMIN.email, ADMIN.password, "/admin/settings");
+  const section = page.locator("form", { has: page.getByRole("heading", { name: "WhatsApp order alerts" }) });
+  await expect(section.getByRole("switch")).toBeChecked();
+  const number = section.getByLabel("Admin WhatsApp number");
+  await number.fill("12345");
+  await section.getByRole("button", { name: "Save WhatsApp alerts" }).click();
+  await expect(page.getByText(/Enter the WhatsApp number with country code/).first()).toBeVisible();
+  // empty = use the store's WhatsApp number (the default)
+  await number.fill("");
+  await section.getByRole("button", { name: "Save WhatsApp alerts" }).click();
+  await expect(page.getByText("Settings saved").first()).toBeVisible();
+  await section.getByRole("button", { name: "Send test message" }).click();
+  await expect(page.getByText(/Test message sent to|printed in the server log/).first()).toBeVisible();
+});

@@ -3,11 +3,13 @@ import Link from "next/link";
 import { Palette } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SettingsSection } from "@/components/admin/store-forms";
+import { TestWhatsAppButton } from "@/components/admin/test-whatsapp-button";
 import { PageHeader, Panel } from "@/components/admin/ui";
 import { Badge } from "@/components/ui/badge";
 import { requireStaff } from "@/server/auth";
 import { getSettings } from "@/server/settings";
 import { configuredGateways } from "@/services/payments";
+import { whatsAppProvider } from "@/services/whatsapp";
 
 // Private, session-gated page: navigation may wait for the server.
 export const instant = false;
@@ -18,11 +20,13 @@ export default async function SettingsPage() {
   await requireStaff("ADMIN");
   const s = await getSettings();
   const gw = configuredGateways();
+  const wa = whatsAppProvider();
   const integrations = [
     { name: "JazzCash", on: gw.JAZZCASH, env: "JAZZCASH_*" },
     { name: "Easypaisa", on: gw.EASYPAISA, env: "EASYPAISA_*" },
     { name: "Safepay (cards)", on: gw.SAFEPAY, env: "SAFEPAY_*" },
     { name: "Stripe", on: gw.STRIPE, env: "STRIPE_*" },
+    { name: wa === "callmebot" ? "WhatsApp alerts (CallMeBot)" : "WhatsApp alerts (Cloud API)", on: wa !== null, env: wa === "callmebot" ? "CALLMEBOT_API_KEY" : "WHATSAPP_*" },
     { name: "Email (Resend)", on: Boolean(process.env.RESEND_API_KEY), env: "RESEND_API_KEY" },
     { name: "Image storage (Cloudinary)", on: Boolean(process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY), env: "CLOUDINARY_*" },
     { name: "Google sign-in", on: Boolean(process.env.GOOGLE_CLIENT_ID), env: "GOOGLE_CLIENT_*" },
@@ -75,6 +79,18 @@ export default async function SettingsPage() {
           { key: "iban", label: "IBAN" },
           { key: "instructions", label: "Instructions for customers", type: "textarea" },
         ]}
+      />
+      <SettingsSection
+        settingsKey="whatsappAlerts"
+        title="WhatsApp order alerts"
+        description={`Sends you a WhatsApp message with the customer's name whenever a new order is placed.${wa ? "" : " WhatsApp isn't connected yet (see Integrations below), so alerts only appear in the server log."}`}
+        values={s.whatsappAlerts}
+        fields={[
+          { key: "enabled", label: "Send me a WhatsApp message for every new order", type: "bool" },
+          { key: "to", label: "Admin WhatsApp number", hint: `With country code, e.g. +92 300 1234567. Leave empty to use the store's WhatsApp number (${s.store.whatsapp || "not set"}).` },
+        ]}
+        saveLabel="Save WhatsApp alerts"
+        extra={<TestWhatsAppButton />}
       />
       <SettingsSection
         settingsKey="orders"

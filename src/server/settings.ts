@@ -3,6 +3,7 @@ import { cacheLife, cacheTag } from "next/cache";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { COLOR_MODES, DEFAULT_THEME, THEME_IDS } from "@/lib/themes";
+import { toWhatsAppNumber } from "@/lib/utils";
 
 // Business settings editable in Admin → Settings. Each key is validated and merged
 // over defaults, so a missing or partially-filled row never breaks the store.
@@ -39,6 +40,15 @@ export const settingsSchemas = {
     facebook: z.string().max(200),
     instagram: z.string().max(200),
     youtube: z.string().max(200),
+  }),
+  // WhatsApp message to the shop owner for every new order (Admin → Settings)
+  whatsappAlerts: z.object({
+    enabled: z.boolean(),
+    to: z
+      .string()
+      .trim()
+      .max(30)
+      .refine((v) => v === "" || toWhatsAppNumber(v) !== null, "Enter the WhatsApp number with country code, e.g. +92 300 1234567."), // empty = the store's WhatsApp number
   }),
   // Video shown in the home page banner (Admin → Banners & pages)
   homeVideo: z.object({
@@ -80,6 +90,7 @@ export const defaultSettings: Settings = {
   },
   orders: { paymentWindowMinutes: 60, returnWindowDays: 7 },
   social: { facebook: "", instagram: "", youtube: "" },
+  whatsappAlerts: { enabled: true, to: "" },
   homeVideo: {
     enabled: true,
     src: "/videos/home-page-video.mp4",

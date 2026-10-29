@@ -3,13 +3,16 @@
 import { refresh } from "next/cache";
 import { z } from "zod";
 import { db } from "@/lib/db";
+import { siteUrl } from "@/lib/env";
 import { rupees } from "@/lib/money";
 import { normalizeCity, slugify } from "@/lib/utils";
 import { action, ok, UserError } from "@/server/action";
 import { assertStaff } from "@/server/auth";
 import { refreshStore } from "@/server/revalidate";
 import { tags } from "@/server/queries/catalog";
-import { settingsSchemas, type SettingsKey } from "@/server/settings";
+import { newOrderWhatsAppText } from "@/server/notifications";
+import { getSettings, settingsSchemas, type SettingsKey } from "@/server/settings";
+import { sendWhatsApp, whatsAppProvider } from "@/services/whatsapp";
 import type { Prisma } from "@/generated/prisma/client";
 
 const optDate = z
@@ -224,6 +227,18 @@ export const saveSettings = action(z.object({ key: z.enum(Object.keys(settingsSc
   refreshStore("settings");
   refresh();
   return ok(undefined, "Settings saved");
+});
+
+/** Sends a sample new-order alert to the saved admin WhatsApp number. */
+export const sendTestWhatsApp = action(z.object({}), async () => {
+  await assertStaff("ADMIN");
+  const s = await getSettings();
+  const to = s.whatsappAlerts.to || s.store.whatsapp;
+  if (!to) throw new UserError("Save an admin WhatsApp number first.");
+  const sample = { customerName: "Test Customer", number: "HB-TEST", total: "Rs 1,000", payment: "Cash on Delivery", url: `${siteUrl}/admin/orders` };
+  const res = await sendWhatsApp({ to, text: newOrderWhatsAppText(sample), templateParams: [sample.customerName, sample.number, sample.total] });
+  if (!res.ok) throw new UserError(res.error ?? "The message could not be sent.");
+  return ok(undefined, whatsAppProvider() ? `Test message sent to ${to}` : `WhatsApp isn't connected yet, so the message was printed in the server log (to ${to}).`);
 });
 
 // ───────────── customers ─────────────

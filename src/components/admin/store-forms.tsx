@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { Loader2, Plus, Trash2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -386,7 +386,7 @@ export function ZoneEditorToggle({ initial, label }: { initial: ZoneValues; labe
 
 type FieldDef = { key: string; label: string; type?: "text" | "money" | "number" | "bool" | "textarea" | "money-nullable"; hint?: string };
 
-export function SettingsSection({ settingsKey, title, description, fields, values }: { settingsKey: string; title: string; description?: string; fields: FieldDef[]; values: Record<string, unknown> }) {
+export function SettingsSection({ settingsKey, title, description, fields, values, extra, saveLabel }: { settingsKey: string; title: string; description?: string; fields: FieldDef[]; values: Record<string, unknown>; extra?: ReactNode; saveLabel?: string }) {
   const toForm = (f: FieldDef, v: unknown) => (f.type === "money" || f.type === "money-nullable" ? (v == null ? "" : String((v as number) / 100)) : v);
   const [state, setState] = useState<Record<string, unknown>>(Object.fromEntries(fields.map((f) => [f.key, toForm(f, values[f.key])])));
   const { pending, run } = useAction();
@@ -431,9 +431,12 @@ export function SettingsSection({ settingsKey, title, description, fields, value
           ),
         )}
       </div>
-      <Button size="sm" disabled={pending} className="justify-self-start">
-        {pending && <Loader2 className="animate-spin" />} Save {title.toLowerCase()}
-      </Button>
+      <div className="flex flex-wrap items-center gap-2">
+        <Button size="sm" disabled={pending}>
+          {pending && <Loader2 className="animate-spin" />} {saveLabel ?? `Save ${title.toLowerCase()}`}
+        </Button>
+        {extra}
+      </div>
     </form>
   );
 }

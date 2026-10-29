@@ -8,6 +8,7 @@ import { orderUrl } from "@/server/order-access";
 import type { ShippingAddress } from "@/server/orders";
 import { getSettings } from "@/server/settings";
 import { sendEmail } from "@/services/email";
+import { sendWhatsApp } from "@/services/whatsapp";
 import { PAYMENT_LABELS } from "@/services/payments";
 
 // All notification helpers swallow errors: an email problem must never fail an order.
@@ -34,7 +35,37 @@ async function loadEmailOrder(orderId: string): Promise<(EmailOrder & { email: s
   };
 }
 
+/** Customer confirmation + admin email + admin WhatsApp alert. Called once per order, when it is placed (or its online payment succeeds). */
 export async function sendOrderPlacedEmails(orderId: string) {
+  await Promise.all([sendOrderPlacedEmailsOnly(orderId), sendAdminWhatsAppAlert(orderId)]);
+}
+
+/** The admin's WhatsApp text for a new order. */
+export function newOrderWhatsAppText(o: { customerName: string; number: string; total: string; payment: string; url: string }) {
+  return `🛒 New order ${o.number} placed by ${o.customerName} (${o.total}, ${o.payment}). It needs to be reviewed: ${o.url}`;
+}
+
+export async function sendAdminWhatsAppAlert(orderId: string) {
+  try {
+    const [order, settings] = await Promise.all([db.order.findUnique({ where: { id: orderId } }), getSettings()]);
+    if (!order || !settings.whatsappAlerts.enabled) return;
+    const to = settings.whatsappAlerts.to || settings.store.whatsapp;
+    if (!to) return;
+    const o = {
+      customerName: order.customerName,
+      number: orderNumber(order.number),
+      total: formatPrice(order.total),
+      payment: PAYMENT_LABELS[order.paymentMethod],
+      url: `${siteUrl}/admin/orders/${order.id}`,
+    };
+    // Template placeholders (Cloud API): {{1}} customer name, {{2}} order number, {{3}} total
+    await sendWhatsApp({ to, text: newOrderWhatsAppText(o), templateParams: [o.customerName, o.number, o.total] });
+  } catch (e) {
+    console.error("[notify] whatsapp", orderId, e);
+  }
+}
+
+async function sendOrderPlacedEmailsOnly(orderId: string) {
   try {
     const order = await loadEmailOrder(orderId);
     if (!order) return;

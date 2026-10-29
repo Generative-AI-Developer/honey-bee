@@ -36,6 +36,13 @@ export function normalizePhone(phone: string): string {
   return digits;
 }
 
+/** International digits without "+" as WhatsApp APIs expect ("0300 1234567" → "923001234567"), or null if implausible. */
+export function toWhatsAppNumber(phone: string): string | null {
+  const n = normalizePhone(phone.trim().replace(/^00/, "+"));
+  const digits = n.startsWith("+") ? n.slice(1) : n;
+  return /^[1-9]\d{9,14}$/.test(digits) ? digits : null;
+}
+
 export function initials(name: string): string {
   return name
     .split(/\s+/)

@@ -20,6 +20,12 @@ const schema = z.object({
   EMAIL_FROM: z.string().default("Honey Bee <orders@honeybee.pk>"),
   ADMIN_NOTIFY_EMAIL: optional,
 
+  WHATSAPP_TOKEN: optional,
+  WHATSAPP_PHONE_NUMBER_ID: optional,
+  WHATSAPP_TEMPLATE: optional,
+  WHATSAPP_TEMPLATE_LANG: z.string().default("en"),
+  CALLMEBOT_API_KEY: optional,
+
   CLOUDINARY_CLOUD_NAME: optional,
   CLOUDINARY_API_KEY: optional,
   CLOUDINARY_API_SECRET: optional,
