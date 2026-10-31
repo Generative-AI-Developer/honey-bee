@@ -4,10 +4,13 @@ import { ADMIN, login } from "./helpers";
 test.describe.configure({ mode: "serial" });
 
 let admin: BrowserContext;
+// the owner's saved choices, restored after the tests that change them
+let saved = { speed: "0.5", layout: "full" };
 test.beforeAll(async ({ browser }) => {
   admin = await browser.newContext();
   const page = await admin.newPage();
   await login(page, ADMIN.email, ADMIN.password, "/admin/content");
+  saved = { speed: await page.getByLabel("Playback speed").inputValue(), layout: await page.getByLabel("Layout").inputValue() };
   await page.close();
 });
 test.afterAll(async () => admin?.close());
@@ -26,16 +29,19 @@ const box = (page: Page) =>
     return { left: r.left, width: r.width, height: r.height, vw: innerWidth, vh: innerHeight, rate: v.playbackRate, muted: v.muted };
   });
 
-test("computers: slow-motion video fills the right half of the banner", async ({ browser }) => {
+test("computers: slow-motion video fills the hero, headline and button over it", async ({ browser }) => {
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
   await page.goto("/");
   await expect.poll(() => heroVideo(page).evaluate((v: HTMLVideoElement) => v.currentTime), { timeout: 15_000 }).toBeGreaterThan(0.3);
   const b = await box(page);
-  expect(b.rate).toBe(0.5);
+  expect(b.rate).toBe(Number(saved.speed));
   expect(b.muted).toBe(true);
-  expect(b.left).toBeCloseTo(b.vw / 2, -1);
-  expect(b.width).toBeCloseTo(b.vw / 2, -1);
-  expect(b.height).toBeGreaterThanOrEqual(600);
+  expect(b.left).toBe(0);
+  expect(b.width).toBe(b.vw);
+  expect(b.height).toBeGreaterThanOrEqual(b.vh * 0.8);
+  // the headline and main button sit on the video, on the first screen
+  await expect(page.getByRole("heading", { level: 1 })).toBeInViewport();
+  await expect(page.getByRole("link", { name: /Shop all honey/ })).toBeInViewport();
   await page.getByRole("button", { name: "Turn sound on" }).click();
   expect(await heroVideo(page).evaluate((v: HTMLVideoElement) => v.muted)).toBe(false);
   await page.getByRole("button", { name: "Pause video" }).click();
@@ -47,7 +53,7 @@ test("phones: video fills the first screen with the headline and button over it"
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
   const page = await context.newPage();
   await page.goto("/");
-  await expect.poll(() => heroVideo(page).evaluate((v: HTMLVideoElement) => v.playbackRate)).toBe(0.5);
+  await expect.poll(() => heroVideo(page).evaluate((v: HTMLVideoElement) => v.playbackRate)).toBe(Number(saved.speed));
   const b = await box(page);
   expect(b.width).toBe(b.vw);
   expect(b.height).toBeGreaterThanOrEqual(b.vh * 0.8);
@@ -68,13 +74,13 @@ test("admin changes to speed and layout reach shoppers", async ({ browser }) => 
   await expect.poll(() => heroVideo(guest).evaluate((v: HTMLVideoElement) => v.playbackRate)).toBe(0.25);
   await expect(guest.locator('[data-hero-layout="frame"]')).toHaveCount(1);
 
-  // back to the defaults
-  await page.getByLabel("Playback speed").selectOption("0.5");
+  // back to the owner's choices
+  await page.getByLabel("Playback speed").selectOption(saved.speed);
   await expect(page.getByText("Playback speed saved").first()).toBeVisible();
-  await page.getByLabel("Layout").selectOption("combo");
+  await page.getByLabel("Layout").selectOption(saved.layout);
   await expect(page.getByText("Layout saved").first()).toBeVisible();
   await guest.goto("/");
-  await expect(guest.locator('[data-hero-layout="combo"]')).toHaveCount(1);
+  await expect(guest.locator(`[data-hero-layout="${saved.layout}"]`)).toHaveCount(1);
   await guest.close();
 });
 

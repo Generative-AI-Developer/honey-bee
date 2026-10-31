@@ -57,8 +57,9 @@ export const settingsSchemas = {
     poster: z.string().max(500).refine((v) => v === "" || v.startsWith("/") || v.startsWith("https://res.cloudinary.com/"), "Invalid cover image."),
     caption: z.string().trim().max(120),
     speed: z.union([z.literal(0.25), z.literal(0.5), z.literal(0.75), z.literal(1)]),
-    // combo: full screen on phones + right half on computers · half: half on computers, large block on phones · frame: small framed video
-    layout: z.enum(["combo", "half", "frame"]),
+    // full: full-width background video with the headline on top · combo: full screen on phones + right half on computers
+    // half: half on computers, large block on phones · frame: small framed video
+    layout: z.enum(["full", "combo", "half", "frame"]),
   }),
   // Global colour scheme for the whole site (Admin → Appearance)
   appearance: z.object({
@@ -97,7 +98,7 @@ export const defaultSettings: Settings = {
     poster: "/videos/home-page-video-poster.jpg",
     caption: "Straight from our honey shop",
     speed: 0.5,
-    layout: "combo",
+    layout: "full",
   },
   appearance: { ...DEFAULT_THEME },
 };

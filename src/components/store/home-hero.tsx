@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ChevronRight, Leaf, ShieldCheck } from "lucide-react";
+import { Banknote, ChevronRight, Leaf, ShieldCheck, Truck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { HeroVideo } from "@/components/store/hero-video";
 import { HoneyJar } from "@/components/store/honey-jar";
@@ -18,7 +18,8 @@ type Props = {
 
 /**
  * Home page banner.
- * - video layout "combo" (default): phones get the video full screen behind the headline;
+ * - video layout "full" (default): full-width background video with the headline and buttons over it (see FullVideoHero).
+ * - "combo": phones get the video full screen behind the headline;
  *   computers get it filling the right half, edge to edge.
  * - "half": right half on computers, a large block above the headline on phones.
  * - "frame": small portrait frame on the right. No video: honey-jar illustration.
@@ -72,6 +73,8 @@ export function HomeHero({ title, subtitle, ctaLabel, ctaHref, rating, video }: 
     </div>
   );
 
+  if (layout === "full") return <FullVideoHero title={title} subtitle={subtitle} ctaLabel={ctaLabel} ctaHref={ctaHref} rating={rating} video={video} />;
+
   if (layout === "combo" || layout === "half") {
     const combo = layout === "combo";
     return (
@@ -118,6 +121,70 @@ export function HomeHero({ title, subtitle, ctaLabel, ctaHref, rating, video }: 
             <div className="absolute top-2 right-0 lg:top-10">{labBadge}</div>
           </div>
         )}
+      </div>
+    </section>
+  );
+}
+
+/**
+ * Full-width background video with the copy on top: the standard "video hero".
+ * A dark gradient keeps the white text readable (left side on computers, bottom on phones)
+ * and softens a low-resolution or portrait video. Height: the first screen below the header.
+ */
+function FullVideoHero({ title, subtitle, ctaLabel, ctaHref, rating, video }: Props) {
+  return (
+    <section data-hero-layout="full" className="relative isolate overflow-hidden bg-chrome text-white">
+      <div className="absolute inset-0" data-hero-video>
+        <HeroVideo
+          src={video.src}
+          poster={video.poster}
+          caption={video.caption}
+          speed={video.speed}
+          variant="fill"
+          controls="top-mobile"
+          showCaption={false}
+          shade="bg-gradient-to-t from-black/90 via-black/50 to-black/25 lg:bg-gradient-to-r lg:from-black/85 lg:via-black/55 lg:to-black/15"
+        />
+      </div>
+      {/* pointer-events-none so the video's pause/sound buttons stay clickable around the copy */}
+      <div className="pointer-events-none relative container-page flex min-h-[calc(100svh-7rem)] flex-col justify-end pt-28 pb-14 lg:min-h-[min(calc(100svh-7rem),860px)] lg:justify-center lg:py-24">
+        <div className="pointer-events-auto max-w-2xl">
+          <span className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3.5 py-1.5 text-xs font-semibold tracking-[0.12em] uppercase backdrop-blur-sm">
+            <Leaf className="size-3.5" aria-hidden /> Fresh harvest now in stock
+          </span>
+          <h1 className="mb-5 text-[2.75rem] leading-[1.03] text-white drop-shadow-[0_2px_16px_rgb(0_0_0/0.35)] sm:text-6xl lg:text-[4.25rem]">{title}</h1>
+          <p className="max-w-xl text-base text-white/85 sm:text-lg">{subtitle}</p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Button asChild size="lg" className="flex-1 sm:flex-none">
+              <Link href={ctaHref}>
+                {ctaLabel} <ChevronRight />
+              </Link>
+            </Button>
+            <Button asChild size="lg" variant="outline" className="flex-1 border-white/80 text-white backdrop-blur-sm hover:bg-white hover:text-black sm:flex-none">
+              <Link href="/about">Our story</Link>
+            </Button>
+          </div>
+          <ul className="mt-9 flex flex-wrap gap-x-6 gap-y-2 text-sm text-white/85">
+            <li className="flex items-center gap-2">
+              <ShieldCheck className="size-4" aria-hidden /> Lab-tested, every batch
+            </li>
+            <li className="flex items-center gap-2">
+              <Banknote className="size-4" aria-hidden /> Cash on Delivery
+            </li>
+            <li className="flex items-center gap-2">
+              <Truck className="size-4" aria-hidden /> Delivery across Pakistan
+            </li>
+          </ul>
+          {/* Social proof comes only from real, approved reviews; hidden until there are some. */}
+          {rating.count > 0 && (
+            <a href="#reviews" className="mt-5 flex items-center gap-3 text-sm">
+              <Stars rating={rating.average} />
+              <span>
+                <b>{rating.average.toFixed(1)}/5</b> <span className="text-white/75">from {rating.count.toLocaleString()} customer reviews</span>
+              </span>
+            </a>
+          )}
+        </div>
       </div>
     </section>
   );

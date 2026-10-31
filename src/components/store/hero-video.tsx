@@ -20,6 +20,7 @@ export function HeroVideo({
   variant = "frame",
   controls = "bottom",
   showCaption = true,
+  shade,
   className,
 }: {
   src: string;
@@ -31,6 +32,8 @@ export function HeroVideo({
   controls?: "bottom" | "top" | "top-mobile";
   /** "desktop": caption only on computers (phones show the headline over the video instead) */
   showCaption?: boolean | "desktop";
+  /** classes for a darkening layer between the video and its buttons (text overlaid on the video) */
+  shade?: string;
   className?: string;
 }) {
   const ref = useRef<HTMLVideoElement>(null);
@@ -113,6 +116,7 @@ export function HeroVideo({
         onPause={() => setPlaying(false)}
         aria-label={caption ? `Video: ${caption}` : "Video from our honey shop"}
       />
+      {shade && <div className={cn("pointer-events-none absolute inset-0", shade)} aria-hidden />}
       {showCaption && caption && (
         <figcaption
           className={cn(

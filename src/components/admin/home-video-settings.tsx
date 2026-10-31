@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { saveSettings } from "@/server/actions/admin/store";
 
-type HomeVideo = { enabled: boolean; src: string; poster: string; caption: string; speed: 0.25 | 0.5 | 0.75 | 1; layout: "combo" | "half" | "frame" };
+type HomeVideo = { enabled: boolean; src: string; poster: string; caption: string; speed: 0.25 | 0.5 | 0.75 | 1; layout: "full" | "combo" | "half" | "frame" };
 
 const SPEEDS = [
   { value: 1, label: "Normal speed" },
@@ -18,7 +18,8 @@ const SPEEDS = [
 ] as const;
 
 const LAYOUTS = [
-  { value: "combo", label: "Full screen on phones, half the banner on computers (recommended)" },
+  { value: "full", label: "Full-width background video, headline on top (recommended)" },
+  { value: "combo", label: "Full screen on phones, half the banner on computers" },
   { value: "half", label: "Half the banner (large block above the text on phones)" },
   { value: "frame", label: "Small framed video beside the text" },
 ] as const;
