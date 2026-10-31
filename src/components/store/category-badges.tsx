@@ -23,7 +23,7 @@ export function CategoryBadgeList({ categories, active, query = "" }: { categori
     <nav aria-label="Categories" className="mb-8">
       <ul className="flex flex-wrap justify-center gap-2">
         <li className="shrink-0">
-          <Badge href={`/shop${qs}`} active={!active} label="All honey" count={total} />
+          <Badge href={`/shop${qs}`} active={!active} label="All Products" count={total} />
         </li>
         {categories.map((c) => (
           <li key={c.slug} className="shrink-0">

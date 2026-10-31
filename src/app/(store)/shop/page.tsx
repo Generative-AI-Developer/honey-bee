@@ -18,7 +18,7 @@ export default function ShopPage({ searchParams }: PageProps<"/shop">) {
         <span className="font-medium text-foreground" aria-current="page">Shop</span>
       </nav>
       <header className="mb-7">
-        <h1 className="text-3xl lg:text-4xl">All honey</h1>
+        <h1 className="text-3xl lg:text-4xl">All Products</h1>
         <p className="mt-1 text-foreground-soft">Raw, unfiltered honey from across Pakistan, every batch lab-tested.</p>
       </header>
       <CatalogView searchParams={searchParams} basePath="/shop" />

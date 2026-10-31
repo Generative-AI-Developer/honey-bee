@@ -50,7 +50,7 @@ export default async function HomePage() {
           heroBanner?.subtitle ??
           "Unheated, unfiltered and lab-tested. Sourced directly from beekeepers in Karak, Swat and Kashmir and delivered to your door anywhere in Pakistan."
         }
-        ctaLabel={heroBanner?.ctaLabel ?? "Shop all honey"}
+        ctaLabel={heroBanner?.ctaLabel ?? "Shop all products"}
         ctaHref={heroBanner?.ctaHref ?? "/shop"}
         rating={storeRating}
         video={settings.homeVideo}

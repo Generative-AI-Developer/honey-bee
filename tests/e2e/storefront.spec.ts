@@ -23,7 +23,7 @@ test("search and filters narrow the shop", async ({ page }) => {
 test("centred category badges switch category and keep the sort", async ({ page }) => {
   await page.goto("/shop?sort=price-asc");
   const categories = page.getByRole("navigation", { name: "Categories" });
-  await expect(categories.getByRole("link", { name: /All honey/ })).toHaveAttribute("aria-current", "page");
+  await expect(categories.getByRole("link", { name: /All Products/ })).toHaveAttribute("aria-current", "page");
   await categories.getByRole("link", { name: /Gift Boxes/ }).click();
   await expect(page).toHaveURL(/\/category\/gift-boxes\?sort=price-asc/);
   await expect(categories.getByRole("link", { name: /Gift Boxes/ })).toHaveAttribute("aria-current", "page");
@@ -64,7 +64,7 @@ test("WhatsApp button, closable announcement and the Shop menu", async ({ page }
     await page.getByRole("button", { name: /^Shop/ }).click();
     const menu = page.getByRole("menu");
     // category names are the owner's to change, so just follow the first one listed
-    await expect(menu.getByRole("menuitem", { name: /All honey/ })).toBeVisible();
+    await expect(menu.getByRole("menuitem", { name: /All Products/ })).toBeVisible();
     const first = menu.getByRole("menuitem").nth(1);
     const name = ((await first.textContent()) ?? "").replace(/\d+$/, "").trim();
     await first.click();

@@ -61,6 +61,7 @@ test.afterAll(async () => {
 });
 
 test("admin uploads images; the banner slides at the chosen interval", async ({ browser }) => {
+  test.skip(original.images > 3, "the owner's slider already has more than 3 images (6 is the limit)");
   const banner = panel("Home page banner");
   await banner.locator('input[type="file"][multiple]').setInputFiles(["tests/e2e/fixtures/honey-photo.jpg", "tests/e2e/fixtures/honey-photo.jpg", "tests/e2e/fixtures/honey-photo.jpg"]);
   await expect(toast("3 images added to the slider")).toBeVisible({ timeout: 30_000 });
