@@ -107,7 +107,7 @@ export const THEMES: Record<ThemeId, ThemeDefinition> = {
   golden: {
     id: "golden",
     name: "Golden / Champagne",
-    description: "Warm honey gold on champagne cream. The original Honey Bee look.",
+    description: "Warm honey gold on champagne cream. The original look.",
     swatches: { primary: "#C9A227", secondary: "#E7D7A0", lightBackground: "#FAF8F1", lightSurface: "#FFFFFF", darkBackground: "#17140D", darkSurface: "#292318", text: "#292524" },
     light: {
       background: "#FAF8F1",

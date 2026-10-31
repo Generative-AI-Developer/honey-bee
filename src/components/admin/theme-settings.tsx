@@ -131,7 +131,7 @@ function ThemeCard({ id, mode, selected, active, onSelect }: { id: ThemeId; mode
       <div data-theme={id} data-mode={mode} className="overflow-hidden rounded-xl border border-border bg-background text-foreground" aria-hidden>
         <div className="flex items-center justify-between bg-chrome px-3 py-2 text-[10px] text-chrome-foreground">
           <span className="font-heading text-xs font-semibold">
-            Honey<span className="text-chrome-accent">Bee</span>
+            Abdul Sami <span className="text-chrome-accent">Enterprises</span>
           </span>
           <span className="text-chrome-muted">Shop · Account</span>
         </div>

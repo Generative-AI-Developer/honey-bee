@@ -23,7 +23,7 @@ export function EmailLayout({ preview, children }: { preview: string; children: 
         <Container style={{ maxWidth: 560, margin: "0 auto", backgroundColor: "#ffffff", borderRadius: 16, border: `1px solid ${colors.line}`, overflow: "hidden" }}>
           <Section style={{ backgroundColor: colors.ink, padding: "20px 32px" }}>
             <Text style={{ margin: 0, fontFamily: "Georgia, serif", fontSize: 22, fontWeight: 700, color: "#ffffff" }}>
-              Honey<span style={{ color: colors.honey }}>Bee</span>
+              Abdul Sami <span style={{ color: colors.honey }}>Enterprises</span>
             </Text>
           </Section>
           <Section style={{ padding: "28px 32px 8px" }}>{children}</Section>

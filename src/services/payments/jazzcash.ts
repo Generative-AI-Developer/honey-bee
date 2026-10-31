@@ -50,7 +50,7 @@ export function startJazzcash(order: PayableOrder, urls: PaymentUrls, attempt: s
     pp_TxnCurrency: "PKR",
     pp_TxnDateTime: pkTime(now),
     pp_BillReference: order.displayNumber,
-    pp_Description: `Honey Bee order ${order.displayNumber}`,
+    pp_Description: `Abdul Sami Enterprises order ${order.displayNumber}`,
     pp_TxnExpiryDateTime: pkTime(new Date(now.getTime() + 60 * 60 * 1000)),
     pp_ReturnURL: urls.returnUrl,
     ppmpf_1: order.id,

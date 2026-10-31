@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import { getSettings } from "@/server/settings";
 
-export const metadata: Metadata = { title: "Contact us", description: "Get in touch with Honey Bee by WhatsApp, phone or email.", alternates: { canonical: "/contact" } };
+export const metadata: Metadata = { title: "Contact us", description: "Get in touch with Abdul Sami Enterprises by WhatsApp, phone or email.", alternates: { canonical: "/contact" } };
 
 export default async function ContactPage() {
   const { store } = await getSettings();

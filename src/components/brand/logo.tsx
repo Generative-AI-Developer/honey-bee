@@ -12,8 +12,10 @@ export function Logo({ className, markClassName, inverted = false, onHeader = fa
   return (
     <Link href={href} className={cn("inline-flex items-center gap-2.5 font-heading text-2xl font-semibold", inverted ? "text-chrome-foreground" : onHeader ? "text-header-foreground" : "text-foreground", className)}>
       <LogoMark className={markClassName} />
-      <span>
-        Honey<b className={cn("font-bold", inverted ? "text-chrome-accent" : onHeader ? "text-header-accent" : "text-primary-strong")}>Bee</b>
+      {/* two lines, like the badge: "Abdul Sami" over a small "ENTERPRISES" */}
+      <span className="flex flex-col items-center text-center leading-none">
+        <span className="whitespace-nowrap">Abdul Sami</span>
+        <b className={cn("mt-1 font-sans text-[0.42em] font-bold tracking-[0.22em] uppercase", inverted ? "text-chrome-accent" : onHeader ? "text-header-accent" : "text-primary-strong")}>Enterprises</b>
       </span>
       <span className="sr-only">home</span>
     </Link>
