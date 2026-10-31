@@ -9,12 +9,16 @@ const storageKey = (text: string) => {
   return `hb-announcement-closed-${h}`;
 };
 
-/** Top announcement strip; closing it is remembered on this device until the text changes. */
 const subscribe = (onChange: () => void) => {
   window.addEventListener("storage", onChange);
   return () => window.removeEventListener("storage", onChange);
 };
 
+/**
+ * Top announcement strip; closing it is remembered on this device until the text changes.
+ * The tiny inline script right after the bar hides it while the page is still loading, so a visitor
+ * who closed it never sees it flash on the next page (React then removes it after hydration).
+ */
 export function AnnouncementBar({ text }: { text: string }) {
   const [closedNow, setClosed] = useState(false);
   const closedBefore = useSyncExternalStore(
@@ -29,22 +33,31 @@ export function AnnouncementBar({ text }: { text: string }) {
     () => false, // server and prerender: shown
   );
   if (closedNow || closedBefore) return null;
+  const hideIfClosed = `try{if(localStorage.getItem(${JSON.stringify(storageKey(text))})==="1")document.currentScript.previousElementSibling.hidden=true}catch(e){}`;
   return (
-    <div className="relative bg-chrome px-10 py-2 text-center text-xs text-chrome-foreground sm:text-[0.8125rem]" role="region" aria-label="Announcement">
-      {text}
-      <button
-        type="button"
-        onClick={() => {
-          setClosed(true);
-          try {
-            localStorage.setItem(storageKey(text), "1");
-          } catch {}
-        }}
-        aria-label="Close announcement"
-        className="absolute top-1/2 right-2 grid size-7 -translate-y-1/2 place-items-center rounded-full text-chrome-muted hover:bg-chrome-hover hover:text-chrome-foreground focus-visible:ring-2 focus-visible:ring-chrome-accent focus-visible:outline-none"
+    <>
+      <div
+        suppressHydrationWarning
+        className="relative bg-chrome px-10 py-2 text-center text-xs text-chrome-foreground sm:text-[0.8125rem]"
+        role="region"
+        aria-label="Announcement"
       >
-        <X className="size-4" />
-      </button>
-    </div>
+        {text}
+        <button
+          type="button"
+          onClick={() => {
+            setClosed(true);
+            try {
+              localStorage.setItem(storageKey(text), "1");
+            } catch {}
+          }}
+          aria-label="Close announcement"
+          className="absolute top-1/2 right-2 grid size-7 -translate-y-1/2 place-items-center rounded-full text-chrome-muted hover:bg-chrome-hover hover:text-chrome-foreground focus-visible:ring-2 focus-visible:ring-chrome-accent focus-visible:outline-none"
+        >
+          <X className="size-4" />
+        </button>
+      </div>
+      <script dangerouslySetInnerHTML={{ __html: hideIfClosed }} />
+    </>
   );
 }
