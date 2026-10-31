@@ -11,6 +11,7 @@ import { ProductGallery } from "@/components/store/product-gallery";
 import { ProductGrid } from "@/components/store/product-card";
 import { ReviewForm } from "@/components/store/review-form";
 import { Stars } from "@/components/store/stars";
+import { WishlistButton } from "@/components/store/wishlist";
 import { JsonLd } from "@/components/seo/json-ld";
 import { formatPrice, percentOff, toRupees } from "@/lib/money";
 import { site } from "@/lib/site";
@@ -135,7 +136,10 @@ async function Product({ params }: Pick<PageProps<"/products/[slug]">, "params">
           <p className="text-xs font-medium tracking-[0.08em] text-muted-foreground uppercase">
             {[product.origin, product.harvest && `Harvest ${product.harvest}`].filter(Boolean).join(" · ")}
           </p>
-          <h1 className="text-4xl lg:text-[2.75rem]">{product.name}</h1>
+          <div className="flex items-start justify-between gap-4">
+            <h1 className="text-4xl lg:text-[2.75rem]">{product.name}</h1>
+            <WishlistButton productId={product.id} productName={product.name} size="lg" className="mt-1 shrink-0" />
+          </div>
           <div className="flex flex-wrap items-center gap-2 text-sm">
             {product.ratingCount > 0 ? (
               <>

@@ -253,6 +253,13 @@ export async function getRelatedProducts(productId: string, categoryId: string, 
   return ordered.map(toCard);
 }
 
+/** Product cards for the given ids, in that order (inactive products are skipped). Uncached: used for per-user lists. */
+export async function getCardsByIds(ids: string[]): Promise<ProductCard[]> {
+  if (!ids.length) return [];
+  const rows = await db.product.findMany({ where: { id: { in: ids }, status: "ACTIVE" }, select: cardSelect });
+  return ids.map((id) => rows.find((r) => r.id === id)).filter((r): r is CardRow => Boolean(r)).map(toCard);
+}
+
 export async function getProductReviews(productId: string) {
   "use cache";
   cacheTag(tags.reviews(productId));

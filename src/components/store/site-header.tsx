@@ -2,7 +2,10 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { Search, ShoppingBag, User } from "lucide-react";
 import { Logo } from "@/components/brand/logo";
+import { AnnouncementBar } from "@/components/store/announcement-bar";
 import { MobileNav } from "@/components/store/mobile-nav";
+import { ShopMenu } from "@/components/store/shop-menu";
+import { WishlistLink } from "@/components/store/wishlist";
 import { getCart } from "@/server/cart";
 import { getCurrentUser, isStaff } from "@/server/auth";
 import { getCategories } from "@/server/queries/catalog";
@@ -20,15 +23,14 @@ export async function SiteHeader() {
   const [settings, categories] = await Promise.all([getSettings(), getCategories()]);
   return (
     <>
-      {settings.store.announcement && (
-        <div className="bg-chrome px-4 py-2 text-center text-xs text-chrome-foreground sm:text-[0.8125rem]">{settings.store.announcement}</div>
-      )}
+      {settings.store.announcement && <AnnouncementBar text={settings.store.announcement} />}
       <header className="sticky top-0 z-40 border-b border-header-border bg-header text-header-foreground">
         <div className="container-page flex h-16 items-center gap-3 lg:h-[76px] lg:gap-7">
           <MobileNav nav={NAV} categories={categories.map((c) => ({ href: `/category/${c.slug}`, label: c.name }))} />
           <Logo className="text-xl lg:text-2xl" onHeader />
           <nav aria-label="Main" className="hidden items-center gap-6 text-[0.9rem] font-medium lg:flex">
-            {NAV.map((n) => (
+            <ShopMenu categories={categories.map((c) => ({ slug: c.slug, name: c.name, count: c.productCount }))} />
+            {NAV.filter((n) => n.href !== "/shop").map((n) => (
               <Link key={n.href} href={n.href} className="underline-offset-8 decoration-2 transition-colors hover:underline">
                 {n.label}
               </Link>
@@ -48,6 +50,7 @@ export async function SiteHeader() {
             <Suspense fallback={<IconLink href="/account" label="Account" icon={<User className="size-5" />} />}>
               <AccountLink />
             </Suspense>
+            <WishlistLink className="hidden sm:grid" />
             <Suspense fallback={<CartLink count={0} />}>
               <HeaderCart />
             </Suspense>

@@ -97,7 +97,7 @@ export default async function HomePage() {
               <div className="flex items-end justify-between gap-2 p-4 sm:p-5">
                 <div>
                   <h3 className="text-base sm:text-lg">{c.name}</h3>
-                  <span className="text-xs text-foreground-soft sm:text-sm">{c.productCount} products</span>
+                  <span className="text-xs text-foreground-soft sm:text-sm">{c.productCount} {c.productCount === 1 ? "product" : "products"}</span>
                 </div>
                 <ArrowRight className="size-5 shrink-0 text-primary-strong transition-transform group-hover:translate-x-1" aria-hidden />
               </div>

@@ -157,7 +157,8 @@ test("admin can create a product with a photo and it appears on the home page", 
   // clean up through the admin (confirm dialog accepted); it must disappear from the store too
   page.once("dialog", (d) => d.accept());
   await page.getByRole("button", { name: /Archive \/ delete/ }).click();
-  await page.waitForURL(/\/admin\/products$/);
+  // the list can be slow to finish loading every image on a busy dev server; arriving on it is enough
+  await page.waitForURL(/\/admin\/products$/, { waitUntil: "commit" });
   await guest.goto("/");
   await expect(guest.locator("article", { hasText: name })).toHaveCount(0);
   await guest.close();
@@ -177,4 +178,20 @@ test("admin sets up WhatsApp order alerts and sends a test message", async ({ pa
   await expect(page.getByText("Settings saved").first()).toBeVisible();
   await section.getByRole("button", { name: "Send test message" }).click();
   await expect(page.getByText(/Test message sent to|printed in the server log/).first()).toBeVisible();
+});
+
+test("signed-in shoppers can save products to their wishlist", async ({ page }) => {
+  await login(page, ADMIN.email, ADMIN.password, "/products/acacia-phulai-honey");
+  const heart = page.getByRole("button", { name: /wishlist/ }).first();
+  await expect(heart).toHaveAttribute("aria-pressed", "false");
+  await heart.click();
+  await expect(heart).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByRole("link", { name: "Wishlist, 1 items" })).toBeVisible();
+
+  await page.goto("/account/wishlist");
+  await expect(page.getByRole("heading", { name: "My wishlist" })).toBeVisible();
+  await expect(page.getByRole("link", { name: /Acacia \(Phulai\) Honey/ }).first()).toBeVisible();
+  // remove it again from the wishlist page
+  await page.getByRole("button", { name: /Remove Acacia \(Phulai\) Honey from wishlist/ }).click();
+  await expect(page.getByText("Nothing saved yet")).toBeVisible();
 });

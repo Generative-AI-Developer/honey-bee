@@ -5,10 +5,11 @@ import { AddToCartButton } from "@/components/store/add-to-cart-button";
 import { Price } from "@/components/store/price";
 import { ProductImage } from "@/components/store/product-image";
 import { Stars } from "@/components/store/stars";
+import { WishlistButton } from "@/components/store/wishlist";
 
 export function ProductCard({ product, priority }: { product: Card; priority?: boolean }) {
   return (
-    <article className="group card-surface flex flex-col overflow-hidden">
+    <article className="group card-surface relative flex flex-col overflow-hidden">
       <Link href={`/products/${product.slug}`} className="relative block aspect-square overflow-hidden bg-muted" aria-label={product.name}>
         <ProductImage
           src={product.image?.url}
@@ -23,11 +24,12 @@ export function ProductCard({ product, priority }: { product: Card; priority?: b
           </Badge>
         )}
         {!product.inStock && (
-          <Badge variant="outline" className="absolute top-3 right-3">
+          <Badge variant="outline" className="absolute bottom-3 left-3 bg-card">
             Sold out
           </Badge>
         )}
       </Link>
+      <WishlistButton productId={product.id} productName={product.name} className="absolute top-2.5 right-2.5" />
       <div className="flex flex-1 flex-col gap-1 p-3 sm:p-4">
         {product.origin && <p className="truncate text-[0.7rem] font-medium tracking-[0.08em] text-muted-foreground uppercase">{product.origin}</p>}
         <h3 className="text-base leading-snug sm:text-lg">

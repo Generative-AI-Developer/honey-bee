@@ -47,3 +47,30 @@ test("unknown pages show the not-found page", async ({ page }) => {
   await page.goto("/products/not-a-real-honey");
   await expect(page.getByText("This jar is empty")).toBeVisible();
 });
+
+test("WhatsApp button, closable announcement and the Shop menu", async ({ page }, info) => {
+  await page.goto("/shop");
+  await expect(page.getByRole("link", { name: "Chat with us on WhatsApp" })).toHaveAttribute("href", /^https:\/\/wa\.me\/\d+\?text=/);
+
+  const bar = page.getByRole("region", { name: "Announcement" });
+  await expect(bar).toBeVisible();
+  await bar.getByRole("button", { name: "Close announcement" }).click();
+  await expect(bar).toHaveCount(0);
+  await page.reload();
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+  await expect(page.getByRole("region", { name: "Announcement" })).toHaveCount(0);
+
+  if (info.project.name !== "mobile") {
+    await page.getByRole("button", { name: /^Shop/ }).click();
+    const menu = page.getByRole("menu");
+    await expect(menu.getByRole("menuitem", { name: /Gift Boxes/ })).toBeVisible();
+    await menu.getByRole("menuitem", { name: /Sidr & Beri/ }).click();
+    await expect(page).toHaveURL(/\/category\/sidr-beri/);
+  }
+});
+
+test("guests are asked to log in to save to the wishlist", async ({ page }) => {
+  await page.goto("/shop");
+  await page.getByRole("button", { name: /Save Sidr \(Beri\) Honey to wishlist/ }).first().click();
+  await expect(page).toHaveURL(/\/login\?next=%2Fshop/);
+});
