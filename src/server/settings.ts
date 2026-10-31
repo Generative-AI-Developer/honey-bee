@@ -2,11 +2,18 @@ import "server-only";
 import { cacheLife, cacheTag } from "next/cache";
 import { z } from "zod";
 import { db } from "@/lib/db";
+import { MAX_INTERVAL_SECONDS, MIN_INTERVAL_SECONDS } from "@/lib/interval";
 import { COLOR_MODES, DEFAULT_THEME, THEME_IDS } from "@/lib/themes";
 import { toWhatsAppNumber } from "@/lib/utils";
 
 // Business settings editable in Admin → Settings. Each key is validated and merged
 // over defaults, so a missing or partially-filled row never breaks the store.
+
+const interval = z
+  .number()
+  .int()
+  .min(MIN_INTERVAL_SECONDS, `The shortest interval is ${MIN_INTERVAL_SECONDS} seconds.`)
+  .max(MAX_INTERVAL_SECONDS, "The longest interval is 60 minutes.");
 
 export const settingsSchemas = {
   store: z.object({
@@ -61,6 +68,28 @@ export const settingsSchemas = {
     // half: half on computers, large block on phones · frame: small framed video
     layout: z.enum(["full", "combo", "half", "frame"]),
   }),
+  // Top banner of the home page (Admin → Banners & pages): what it shows and how tall it is
+  homeBanner: z.object({
+    media: z.enum(["video", "images"]),
+    height: z.enum(["short", "medium", "full"]), // 50% / 65% / 100% of the screen (the "full" video layout and the image slider)
+    images: z
+      .array(
+        z.object({
+          src: z.string().max(500).refine((v) => v.startsWith("/uploads/") || v.startsWith("https://res.cloudinary.com/"), "Image must be uploaded to this site."),
+          publicId: z.string().max(200).nullable(),
+          alt: z.string().trim().max(150),
+        }),
+      )
+      .max(6, "Up to 6 banner images."),
+    slideIntervalSeconds: interval,
+    autoplayOnPhones: z.boolean(),
+  }),
+  // "Bestselling honey" row on the home page
+  productSlider: z.object({
+    autoSlide: z.boolean(),
+    intervalSeconds: interval,
+    autoplayOnPhones: z.boolean(),
+  }),
   // Global colour scheme for the whole site (Admin → Appearance)
   appearance: z.object({
     theme: z.enum(THEME_IDS),
@@ -100,6 +129,8 @@ export const defaultSettings: Settings = {
     speed: 0.5,
     layout: "full",
   },
+  homeBanner: { media: "video", height: "medium", images: [], slideIntervalSeconds: 6, autoplayOnPhones: false },
+  productSlider: { autoSlide: true, intervalSeconds: 8, autoplayOnPhones: false },
   appearance: { ...DEFAULT_THEME },
 };
 

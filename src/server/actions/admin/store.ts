@@ -11,7 +11,8 @@ import { assertStaff } from "@/server/auth";
 import { refreshStore } from "@/server/revalidate";
 import { tags } from "@/server/queries/catalog";
 import { newOrderWhatsAppText } from "@/server/notifications";
-import { getSettings, settingsSchemas, type SettingsKey } from "@/server/settings";
+import { getSettings, settingsSchemas, type Settings, type SettingsKey } from "@/server/settings";
+import { deleteImage, storeImage } from "@/services/storage";
 import { sendWhatsApp, whatsAppProvider } from "@/services/whatsapp";
 import type { Prisma } from "@/generated/prisma/client";
 
@@ -227,6 +228,49 @@ export const saveSettings = action(z.object({ key: z.enum(Object.keys(settingsSc
   refreshStore("settings");
   refresh();
   return ok(undefined, "Settings saved");
+});
+
+// ───────────── home banner images ─────────────
+
+const MAX_BANNER_IMAGES = 6;
+
+async function saveHomeBanner(value: Settings["homeBanner"]) {
+  const parsed = settingsSchemas.homeBanner.parse(value);
+  await db.storeSetting.upsert({ where: { key: "homeBanner" }, update: { value: parsed as Prisma.InputJsonValue }, create: { key: "homeBanner", value: parsed as Prisma.InputJsonValue } });
+  refreshStore("settings");
+  refresh();
+}
+
+/** Adds uploaded images to the end of the home banner slider (FormData field "images"). */
+export async function uploadBannerImages(formData: FormData) {
+  try {
+    await assertStaff("ADMIN");
+    const files = formData.getAll("images").filter((f): f is File => f instanceof File && f.size > 0);
+    if (files.length === 0) return { ok: false as const, error: "Choose at least one image." };
+    const banner = (await getSettings()).homeBanner;
+    if (banner.images.length + files.length > MAX_BANNER_IMAGES) return { ok: false as const, error: `The slider can hold up to ${MAX_BANNER_IMAGES} images.` };
+    const added = [];
+    for (const file of files) {
+      const stored = await storeImage(file, "banners");
+      added.push({ src: stored.url, publicId: stored.publicId, alt: "" });
+    }
+    const images = [...banner.images, ...added];
+    await saveHomeBanner({ ...banner, images });
+    return { ok: true as const, images, message: `${files.length} image${files.length > 1 ? "s" : ""} added to the slider` };
+  } catch (e) {
+    return { ok: false as const, error: e instanceof Error ? e.message : "Upload failed." };
+  }
+}
+
+export const removeBannerImage = action(z.object({ src: z.string().max(500) }), async ({ src }) => {
+  await assertStaff("ADMIN");
+  const banner = (await getSettings()).homeBanner;
+  const image = banner.images.find((i) => i.src === src);
+  if (!image) throw new UserError("That image is no longer in the slider.");
+  const images = banner.images.filter((i) => i.src !== src);
+  await saveHomeBanner({ ...banner, images });
+  await deleteImage(image.publicId);
+  return ok(images, "Image removed");
 });
 
 /** Sends a sample new-order alert to the saved admin WhatsApp number. */

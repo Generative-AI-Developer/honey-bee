@@ -5,7 +5,8 @@ import { ArrowRight, BadgeCheck, Banknote, Check, ChevronRight, RotateCcw, Shiel
 import { Button } from "@/components/ui/button";
 import { HomeHero } from "@/components/store/home-hero";
 import { HoneyJar } from "@/components/store/honey-jar";
-import { ProductGrid } from "@/components/store/product-card";
+import { ProductCard } from "@/components/store/product-card";
+import { ProductCarousel } from "@/components/store/product-carousel";
 import { Stars } from "@/components/store/stars";
 import { JsonLd } from "@/components/seo/json-ld";
 import { formatPrice } from "@/lib/money";
@@ -21,7 +22,7 @@ export default async function HomePage() {
     getBanners("HERO"),
     getBanners("PROMO"),
     getCategories(),
-    getFeaturedProducts("bestsellers", 8),
+    getFeaturedProducts("bestsellers", 12),
     getHomeReviews(3),
     getFreeShippingThreshold(),
     getSettings(),
@@ -53,6 +54,7 @@ export default async function HomePage() {
         ctaHref={heroBanner?.ctaHref ?? "/shop"}
         rating={storeRating}
         video={settings.homeVideo}
+        banner={settings.homeBanner}
       />
 
       {/* Trust strip */}
@@ -120,7 +122,15 @@ export default async function HomePage() {
               <Link href="/shop?sort=price-asc" className="rounded-full px-4 py-2 hover:bg-muted">Best value</Link>
             </nav>
           </div>
-          <ProductGrid products={bestsellers} priorityCount={2} />
+          <ProductCarousel
+            label="Bestselling honey"
+            items={bestsellers.map((p) => (
+              <ProductCard key={p.id} product={p} />
+            ))}
+            autoSlide={settings.productSlider.autoSlide}
+            intervalSeconds={settings.productSlider.intervalSeconds}
+            autoplayOnPhones={settings.productSlider.autoplayOnPhones}
+          />
         </div>
       </section>
 

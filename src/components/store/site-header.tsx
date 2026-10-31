@@ -11,26 +11,24 @@ import { getCurrentUser, isStaff } from "@/server/auth";
 import { getCategories } from "@/server/queries/catalog";
 import { getSettings } from "@/server/settings";
 
-const NAV = [
-  { href: "/shop", label: "Shop" },
-  { href: "/category/sidr-beri", label: "Sidr Honey" },
-  { href: "/category/infused-specialty", label: "Specialty" },
-  { href: "/category/gift-boxes", label: "Gift Boxes" },
-  { href: "/about", label: "Our Story" },
-];
+// Category links come from the live categories (first 3 by the admin's order), so renaming or
+// reordering categories in the admin can never leave a broken link in the header.
+const FEATURED_CATEGORIES = 3;
 
 export async function SiteHeader() {
   const [settings, categories] = await Promise.all([getSettings(), getCategories()]);
+  const featured = categories.slice(0, FEATURED_CATEGORIES).map((c) => ({ href: `/category/${c.slug}`, label: c.name }));
+  const about = { href: "/about", label: "Our Story" };
   return (
     <>
       {settings.store.announcement && <AnnouncementBar text={settings.store.announcement} />}
       <header className="sticky top-0 z-40 border-b border-header-border bg-header text-header-foreground">
         <div className="container-page flex h-16 items-center gap-3 lg:h-[76px] lg:gap-7">
-          <MobileNav nav={NAV} categories={categories.map((c) => ({ href: `/category/${c.slug}`, label: c.name }))} />
+          <MobileNav nav={[{ href: "/shop", label: "Shop" }, about]} categories={categories.map((c) => ({ href: `/category/${c.slug}`, label: c.name }))} />
           <Logo className="text-xl lg:text-2xl" onHeader />
           <nav aria-label="Main" className="hidden items-center gap-6 text-[0.9rem] font-medium lg:flex">
             <ShopMenu categories={categories.map((c) => ({ slug: c.slug, name: c.name, count: c.productCount }))} />
-            {NAV.filter((n) => n.href !== "/shop").map((n) => (
+            {[...featured, about].map((n) => (
               <Link key={n.href} href={n.href} className="underline-offset-8 decoration-2 transition-colors hover:underline">
                 {n.label}
               </Link>

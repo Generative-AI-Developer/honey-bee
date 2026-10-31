@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { HomeBannerSettings, ProductSliderSettings } from "@/components/admin/home-banner-settings";
 import { HomeVideoSettings } from "@/components/admin/home-video-settings";
 import { BannerEditorToggle, PageEditorToggle } from "@/components/admin/store-forms";
 import { PageHeader, Panel } from "@/components/admin/ui";
@@ -23,9 +24,17 @@ export default async function ContentPage() {
     <>
       <PageHeader title="Banners & pages" description="The announcement bar text is in Settings → Store." />
       {staff.role === "ADMIN" && (
-        <Panel title="Home page video" description="Plays silently on a loop in the top banner of the home page (slow motion by default); visitors can turn the sound on.">
-          <HomeVideoSettings initial={settings.homeVideo} />
-        </Panel>
+        <>
+          <Panel title="Home page banner" description="The big banner at the top of the home page: its height, and whether it shows the video or an image slider.">
+            <HomeBannerSettings initial={settings.homeBanner} />
+          </Panel>
+          <Panel title="Home page video" description="Plays silently on a loop in the top banner when the banner shows the video (slow motion by default); visitors can turn the sound on.">
+            <HomeVideoSettings initial={settings.homeVideo} />
+          </Panel>
+          <Panel title="Product slider" description="The “Bestselling honey” row on the home page. Its timing is separate from the banner.">
+            <ProductSliderSettings initial={settings.productSlider} />
+          </Panel>
+        </>
       )}
       <Panel
         title="Home page banners"

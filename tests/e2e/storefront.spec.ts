@@ -63,9 +63,13 @@ test("WhatsApp button, closable announcement and the Shop menu", async ({ page }
   if (info.project.name !== "mobile") {
     await page.getByRole("button", { name: /^Shop/ }).click();
     const menu = page.getByRole("menu");
-    await expect(menu.getByRole("menuitem", { name: /Gift Boxes/ })).toBeVisible();
-    await menu.getByRole("menuitem", { name: /Sidr & Beri/ }).click();
-    await expect(page).toHaveURL(/\/category\/sidr-beri/);
+    // category names are the owner's to change, so just follow the first one listed
+    await expect(menu.getByRole("menuitem", { name: /All honey/ })).toBeVisible();
+    const first = menu.getByRole("menuitem").nth(1);
+    const name = ((await first.textContent()) ?? "").replace(/\d+$/, "").trim();
+    await first.click();
+    await expect(page).toHaveURL(/\/category\/[a-z0-9-]+/);
+    await expect(page.getByRole("heading", { level: 1, name })).toBeVisible();
   }
 });
 
@@ -73,4 +77,17 @@ test("guests are asked to log in to save to the wishlist", async ({ page }) => {
   await page.goto("/shop");
   await page.getByRole("button", { name: /Save Sidr \(Beri\) Honey to wishlist/ }).first().click();
   await expect(page).toHaveURL(/\/login\?next=%2Fshop/);
+});
+
+test("every header link opens a real page", async ({ page }, info) => {
+  test.skip(info.project.name === "mobile", "the desktop header shows these links");
+  await page.goto("/");
+  const links = page.getByRole("navigation", { name: "Main" }).getByRole("link");
+  const hrefs = await links.evaluateAll((els) => els.map((e) => e.getAttribute("href")!));
+  expect(hrefs.length).toBeGreaterThan(1);
+  for (const href of hrefs) {
+    await page.goto(href);
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+    await expect(page.getByText(/couldn.t find|not found/i)).toHaveCount(0);
+  }
 });

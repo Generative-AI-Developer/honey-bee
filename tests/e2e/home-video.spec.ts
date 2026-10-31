@@ -23,13 +23,15 @@ async function videoPanel() {
 }
 
 const heroVideo = (page: Page) => page.locator("main video");
+// Banner height is the admin's choice (short 50% / medium 65% / full screen): smallest share of the screen to expect
+const minShare = async (page: Page) => ({ short: 0.45, medium: 0.6, full: 0.8 })[(await page.locator("[data-hero-height]").getAttribute("data-hero-height")) as "short" | "medium" | "full"] ?? 0.45;
 const box = (page: Page) =>
   heroVideo(page).evaluate((v: HTMLVideoElement) => {
     const r = v.getBoundingClientRect();
     return { left: r.left, width: r.width, height: r.height, vw: innerWidth, vh: innerHeight, rate: v.playbackRate, muted: v.muted };
   });
 
-test("computers: slow-motion video fills the hero, headline and button over it", async ({ browser }) => {
+test("computers: slow-motion video fills the banner, headline and button over it", async ({ browser }) => {
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
   await page.goto("/");
   await expect.poll(() => heroVideo(page).evaluate((v: HTMLVideoElement) => v.currentTime), { timeout: 15_000 }).toBeGreaterThan(0.3);
@@ -38,7 +40,7 @@ test("computers: slow-motion video fills the hero, headline and button over it",
   expect(b.muted).toBe(true);
   expect(b.left).toBe(0);
   expect(b.width).toBe(b.vw);
-  expect(b.height).toBeGreaterThanOrEqual(b.vh * 0.8);
+  expect(b.height).toBeGreaterThanOrEqual(b.vh * (await minShare(page)));
   // the headline and main button sit on the video, on the first screen
   await expect(page.getByRole("heading", { level: 1 })).toBeInViewport();
   await expect(page.getByRole("link", { name: /Shop all honey/ })).toBeInViewport();
@@ -49,14 +51,14 @@ test("computers: slow-motion video fills the hero, headline and button over it",
   await page.close();
 });
 
-test("phones: video fills the first screen with the headline and button over it", async ({ browser }) => {
+test("phones: video fills the banner with the headline and button over it", async ({ browser }) => {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
   const page = await context.newPage();
   await page.goto("/");
   await expect.poll(() => heroVideo(page).evaluate((v: HTMLVideoElement) => v.playbackRate)).toBe(Number(saved.speed));
   const b = await box(page);
   expect(b.width).toBe(b.vw);
-  expect(b.height).toBeGreaterThanOrEqual(b.vh * 0.8);
+  expect(b.height).toBeGreaterThanOrEqual(b.vh * (await minShare(page)));
   await expect(page.getByRole("heading", { level: 1 })).toBeInViewport();
   await expect(page.getByRole("link", { name: /Shop all honey/ })).toBeInViewport();
   await context.close();

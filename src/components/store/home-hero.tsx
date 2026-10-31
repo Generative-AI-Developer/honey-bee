@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Banknote, ChevronRight, Leaf, ShieldCheck, Truck } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { HeroSlider } from "@/components/store/hero-slider";
 import { HeroVideo } from "@/components/store/hero-video";
 import { HoneyJar } from "@/components/store/honey-jar";
 import { Stars } from "@/components/store/stars";
@@ -14,17 +15,29 @@ type Props = {
   ctaHref: string;
   rating: { average: number; count: number };
   video: Settings["homeVideo"];
+  banner: Settings["homeBanner"];
+};
+
+const SHADE = "bg-gradient-to-t from-black/90 via-black/50 to-black/25 lg:bg-gradient-to-r lg:from-black/85 lg:via-black/55 lg:to-black/15";
+
+// Banner height (Admin → Banners & pages). The copy can still make it taller on small phones, so it always fits.
+const HEIGHTS: Record<Settings["homeBanner"]["height"], string> = {
+  short: "min-h-[max(50svh,420px)] pt-20 pb-10 lg:py-12",
+  medium: "min-h-[max(65svh,480px)] pt-24 pb-12 lg:min-h-[clamp(480px,65svh,720px)] lg:py-16",
+  full: "min-h-[calc(100svh-7rem)] pt-28 pb-14 lg:min-h-[min(calc(100svh-7rem),860px)] lg:py-24",
 };
 
 /**
  * Home page banner.
- * - video layout "full" (default): full-width background video with the headline and buttons over it (see FullVideoHero).
+ * - banner media "images" (with images uploaded): full-width image slider behind the headline (see FullHero).
+ * - video layout "full" (default): full-width background video with the headline and buttons over it (see FullHero).
  * - "combo": phones get the video full screen behind the headline;
  *   computers get it filling the right half, edge to edge.
  * - "half": right half on computers, a large block above the headline on phones.
  * - "frame": small portrait frame on the right. No video: honey-jar illustration.
  */
-export function HomeHero({ title, subtitle, ctaLabel, ctaHref, rating, video }: Props) {
+export function HomeHero(props: Props) {
+  const { title, subtitle, ctaLabel, ctaHref, rating, video, banner } = props;
   const hasVideo = video.enabled && Boolean(video.src);
   const layout = hasVideo ? video.layout : "none";
   // In "combo" the copy sits on the video on phones, so it is white there.
@@ -73,7 +86,22 @@ export function HomeHero({ title, subtitle, ctaLabel, ctaHref, rating, video }: 
     </div>
   );
 
-  if (layout === "full") return <FullVideoHero title={title} subtitle={subtitle} ctaLabel={ctaLabel} ctaHref={ctaHref} rating={rating} video={video} />;
+  if (banner.media === "images" && banner.images.length > 0) {
+    return (
+      <FullHero {...props} kind="images">
+        <HeroSlider slides={banner.images} intervalSeconds={banner.slideIntervalSeconds} autoplayOnPhones={banner.autoplayOnPhones} shade={SHADE} />
+      </FullHero>
+    );
+  }
+  if (layout === "full") {
+    return (
+      <FullHero {...props} kind="full">
+        <div className="absolute inset-0" data-hero-video>
+          <HeroVideo src={video.src} poster={video.poster} caption={video.caption} speed={video.speed} variant="fill" controls="top-mobile" showCaption={false} shade={SHADE} />
+        </div>
+      </FullHero>
+    );
+  }
 
   if (layout === "combo" || layout === "half") {
     const combo = layout === "combo";
@@ -127,27 +155,16 @@ export function HomeHero({ title, subtitle, ctaLabel, ctaHref, rating, video }: 
 }
 
 /**
- * Full-width background video with the copy on top: the standard "video hero".
- * A dark gradient keeps the white text readable (left side on computers, bottom on phones)
- * and softens a low-resolution or portrait video. Height: the first screen below the header.
+ * Full-width background (video or image slider) with the copy on top: the standard hero.
+ * A dark gradient keeps the white text readable (left side on computers, bottom on phones).
+ * Height comes from the admin's banner height setting.
  */
-function FullVideoHero({ title, subtitle, ctaLabel, ctaHref, rating, video }: Props) {
+function FullHero({ title, subtitle, ctaLabel, ctaHref, rating, banner, kind, children }: Props & { kind: "full" | "images"; children: React.ReactNode }) {
   return (
-    <section data-hero-layout="full" className="relative isolate overflow-hidden bg-chrome text-white">
-      <div className="absolute inset-0" data-hero-video>
-        <HeroVideo
-          src={video.src}
-          poster={video.poster}
-          caption={video.caption}
-          speed={video.speed}
-          variant="fill"
-          controls="top-mobile"
-          showCaption={false}
-          shade="bg-gradient-to-t from-black/90 via-black/50 to-black/25 lg:bg-gradient-to-r lg:from-black/85 lg:via-black/55 lg:to-black/15"
-        />
-      </div>
-      {/* pointer-events-none so the video's pause/sound buttons stay clickable around the copy */}
-      <div className="pointer-events-none relative container-page flex min-h-[calc(100svh-7rem)] flex-col justify-end pt-28 pb-14 lg:min-h-[min(calc(100svh-7rem),860px)] lg:justify-center lg:py-24">
+    <section data-hero-layout={kind} data-hero-height={banner.height} className="relative isolate overflow-hidden bg-chrome text-white">
+      {children}
+      {/* pointer-events-none so the video's pause/sound and slider buttons stay clickable around the copy */}
+      <div className={cn("pointer-events-none relative container-page flex flex-col justify-end lg:justify-center", HEIGHTS[banner.height])}>
         <div className="pointer-events-auto max-w-2xl">
           <span className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3.5 py-1.5 text-xs font-semibold tracking-[0.12em] uppercase backdrop-blur-sm">
             <Leaf className="size-3.5" aria-hidden /> Fresh harvest now in stock
