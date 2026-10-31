@@ -1,21 +1,17 @@
+import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
+/** The round AS Honey badge (public/brand/logo-mark.png, cut from the owner's Logo1.png with a transparent background). */
 export function LogoMark({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 40 40" aria-hidden="true" className={cn("size-8", className)}>
-      <path d="M20 3 35 11.5v17L20 37 5 28.5v-17z" fill="var(--primary)" />
-      <path d="M20 10l8.5 5v10L20 30l-8.5-5V15z" fill="var(--chrome)" />
-      <path d="M15 18h10M15 22h10" stroke="var(--primary)" strokeWidth="2" />
-    </svg>
-  );
+  return <Image src="/brand/logo-mark.png" alt="" width={96} height={96} priority className={cn("size-10 shrink-0 rounded-full", className)} />;
 }
 
 /** `inverted`: on dark chrome bands. `onHeader`: on the storefront header colour. */
-export function Logo({ className, inverted = false, onHeader = false, href = "/" }: { className?: string; inverted?: boolean; onHeader?: boolean; href?: string }) {
+export function Logo({ className, markClassName, inverted = false, onHeader = false, href = "/" }: { className?: string; markClassName?: string; inverted?: boolean; onHeader?: boolean; href?: string }) {
   return (
     <Link href={href} className={cn("inline-flex items-center gap-2.5 font-heading text-2xl font-semibold", inverted ? "text-chrome-foreground" : onHeader ? "text-header-foreground" : "text-foreground", className)}>
-      <LogoMark />
+      <LogoMark className={markClassName} />
       <span>
         Honey<b className={cn("font-bold", inverted ? "text-chrome-accent" : onHeader ? "text-header-accent" : "text-primary-strong")}>Bee</b>
       </span>

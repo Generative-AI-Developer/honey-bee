@@ -25,7 +25,7 @@ export default async function InvoicePage({ params }: PageProps<"/admin/orders/[
       </div>
       <header className="flex items-start justify-between border-b border-border pb-6">
         <div className="flex items-center gap-3">
-          <LogoMark className="size-12" />
+          <LogoMark className="size-16" />
           <div>
             <b className="font-heading text-2xl">{settings.store.name}</b>
             <p className="text-sm text-muted-foreground">

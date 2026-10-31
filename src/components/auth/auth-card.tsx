@@ -5,7 +5,7 @@ export function AuthCard({ title, subtitle, children, footer }: { title: string;
   return (
     <div className="container-page grid place-items-center py-12 lg:py-20">
       <div className="card-surface w-full max-w-md p-6 sm:p-8">
-        <LogoMark className="mb-5 size-10" />
+        <LogoMark className="mb-5 size-16" />
         <h1 className="text-3xl">{title}</h1>
         {subtitle && <p className="mt-1.5 text-foreground-soft">{subtitle}</p>}
         <div className="mt-6">{children}</div>

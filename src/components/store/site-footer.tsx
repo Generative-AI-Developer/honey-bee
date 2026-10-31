@@ -21,7 +21,7 @@ export async function SiteFooter() {
     <footer className="mt-auto bg-chrome pt-14 text-chrome-muted">
       <div className="container-page grid gap-10 pb-12 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1.5fr]">
         <div>
-          <Logo inverted />
+          <Logo inverted markClassName="size-16" />
           <p className="mt-4 max-w-xs text-sm leading-relaxed">
             Raw, unprocessed honey sourced directly from beekeepers in Swat, Karak, Thal and the Kashmir valleys.
           </p>
