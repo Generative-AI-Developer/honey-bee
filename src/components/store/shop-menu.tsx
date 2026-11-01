@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { ChevronDown, Gift, Sparkles } from "lucide-react";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 type Category = { slug: string; name: string; count: number };
 
@@ -21,7 +21,6 @@ export function ShopMenu({ categories }: { categories: Category[] }) {
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuLabel className="px-3 text-xs font-semibold tracking-[0.08em] text-muted-foreground uppercase">Categories</DropdownMenuLabel>
         {categories.map((c) => (
           <DropdownMenuItem key={c.slug} asChild className="rounded-xl px-3 py-2">
             <Link href={`/category/${c.slug}`}>

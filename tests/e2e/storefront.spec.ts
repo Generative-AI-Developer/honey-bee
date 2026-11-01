@@ -65,6 +65,7 @@ test("WhatsApp button, closable announcement and the Shop menu", async ({ page }
     const menu = page.getByRole("menu");
     // category names are the owner's to change, so just follow the first one listed
     await expect(menu.getByRole("menuitem", { name: /All Products/ })).toBeVisible();
+    await expect(menu.getByText("Categories", { exact: true })).toHaveCount(0); // heading removed at the owner's request
     const first = menu.getByRole("menuitem").nth(1);
     const name = ((await first.textContent()) ?? "").replace(/\d+$/, "").trim();
     await first.click();
