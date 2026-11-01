@@ -4,7 +4,8 @@ test("home page shows the catalogue and links work", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { level: 1 })).toContainText(/honey/i);
   await expect(page.getByRole("heading", { name: "Bestselling honey" })).toBeVisible();
-  await page.getByRole("link", { name: /Sidr \(Beri\) Honey/ }).first().click();
+  // a category may share the product's name, so pick the product inside the bestsellers row
+  await page.getByRole("region", { name: "Bestselling honey" }).getByRole("link", { name: /Sidr \(Beri\) Honey/ }).first().click();
   await expect(page).toHaveURL(/\/products\/sidr-beri-honey/);
   await expect(page.getByRole("heading", { level: 1, name: "Sidr (Beri) Honey" })).toBeVisible();
 });
