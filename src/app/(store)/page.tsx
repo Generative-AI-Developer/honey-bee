@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, BadgeCheck, Banknote, Check, ChevronRight, RotateCcw, ShieldCheck, Truck } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ArrowRight, BadgeCheck, Banknote, ChevronRight, RotateCcw, ShieldCheck, Truck } from "lucide-react";
 import { HomeHero } from "@/components/store/home-hero";
-import { HoneyJar } from "@/components/store/honey-jar";
 import { ProductCard } from "@/components/store/product-card";
 import { ProductCarousel } from "@/components/store/product-carousel";
 import { Stars } from "@/components/store/stars";
@@ -18,9 +16,8 @@ import { getSettings } from "@/server/settings";
 export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 export default async function HomePage() {
-  const [hero, promo, categories, bestsellers, reviews, freeOver, settings, storeRating] = await Promise.all([
+  const [hero, categories, bestsellers, reviews, freeOver, settings, storeRating] = await Promise.all([
     getBanners("HERO"),
-    getBanners("PROMO"),
     getCategories(),
     getFeaturedProducts("bestsellers", 12),
     getHomeReviews(3),
@@ -29,7 +26,6 @@ export default async function HomePage() {
     getStoreRating(),
   ]);
   const heroBanner = hero[0];
-  const promoBanner = promo[0];
 
   return (
     <>
@@ -131,54 +127,6 @@ export default async function HomePage() {
             intervalSeconds={settings.productSlider.intervalSeconds}
             autoplayOnPhones={settings.productSlider.autoplayOnPhones}
           />
-        </div>
-      </section>
-
-      {/* Promo */}
-      {promoBanner && (
-        <section className="container-page py-14 lg:py-20">
-          <div className="relative grid items-center gap-8 overflow-hidden rounded-[28px] bg-chrome px-6 py-10 text-chrome-foreground sm:px-12 lg:grid-cols-[1.2fr_1fr] lg:px-16 lg:py-14">
-            <div>
-              <span className="eyebrow mb-3 text-chrome-accent">Limited offer</span>
-              <h2 className="mb-3 text-3xl text-chrome-foreground lg:text-[2.75rem]">{promoBanner.title}</h2>
-              {promoBanner.subtitle && <p className="mb-7 max-w-lg text-chrome-muted lg:text-lg">{promoBanner.subtitle}</p>}
-              {promoBanner.ctaHref && (
-                <Button asChild size="lg">
-                  <Link href={promoBanner.ctaHref}>{promoBanner.ctaLabel ?? "Shop now"}</Link>
-                </Button>
-              )}
-            </div>
-            <div className="flex items-end justify-center gap-3" aria-hidden>
-              <HoneyJar tone="sidr" label="ROYAL" lid="var(--primary)" className="w-36 lg:w-44" />
-              <HoneyJar tone="acacia" label="GIFT" lid="var(--primary)" className="w-28 lg:w-32" />
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Story */}
-      <section className="container-page grid items-center gap-10 py-14 lg:grid-cols-2 lg:gap-16 lg:py-20">
-        <div className="relative grid h-72 place-items-center overflow-hidden rounded-[28px] bg-accent lg:h-[460px]">
-          <div className="comb-pattern absolute inset-0 opacity-30" aria-hidden />
-          <HoneyJar tone="kalonji" label="KALONJI" className="relative w-40 lg:w-48" />
-        </div>
-        <div>
-          <span className="eyebrow mb-2">Our story</span>
-          <h2 className="text-3xl lg:text-4xl">From the hive to your home, nothing added</h2>
-          <p className="my-5 text-foreground-soft lg:text-lg">
-            We work with 40+ family beekeepers who follow the flowers across Pakistan: sidr trees in Karak, phulai in the Salt Range, wildflowers in Swat. Each batch is
-            cold-extracted, tested in an independent lab, and jarred by hand in Lahore.
-          </p>
-          <ul className="mb-7 grid gap-2.5 font-medium">
-            {["Traceable to the farm and harvest date", "Independent purity & moisture tests", "Fair prices paid directly to beekeepers"].map((t) => (
-              <li key={t} className="flex items-center gap-2.5">
-                <Check className="size-5 text-success" aria-hidden /> {t}
-              </li>
-            ))}
-          </ul>
-          <Button asChild variant="outline">
-            <Link href="/about">Read more</Link>
-          </Button>
         </div>
       </section>
 
