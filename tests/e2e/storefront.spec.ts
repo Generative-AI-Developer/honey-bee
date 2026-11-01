@@ -48,17 +48,18 @@ test("unknown pages show the not-found page", async ({ page }) => {
   await expect(page.getByText("This jar is empty")).toBeVisible();
 });
 
-test("WhatsApp button, closable announcement and the Shop menu", async ({ page }, info) => {
+test("WhatsApp button, announcement bar and the Shop menu", async ({ page }, info) => {
   await page.goto("/shop");
   await expect(page.getByRole("link", { name: "Chat with us on WhatsApp" })).toHaveAttribute("href", /^https:\/\/wa\.me\/\d+\?text=/);
 
+  // the announcement bar is always shown (no close button) and stays at the top while scrolling
   const bar = page.getByRole("region", { name: "Announcement" });
   await expect(bar).toBeVisible();
-  await bar.getByRole("button", { name: "Close announcement" }).click();
-  await expect(bar).toHaveCount(0);
-  await page.reload();
-  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-  await expect(page.getByRole("region", { name: "Announcement" })).toHaveCount(0);
+  await expect(bar.getByRole("button")).toHaveCount(0);
+  await page.evaluate(() => window.scrollTo(0, 1200));
+  await expect.poll(() => bar.evaluate((el) => Math.round(el.getBoundingClientRect().top))).toBe(0);
+  await expect(bar).toBeInViewport();
+  await page.evaluate(() => window.scrollTo(0, 0));
 
   if (info.project.name !== "mobile") {
     await page.getByRole("button", { name: /^Shop/ }).click();
