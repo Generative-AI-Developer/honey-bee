@@ -102,7 +102,7 @@ export type Settings = { [K in SettingsKey]: z.infer<(typeof settingsSchemas)[K]
 
 export const defaultSettings: Settings = {
   store: {
-    name: "Abdul Sami Enterprises",
+    name: "Abdul Sami Honey Enterprises",
     email: "hello@honeybee.pk",
     phone: "+92 300 0000000",
     whatsapp: "+92 300 0000000",

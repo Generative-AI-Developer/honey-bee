@@ -1,7 +1,7 @@
 // Static brand facts used in metadata and structured data.
 // Editable business details (phone, address, bank, fees) live in Admin → Settings.
 export const site = {
-  name: "Abdul Sami Enterprises",
+  name: "Abdul Sami Honey Enterprises",
   tagline: "Pure, raw honey from Pakistan's wild valleys",
   description:
     "Raw, unfiltered and lab-tested honey sourced directly from beekeepers in Karak, Swat and Kashmir. Sidr, Acacia, Kalonji and more, with Cash on Delivery across Pakistan.",

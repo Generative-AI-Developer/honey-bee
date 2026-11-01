@@ -5,7 +5,7 @@ import { ContactForm } from "@/components/store/contact-form";
 import { toWhatsAppNumber } from "@/lib/utils";
 import { getSettings } from "@/server/settings";
 
-export const metadata: Metadata = { title: "Contact us", description: "Get in touch with Abdul Sami Enterprises by WhatsApp, phone or email, or send us a message.", alternates: { canonical: "/contact" } };
+export const metadata: Metadata = { title: "Contact us", description: "Get in touch with Abdul Sami Honey Enterprises by WhatsApp, phone or email, or send us a message.", alternates: { canonical: "/contact" } };
 
 const HELP = [
   { href: "/track-order", label: "Track your order" },

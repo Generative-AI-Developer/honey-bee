@@ -24,7 +24,7 @@ export async function startStripe(order: PayableOrder, urls: PaymentUrls): Promi
     line_items: [
       {
         quantity: 1,
-        price_data: { currency: "pkr", unit_amount: order.total, product_data: { name: `Abdul Sami Enterprises order ${order.displayNumber}` } },
+        price_data: { currency: "pkr", unit_amount: order.total, product_data: { name: `Abdul Sami Honey Enterprises order ${order.displayNumber}` } },
       },
     ],
     success_url: `${urls.returnUrl}?session_id={CHECKOUT_SESSION_ID}`,

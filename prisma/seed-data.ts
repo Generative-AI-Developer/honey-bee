@@ -285,10 +285,10 @@ export const pages = [
   {
     slug: "about",
     title: "About us",
-    seoDescription: "Abdul Sami Enterprises (AS Honey) brings pure, raw, lab-tested honey from Pakistan's best honey regions to homes nationwide.",
+    seoDescription: "Abdul Sami Honey Enterprises (AS Honey) brings pure, raw, lab-tested honey from Pakistan's best honey regions to homes nationwide.",
     body: `## Who we are
 
-**Abdul Sami Enterprises** is the business behind **AS Honey**. Our aim is simple: to bring pure, natural honey from Pakistan's best honey-producing regions to homes across the country, with nothing added and nothing taken away.
+**Abdul Sami Honey Enterprises** is the business behind **AS Honey**. Our aim is simple: to bring pure, natural honey from Pakistan's best honey-producing regions to homes across the country, with nothing added and nothing taken away.
 
 ## Where our honey comes from
 

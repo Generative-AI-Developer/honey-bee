@@ -23,7 +23,7 @@ export const auth = betterAuth({
     sendResetPassword: async ({ user, url }) => {
       await sendEmail({
         to: user.email,
-        subject: "Reset your Abdul Sami Enterprises password",
+        subject: "Reset your Abdul Sami Honey Enterprises password",
         react: ResetPasswordEmail({ name: user.name, url }),
       });
     },
@@ -35,7 +35,7 @@ export const auth = betterAuth({
     sendVerificationEmail: async ({ user, url }) => {
       await sendEmail({
         to: user.email,
-        subject: "Confirm your email for Abdul Sami Enterprises",
+        subject: "Confirm your email for Abdul Sami Honey Enterprises",
         react: VerifyEmail({ name: user.name, url }),
       });
     },

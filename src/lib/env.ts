@@ -17,7 +17,7 @@ const schema = z.object({
   GOOGLE_CLIENT_SECRET: optional,
 
   RESEND_API_KEY: optional,
-  EMAIL_FROM: z.string().default("Abdul Sami Enterprises <orders@honeybee.pk>"),
+  EMAIL_FROM: z.string().default("Abdul Sami Honey Enterprises <orders@honeybee.pk>"),
   ADMIN_NOTIFY_EMAIL: optional,
 
   WHATSAPP_TOKEN: optional,

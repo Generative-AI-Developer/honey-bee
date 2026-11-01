@@ -18,7 +18,7 @@ export default function LoginPage({ searchParams }: PageProps<"/login">) {
       subtitle="Log in to track orders and check out faster."
       footer={
         <>
-          New to Abdul Sami Enterprises?{" "}
+          New to Abdul Sami Honey Enterprises?{" "}
           <Link href="/register" className="font-semibold text-primary-strong">
             Create an account
           </Link>

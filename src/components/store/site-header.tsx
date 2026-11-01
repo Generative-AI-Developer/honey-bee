@@ -27,9 +27,9 @@ export async function SiteHeader() {
     <div className="sticky top-0 z-40">
       {settings.store.announcement && <AnnouncementBar text={settings.store.announcement} />}
       <header className="border-b border-header-border bg-header text-header-foreground">
-        <div className="container-page flex h-16 items-center gap-3 lg:h-[76px] lg:gap-7">
+        <div className="container-page flex h-16 items-center gap-2 sm:gap-3 lg:h-[76px] lg:gap-6">
           <MobileNav nav={[HOME, { href: "/shop", label: "Shop" }, ...PAGES]} categories={categories.map((c) => ({ href: `/category/${c.slug}`, label: c.name }))} />
-          <Logo className="text-xl lg:text-2xl" markClassName="size-12 lg:size-14" onHeader />
+          <Logo className="gap-2 text-[1.05rem] sm:gap-2.5 sm:text-xl lg:text-[1.35rem] xl:text-2xl" markClassName="size-10 sm:size-12 lg:size-14" onHeader />
           <nav aria-label="Main" className="hidden flex-1 items-center justify-center gap-1 text-[0.95rem] font-medium lg:flex xl:gap-2">
             <NavLink {...HOME} />
             <ShopMenu categories={categories.map((c) => ({ slug: c.slug, name: c.name, count: c.productCount }))} />
@@ -37,7 +37,7 @@ export async function SiteHeader() {
               <NavLink key={n.href} {...n} />
             ))}
           </nav>
-          <form action="/shop" role="search" className="ml-auto hidden max-w-xs flex-1 md:flex lg:ml-0 lg:w-52 lg:flex-none xl:w-72">
+          <form action="/shop" role="search" className="ml-auto hidden max-w-xs flex-1 md:flex lg:hidden xl:ml-0 xl:flex xl:w-72 xl:flex-none">
             <label className="flex h-11 w-full items-center gap-2.5 rounded-full border-[1.5px] border-border bg-card px-4 text-sm text-muted-foreground focus-within:border-ring">
               <Search className="size-4 shrink-0" aria-hidden />
               <span className="sr-only">Search products</span>
@@ -45,7 +45,7 @@ export async function SiteHeader() {
             </label>
           </form>
           <div className="ml-auto flex items-center gap-1 md:ml-0">
-            <Link href="/shop?focus=search" className="grid size-10 place-items-center rounded-full hover:bg-header-hover md:hidden" aria-label="Search">
+            <Link href="/shop?focus=search" className="hidden size-10 place-items-center rounded-full hover:bg-header-hover lg:grid xl:hidden" aria-label="Search">
               <Search className="size-5" />
             </Link>
             <Suspense fallback={<IconLink href="/account" label="Account" icon={<User className="size-5" />} />}>
