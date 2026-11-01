@@ -116,7 +116,7 @@ export function ProductForm({ initial, categories, images = [], isAdmin }: { ini
               <Input value={v.harvest} onChange={(e) => set("harvest", e.target.value)} placeholder="Oct 2026" />
             </Field>
           </div>
-          <Field label="Benefits (one per line)">
+          <Field label="Benefits (one per line)" hint="Short points, one per line, up to 300 characters each (max 10).">
             <Textarea rows={3} value={v.benefits.join("\n")} onChange={(e) => set("benefits", e.target.value.split("\n"))} />
           </Field>
         </Card>

@@ -11,44 +11,47 @@ import { refreshStore } from "@/server/revalidate";
 import { tags } from "@/server/queries/catalog";
 import { deleteImage, storeImage } from "@/services/storage";
 
-const money = z.coerce.number().min(0).max(10_000_000);
+const money = z.coerce.number("Enter a price in rupees.").min(0, "Prices can't be negative.").max(10_000_000, "Prices can be at most Rs 10,000,000.");
 
 const variantSchema = z.object({
   id: z.string().max(40).optional(),
-  name: z.string().trim().min(1, "Each size needs a name (e.g. 500g).").max(40),
+  name: z.string().trim().min(1, "Each size needs a name (e.g. 500g).").max(40, "Size names can be up to 40 characters."),
   // Optional: generated from the product name and size when left blank.
   sku: z
     .string()
     .trim()
-    .max(40)
+    .max(40, "SKUs can be up to 40 characters.")
     .refine((v) => v === "" || /^[A-Za-z0-9-_]{2,}$/.test(v), "SKUs may only contain letters, numbers, - and _ (2+ characters).")
     .default(""),
   price: money.refine((v) => v > 0, "Price must be more than 0."),
   compareAtPrice: money.optional().nullable(),
-  stock: z.coerce.number().int().min(0).max(100_000).optional(),
-  lowStockThreshold: z.coerce.number().int().min(0).max(10_000).default(5),
-  weightGrams: z.coerce.number().int().min(1, "Enter the packed weight in grams.").max(50_000),
+  stock: z.coerce.number().int("Stock must be a whole number.").min(0, "Stock can't be negative.").max(100_000, "Stock can be at most 100,000.").optional(),
+  lowStockThreshold: z.coerce.number().int("Low-stock alert must be a whole number.").min(0).max(10_000, "Low-stock alert can be at most 10,000.").default(5),
+  weightGrams: z.coerce.number().int("Weight must be whole grams.").min(1, "Enter the packed weight in grams.").max(50_000, "Weight can be at most 50,000 g."),
   isActive: z.boolean().default(true),
   isDefault: z.boolean().default(false),
 });
 
 const productSchema = z.object({
   id: z.string().max(40).optional(),
-  name: z.string().trim().min(2, "Product name is required.").max(120),
-  slug: z.string().trim().max(80).optional(),
-  shortDescription: z.string().trim().min(10, "Add a short description (10+ characters).").max(300),
-  description: z.string().trim().min(20, "Add a full description (20+ characters).").max(10_000),
+  name: z.string().trim().min(2, "Product name is required.").max(120, "Product name can be up to 120 characters."),
+  slug: z.string().trim().max(80, "URL slug can be up to 80 characters.").optional(),
+  shortDescription: z.string().trim().min(10, "Add a short description (10+ characters).").max(300, "Short description can be up to 300 characters."),
+  description: z.string().trim().min(20, "Add a full description (20+ characters).").max(10_000, "Full description can be up to 10,000 characters."),
   categoryId: z.string().min(1, "Choose a category.").max(40),
   status: z.enum(["DRAFT", "ACTIVE", "ARCHIVED"]),
   featured: z.boolean().default(false),
-  origin: z.string().trim().max(120).optional(),
-  floralSource: z.string().trim().max(120).optional(),
-  harvest: z.string().trim().max(40).optional(),
-  benefits: z.array(z.string().trim().min(1).max(160)).max(10).default([]),
-  tags: z.array(z.string().trim().toLowerCase().min(1).max(30)).max(10).default([]),
-  seoTitle: z.string().trim().max(70).optional(),
-  seoDescription: z.string().trim().max(170).optional(),
-  variants: z.array(variantSchema).min(1, "Add at least one size / variant.").max(12),
+  origin: z.string().trim().max(120, "Origin can be up to 120 characters.").optional(),
+  floralSource: z.string().trim().max(120, "Floral source can be up to 120 characters.").optional(),
+  harvest: z.string().trim().max(40, "Harvest can be up to 40 characters.").optional(),
+  benefits: z
+    .array(z.string().trim().min(1).max(300, "Each benefit (one line) can be up to 300 characters. Split long text into several lines."))
+    .max(10, "Add up to 10 benefits.")
+    .default([]),
+  tags: z.array(z.string().trim().toLowerCase().min(1).max(30, "Each tag can be up to 30 characters.")).max(10, "Add up to 10 tags.").default([]),
+  seoTitle: z.string().trim().max(70, "SEO title can be up to 70 characters.").optional(),
+  seoDescription: z.string().trim().max(170, "SEO description can be up to 170 characters.").optional(),
+  variants: z.array(variantSchema).min(1, "Add at least one size / variant.").max(12, "A product can have up to 12 sizes."),
 });
 
 export type ProductFormInput = z.input<typeof productSchema>;
@@ -192,7 +195,7 @@ export const deleteProductImage = action(z.object({ imageId: z.string().max(40) 
   return ok(undefined, "Image removed");
 });
 
-export const updateImageMeta = action(z.object({ imageId: z.string().max(40), alt: z.string().trim().min(1).max(160), makePrimary: z.boolean().optional() }), async ({ imageId, alt, makePrimary }) => {
+export const updateImageMeta = action(z.object({ imageId: z.string().max(40), alt: z.string().trim().min(1, "Describe the photo in a few words.").max(160, "Photo description can be up to 160 characters."), makePrimary: z.boolean().optional() }), async ({ imageId, alt, makePrimary }) => {
   await assertStaff();
   const image = await db.productImage.update({ where: { id: imageId }, data: { alt }, include: { product: { select: { id: true, slug: true } } } });
   if (makePrimary) {
