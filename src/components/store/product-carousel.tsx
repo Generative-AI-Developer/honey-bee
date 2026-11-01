@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, type ReactNode } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { HOME_CARD_GAP, HOME_CARD_WIDTH } from "@/lib/layout";
+import { cn } from "@/lib/utils";
 
 /**
  * Horizontally scrolling product row: 4 cards on computers, 3 on tablets, 2 on phones, with the next card
@@ -54,10 +56,10 @@ export function ProductCarousel({ items, autoSlide, intervalSeconds, autoplayOnP
       <div
         ref={track}
         data-product-track
-        className="-mx-4 flex snap-x snap-mandatory scroll-px-4 gap-4 overflow-x-auto px-4 pb-3 [scrollbar-width:none] sm:mx-0 sm:scroll-px-0 sm:gap-6 sm:px-0 lg:gap-8 [&::-webkit-scrollbar]:hidden"
+        className={cn("-mx-4 flex snap-x snap-mandatory scroll-px-4 overflow-x-auto px-4 pb-3 [scrollbar-width:none] sm:mx-0 sm:scroll-px-0 sm:px-0 [&::-webkit-scrollbar]:hidden", HOME_CARD_GAP)}
       >
         {items.map((item, i) => (
-          <div key={i} className="flex w-[44%] shrink-0 snap-start [&>*]:flex-1 sm:w-[30%] lg:w-[calc((100%-3*2rem)/4.2)]">
+          <div key={i} className={cn("flex shrink-0 snap-start [&>*]:flex-1", HOME_CARD_WIDTH)}>
             {item}
           </div>
         ))}

@@ -8,7 +8,9 @@ import { ProductCarousel } from "@/components/store/product-carousel";
 import { Stars } from "@/components/store/stars";
 import { JsonLd } from "@/components/seo/json-ld";
 import { formatPrice } from "@/lib/money";
+import { HOME_CARD_GAP, HOME_CARD_WIDTH } from "@/lib/layout";
 import { site } from "@/lib/site";
+import { cn } from "@/lib/utils";
 import { getBanners, getCategories, getFeaturedProducts, getHomeReviews, getStoreRating } from "@/server/queries/catalog";
 import { getFreeShippingThreshold } from "@/server/queries/shipping";
 import { getSettings } from "@/server/settings";
@@ -84,12 +86,13 @@ export default async function HomePage() {
             View all <ChevronRight className="size-4" />
           </Link>
         </div>
-        <div className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
+        {/* exactly the same width and spacing as the "Bestselling honey" cards below, square photos */}
+        <div className={cn("flex flex-wrap", HOME_CARD_GAP)}>
           {categories.map((c) => (
-            <Link key={c.id} href={`/category/${c.slug}`} className="group relative overflow-hidden rounded-3xl bg-muted">
-              <div className="relative aspect-[4/3]">
+            <Link key={c.id} href={`/category/${c.slug}`} className={cn("group relative overflow-hidden rounded-3xl bg-muted", HOME_CARD_WIDTH)}>
+              <div className="relative aspect-square overflow-hidden">
                 {c.coverImage && (
-                  <Image src={c.coverImage} alt="" fill sizes="(max-width:1024px) 50vw, 33vw" unoptimized={c.coverImage.endsWith(".svg")} className="object-cover transition-transform duration-500 group-hover:scale-105" />
+                  <Image src={c.coverImage} alt="" fill sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw" unoptimized={c.coverImage.endsWith(".svg")} className="object-cover transition-transform duration-500 group-hover:scale-105" />
                 )}
               </div>
               <div className="flex items-end justify-between gap-2 p-4 sm:p-5">
