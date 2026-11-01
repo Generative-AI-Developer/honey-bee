@@ -23,9 +23,10 @@ const HOME = { href: "/", label: "Home" };
 export async function SiteHeader() {
   const [settings, categories] = await Promise.all([getSettings(), getCategories()]);
   return (
-    <>
+    // The announcement bar and the header stay at the top together while scrolling.
+    <div className="sticky top-0 z-40">
       {settings.store.announcement && <AnnouncementBar text={settings.store.announcement} />}
-      <header className="sticky top-0 z-40 border-b border-header-border bg-header text-header-foreground">
+      <header className="border-b border-header-border bg-header text-header-foreground">
         <div className="container-page flex h-16 items-center gap-3 lg:h-[76px] lg:gap-7">
           <MobileNav nav={[HOME, { href: "/shop", label: "Shop" }, ...PAGES]} categories={categories.map((c) => ({ href: `/category/${c.slug}`, label: c.name }))} />
           <Logo className="text-xl lg:text-2xl" markClassName="size-12 lg:size-14" onHeader />
@@ -57,7 +58,7 @@ export async function SiteHeader() {
           </div>
         </div>
       </header>
-    </>
+    </div>
   );
 }
 

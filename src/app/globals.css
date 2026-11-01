@@ -91,7 +91,7 @@
   }
   html {
     @apply font-sans antialiased;
-    scroll-padding-top: 6rem;
+    scroll-padding-top: 7.5rem; /* sticky announcement bar + header */
   }
   body {
     @apply bg-background text-foreground;
