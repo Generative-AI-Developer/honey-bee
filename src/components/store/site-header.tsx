@@ -29,7 +29,7 @@ export async function SiteHeader() {
       <header className="border-b border-header-border bg-header text-header-foreground">
         <div className="container-page flex h-16 items-center gap-2 sm:gap-3 lg:h-[76px] lg:gap-6">
           <MobileNav nav={[HOME, { href: "/shop", label: "Shop" }, ...PAGES]} categories={categories.map((c) => ({ href: `/category/${c.slug}`, label: c.name }))} />
-          <Logo className="gap-2 text-[1.05rem] sm:gap-2.5 sm:text-xl lg:text-[1.35rem] xl:text-2xl" markClassName="size-10 sm:size-12 lg:size-14" onHeader />
+          <Logo className="gap-2 text-[0.95rem] sm:gap-2.5 sm:text-lg lg:text-[1.15rem] xl:text-xl" markClassName="size-10 sm:size-12 lg:size-14" onHeader />
           <nav aria-label="Main" className="hidden flex-1 items-center justify-center gap-1 text-[0.95rem] font-medium lg:flex xl:gap-2">
             <NavLink {...HOME} />
             <ShopMenu categories={categories.map((c) => ({ slug: c.slug, name: c.name, count: c.productCount }))} />

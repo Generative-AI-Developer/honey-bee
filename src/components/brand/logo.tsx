@@ -15,7 +15,7 @@ export function Logo({ className, markClassName, inverted = false, onHeader = fa
       {/* two lines: "Abdul Sami Honey" over a small, centred "ENTERPRISES" */}
       <span className="flex flex-col items-center text-center leading-none">
         <span className="whitespace-nowrap">Abdul Sami Honey</span>
-        <b className={cn("mt-1 font-sans text-[0.42em] font-bold tracking-[0.22em] uppercase", inverted ? "text-chrome-accent" : onHeader ? "text-header-accent" : "text-primary-strong")}>Enterprises</b>
+        <b className={cn("mt-1 font-sans text-[0.46em] font-bold tracking-[0.22em] uppercase", inverted ? "text-chrome-accent" : onHeader ? "text-header-accent" : "text-primary-strong")}>Enterprises</b>
       </span>
       <span className="sr-only">home</span>
     </Link>
