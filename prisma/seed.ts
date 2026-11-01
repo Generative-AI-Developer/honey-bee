@@ -6,7 +6,7 @@ import { randomUUID } from "node:crypto";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { hashPassword } from "better-auth/crypto";
 import { PrismaClient } from "../src/generated/prisma/client";
-import { banners, categories, discounts, pages, products, shippingZones } from "./seed-data";
+import { banners, blogPosts, categories, discounts, pages, products, shippingZones } from "./seed-data";
 
 const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL! }) });
 const rs = (rupees: number) => Math.round(rupees * 100);
@@ -134,7 +134,10 @@ async function seedMarketing() {
   for (const p of pages) {
     await db.page.upsert({ where: { slug: p.slug }, update: {}, create: p });
   }
-  console.log(`✓ ${discounts.length} discounts, banners, ${pages.length} pages`);
+  for (const post of blogPosts) {
+    await db.blogPost.upsert({ where: { slug: post.slug }, update: {}, create: { ...post, isPublished: true } });
+  }
+  console.log(`✓ ${discounts.length} discounts, banners, ${pages.length} pages, ${blogPosts.length} blog posts`);
 }
 
 async function main() {

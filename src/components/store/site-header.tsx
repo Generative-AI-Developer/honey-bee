@@ -4,6 +4,7 @@ import { Search, ShoppingBag, User } from "lucide-react";
 import { Logo } from "@/components/brand/logo";
 import { AnnouncementBar } from "@/components/store/announcement-bar";
 import { MobileNav } from "@/components/store/mobile-nav";
+import { NavLink } from "@/components/store/nav-link";
 import { ShopMenu } from "@/components/store/shop-menu";
 import { WishlistLink } from "@/components/store/wishlist";
 import { getCart } from "@/server/cart";
@@ -11,30 +12,31 @@ import { getCurrentUser, isStaff } from "@/server/auth";
 import { getCategories } from "@/server/queries/catalog";
 import { getSettings } from "@/server/settings";
 
-// Category links come from the live categories (first 3 by the admin's order), so renaming or
-// reordering categories in the admin can never leave a broken link in the header.
-const FEATURED_CATEGORIES = 3;
+// Main menu. "Shop" is the dropdown (ShopMenu) with every category; the rest are plain links.
+const PAGES = [
+  { href: "/about", label: "About" },
+  { href: "/blog", label: "Blog" },
+  { href: "/contact", label: "Contact" },
+];
+const HOME = { href: "/", label: "Home" };
 
 export async function SiteHeader() {
   const [settings, categories] = await Promise.all([getSettings(), getCategories()]);
-  const featured = categories.slice(0, FEATURED_CATEGORIES).map((c) => ({ href: `/category/${c.slug}`, label: c.name }));
-  const about = { href: "/about", label: "Our Story" };
   return (
     <>
       {settings.store.announcement && <AnnouncementBar text={settings.store.announcement} />}
       <header className="sticky top-0 z-40 border-b border-header-border bg-header text-header-foreground">
         <div className="container-page flex h-16 items-center gap-3 lg:h-[76px] lg:gap-7">
-          <MobileNav nav={[{ href: "/shop", label: "Shop" }, about]} categories={categories.map((c) => ({ href: `/category/${c.slug}`, label: c.name }))} />
+          <MobileNav nav={[HOME, { href: "/shop", label: "Shop" }, ...PAGES]} categories={categories.map((c) => ({ href: `/category/${c.slug}`, label: c.name }))} />
           <Logo className="text-xl lg:text-2xl" markClassName="size-12 lg:size-14" onHeader />
-          <nav aria-label="Main" className="hidden items-center gap-6 text-[0.9rem] font-medium lg:flex">
+          <nav aria-label="Main" className="hidden flex-1 items-center justify-center gap-5 text-[0.95rem] font-medium lg:flex xl:gap-7">
+            <NavLink {...HOME} />
             <ShopMenu categories={categories.map((c) => ({ slug: c.slug, name: c.name, count: c.productCount }))} />
-            {[...featured, about].map((n) => (
-              <Link key={n.href} href={n.href} className="underline-offset-8 decoration-2 transition-colors hover:underline">
-                {n.label}
-              </Link>
+            {PAGES.map((n) => (
+              <NavLink key={n.href} {...n} />
             ))}
           </nav>
-          <form action="/shop" role="search" className="ml-auto hidden max-w-xs flex-1 md:flex">
+          <form action="/shop" role="search" className="ml-auto hidden max-w-xs flex-1 md:flex lg:ml-0 lg:w-52 lg:flex-none xl:w-72">
             <label className="flex h-11 w-full items-center gap-2.5 rounded-full border-[1.5px] border-border bg-card px-4 text-sm text-muted-foreground focus-within:border-ring">
               <Search className="size-4 shrink-0" aria-hidden />
               <span className="sr-only">Search products</span>

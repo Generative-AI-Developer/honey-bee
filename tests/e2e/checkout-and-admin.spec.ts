@@ -195,3 +195,28 @@ test("signed-in shoppers can save products to their wishlist", async ({ page }) 
   await page.getByRole("button", { name: /Remove Acacia \(Phulai\) Honey from wishlist/ }).click();
   await expect(page.getByText("Nothing saved yet")).toBeVisible();
 });
+
+test("admin writes a blog post, it appears on the blog, then deletes it", async ({ page, browser }) => {
+  await login(page, ADMIN.email, ADMIN.password, "/admin/blog/new");
+  const title = `Test post ${Date.now()}`;
+  await page.getByLabel("Title").fill(title);
+  await page.getByLabel("Summary").fill("A short summary written by the end-to-end tests.");
+  await page.getByLabel("Article").fill("## A heading\n\nSome **bold** text and a [link to the shop](/shop).");
+  await page.getByRole("button", { name: "Publish post" }).click();
+  await expect(page.getByText("Post published").first()).toBeVisible();
+  await page.waitForURL(/\/admin\/blog\/(?!new)[^/]+$/, { waitUntil: "commit" });
+  await expect(page.getByRole("button", { name: "Delete post" })).toBeVisible();
+
+  const guest = await browser.newPage();
+  await guest.goto("/blog");
+  await guest.getByRole("link", { name: title, exact: true }).click();
+  await expect(guest.getByRole("heading", { level: 1, name: title })).toBeVisible();
+  await expect(guest.getByRole("heading", { name: "A heading" })).toBeVisible();
+
+  await page.getByRole("button", { name: "Delete post" }).click();
+  await page.getByRole("button", { name: "Yes, delete" }).click();
+  await page.waitForURL(/\/admin\/blog$/, { waitUntil: "commit" });
+  await guest.goto("/blog");
+  await expect(guest.getByRole("link", { name: title, exact: true })).toHaveCount(0);
+  await guest.close();
+});

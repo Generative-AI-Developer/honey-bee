@@ -14,6 +14,7 @@ export const tags = {
   pages: "pages",
   page: (slug: string) => `page:${slug}`,
   shipping: "shipping",
+  blog: "blog",
 } as const;
 
 const cardSelect = {

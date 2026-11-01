@@ -27,7 +27,7 @@ function detectImageType(buf: Buffer): (typeof ALLOWED_IMAGE_TYPES)[number] | nu
   return null;
 }
 
-export async function storeImage(file: File, folder: "products" | "categories" | "banners" | "receipts" | "videos"): Promise<StoredFile> {
+export async function storeImage(file: File, folder: "products" | "categories" | "banners" | "blog" | "receipts" | "videos"): Promise<StoredFile> {
   if (file.size === 0) throw new Error("The file is empty.");
   if (file.size > MAX_UPLOAD_BYTES) throw new Error("Images must be 5 MB or smaller.");
   const buf = Buffer.from(await file.arrayBuffer());

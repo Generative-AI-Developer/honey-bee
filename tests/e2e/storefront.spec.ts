@@ -92,3 +92,27 @@ test("every header link opens a real page", async ({ page }, info) => {
     await expect(page.getByText(/couldn.t find|not found/i)).toHaveCount(0);
   }
 });
+
+test("blog lists articles and opens one", async ({ page }) => {
+  await page.goto("/blog");
+  await expect(page.getByRole("heading", { level: 1, name: "The honey journal" })).toBeVisible();
+  const first = page.getByRole("article").first();
+  const title = (await first.getByRole("heading").textContent())!.trim();
+  await first.getByRole("link", { name: title, exact: true }).click();
+  await expect(page).toHaveURL(/\/blog\/[a-z0-9-]+$/);
+  await expect(page.getByRole("heading", { level: 1, name: title })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Shop all products" })).toBeVisible();
+});
+
+test("contact form checks the details and sends the message", async ({ page }) => {
+  await page.goto("/contact");
+  const form = page.getByRole("region", { name: "Send us a message" });
+  await form.getByRole("button", { name: "Send message" }).click();
+  await expect(form.getByText("Please tell us your name.")).toBeVisible();
+  await form.getByLabel("Your name").fill("Test Visitor");
+  await form.getByLabel("Email", { exact: true }).fill("visitor@example.com");
+  await form.getByLabel("What is it about?").selectOption("Wholesale or corporate gifting");
+  await form.getByLabel("Message").fill("Could you send a quote for 50 gift boxes for Eid?");
+  await form.getByRole("button", { name: "Send message" }).click();
+  await expect(form.getByText(/Your message has been sent/)).toBeVisible();
+});

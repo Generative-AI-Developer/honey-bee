@@ -134,7 +134,7 @@ export const savePage = action(
   async ({ id, ...d }) => {
     await assertStaff();
     const slug = slugify(d.slug);
-    const reserved = ["shop", "category", "products", "cart", "checkout", "order", "account", "admin", "api", "login", "register", "track-order", "contact"];
+    const reserved = ["shop", "category", "products", "cart", "checkout", "order", "account", "admin", "api", "login", "register", "track-order", "contact", "blog"];
     if (reserved.includes(slug)) throw new UserError(`"/${slug}" is used by the store. Choose another URL.`);
     const clash = await db.page.findFirst({ where: { slug, NOT: id ? { id } : undefined } });
     if (clash) throw new UserError(`A page already uses /${slug}.`);

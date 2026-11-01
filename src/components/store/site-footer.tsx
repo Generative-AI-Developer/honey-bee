@@ -78,6 +78,8 @@ export async function SiteFooter() {
             { href: "/returns", label: "Returns & refunds" },
             { href: "/faq", label: "FAQ" },
             { href: "/contact", label: "Contact us" },
+            { href: "/about", label: "About us" },
+            { href: "/blog", label: "Blog" },
           ]}
         />
         <div>

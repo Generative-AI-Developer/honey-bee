@@ -284,19 +284,37 @@ export const banners = [
 export const pages = [
   {
     slug: "about",
-    title: "Our story",
-    seoDescription: "How Honey Bee sources raw, lab-tested honey directly from family beekeepers across Pakistan.",
-    body: `## From the hive to your home, nothing added
+    title: "About us",
+    seoDescription: "Abdul Sami Enterprises (AS Honey) brings pure, raw, lab-tested honey from Pakistan's best honey regions to homes nationwide.",
+    body: `## Who we are
 
-We work with more than 40 family beekeepers who follow the flowers across Pakistan: sidr trees in Karak, phulai in the Salt Range, wildflowers in Swat and Kashmir.
+**Abdul Sami Enterprises** is the business behind **AS Honey**. Our aim is simple: to bring pure, natural honey from Pakistan's best honey-producing regions to homes across the country, with nothing added and nothing taken away.
 
-Each batch is cold-extracted, tested in an independent laboratory, and jarred by hand in Lahore.
+## Where our honey comes from
 
-## Our promise
+Pakistan is home to some of the world's most loved honeys, and each one tastes of the flowers the bees visited:
 
-- **Traceable:** every jar is linked to its farm and harvest date.
-- **Tested:** independent purity and moisture tests on every batch.
-- **Fair:** we pay beekeepers directly and fairly.`,
+- **Sidr (beri)** from the wild sidr groves of Karak, rich, thick and amber.
+- **Acacia (phulai)** from the Salt Range, light, mild and slow to crystallise.
+- **Wildflower and forest honey** from the valleys of Swat and Kashmir.
+- **Honeycomb and specialty honeys** for those who like their honey just as the bees made it.
+
+## How we keep it pure
+
+- **Raw and unheated:** our honey is not cooked or blended with sugar syrups.
+- **Lab-tested:** every batch is tested for purity before it is packed. Ask us for the report for your jar.
+- **Carefully packed:** sealed jars, packed to reach you safely anywhere in Pakistan.
+
+## Our promise to you
+
+- **Pure honey, every time.** If it isn't right, tell us.
+- **Cash on Delivery** across Pakistan, plus bank transfer and mobile wallets.
+- **Easy returns** within 7 days if there's a quality problem.
+- **Real people to talk to** on WhatsApp, phone or email.
+
+## Get in touch
+
+Questions about a product, a bulk order or corporate gifting? [Contact us](/contact), we'd love to hear from you. Or [browse our honey](/shop).`,
   },
   {
     slug: "shipping",
@@ -395,5 +413,137 @@ Unpaid online orders are automatically cancelled if payment isn't completed with
 ## Liability
 
 Honey should not be given to infants under 12 months of age.`,
+  },
+];
+
+// Starter articles for the blog (Admin → Blog). Plain, practical guides; no medical claims.
+export const blogPosts = [
+  {
+    slug: "how-to-tell-if-honey-is-pure",
+    title: "How to tell if honey is pure (and which home tests to ignore)",
+    excerpt: "The water, thumb and flame tests you see online can't really tell pure honey from adulterated honey. Here is what actually works when you buy.",
+    publishedAt: new Date("2026-10-30T09:00:00+05:00"),
+    body: `Almost everyone in Pakistan has heard a "trick" for spotting fake honey: drop it in water, put it on your thumb, or try to set it alight. They are fun to try, but they cannot tell you whether honey is pure.
+
+## Why the popular home tests don't work
+
+- **The water test:** thick honey sinks and dissolves slowly, but so does thick sugar syrup. Runny pure honey can dissolve quickly too.
+- **The thumb test:** whether honey spreads or stays put depends on its moisture and temperature, not its purity.
+- **The flame test:** a matchstick dipped in honey may or may not light depending on how wet it is. It says nothing about added sugar.
+- **The paper or cloth test:** absorption depends on water content, which varies naturally between harvests.
+
+Modern adulteration is done with refined syrups made to look, taste and behave like honey, so simple kitchen tests are easily fooled.
+
+## What actually tells you honey is pure
+
+Purity is measured in a **laboratory**. Common checks include:
+
+- **Moisture content:** good honey is usually below about 20% water; wetter honey can ferment.
+- **Sugar profile:** shows whether the natural balance of fructose and glucose has been changed.
+- **HMF (hydroxymethylfurfural):** a high level suggests the honey was overheated or is old.
+- **Tests for added syrups:** specialised tests detect sugars from cane or corn added to honey.
+
+## How to buy with confidence
+
+1. **Ask for a lab report.** A seller who tests every batch will happily show you the results.
+2. **Know where it comes from.** The region, the flower (for example sidr or acacia) and the harvest season should be clear on the label.
+3. **Be wary of prices that are too good to be true.** Real honey takes bees, flowers and time.
+4. **Don't fear crystallisation.** Honey that turns solid is natural, not fake. [Read why honey crystallises](/blog/why-honey-crystallises-and-how-to-store-it).
+
+Every batch we sell is lab-tested. If you would like to see the report for your jar, message us on WhatsApp.`,
+  },
+  {
+    slug: "why-honey-crystallises-and-how-to-store-it",
+    title: "Why honey crystallises, and how to store it",
+    excerpt: "Crystallised honey hasn't gone bad and isn't fake. Here's why it happens, how to make it runny again, and the best way to store a jar.",
+    publishedAt: new Date("2026-10-26T09:00:00+05:00"),
+    body: `Opened your jar to find it cloudy or solid? Good news: your honey is fine. Crystallisation is one of the most natural things honey does.
+
+## Why it happens
+
+Honey is mostly two natural sugars, **fructose** and **glucose**, with very little water. Glucose doesn't stay dissolved for long, so over time it forms tiny crystals.
+
+- Honey with more glucose, such as mustard or wildflower honey, crystallises within weeks.
+- Honey with more fructose, such as acacia, can stay runny for many months.
+- Cool temperatures (around 10–15°C) speed it up, which is why it happens faster in winter.
+
+Crystallised honey tastes the same and is just as good. Many people prefer it, because it spreads on toast without dripping.
+
+## How to make it runny again
+
+1. Stand the closed jar in a bowl of **warm water** (not boiling, comfortably hot to the touch).
+2. Leave it for 15–30 minutes and stir now and then.
+3. Repeat if needed.
+
+Avoid the microwave and very hot water. Strong heat can spoil the flavour and the natural qualities of raw honey.
+
+## How to store honey
+
+- **Close the lid tightly.** Honey absorbs moisture from the air, and wet honey can ferment.
+- **Keep it at room temperature,** away from direct sunlight and the stove.
+- **Don't refrigerate it.** The fridge makes honey crystallise faster.
+- **Use a clean, dry spoon** every time.
+
+Stored this way, honey keeps for a very long time. The "best before" date is mostly about flavour and texture.`,
+  },
+  {
+    slug: "sidr-beri-honey-guide",
+    title: "Sidr (Beri) honey: a guide to Pakistan's most prized honey",
+    excerpt: "Where sidr honey comes from, why it costs more than other honey, what it tastes like and how to make the most of a jar.",
+    publishedAt: new Date("2026-10-20T09:00:00+05:00"),
+    body: `Ask anyone in Pakistan about the finest honey and you will hear one name: **sidr**, also called **beri**. Here's what makes it special.
+
+## Where it comes from
+
+Sidr honey is made by bees that feed on the blossoms of the **sidr (beri) tree**, *Ziziphus*. The trees grow wild in dry, hilly areas, and in Pakistan some of the best-known sidr honey comes from **Karak** and the surrounding districts of Khyber Pakhtunkhwa.
+
+The trees flower for only a few weeks each year, in **autumn**, so beekeepers move their hives to the sidr groves for a short, intense harvest.
+
+## Why it costs more
+
+- **A short season:** the bees have only a few weeks of sidr blossom each year.
+- **Small harvests:** wild trees and dry weather mean limited yields.
+- **High demand:** sidr is a traditional favourite and a popular gift, especially around Eid and weddings.
+
+Because it's valuable, sidr is also one of the honeys most often faked. Buying from a seller who lab-tests every batch matters. [See how to tell if honey is pure](/blog/how-to-tell-if-honey-is-pure).
+
+## What it tastes like
+
+Sidr honey is usually **thick and amber to dark**, with a rich, warm, slightly caramel-like flavour and a gentle aftertaste. It tends to stay runny for longer than many other honeys.
+
+## Ways to enjoy it
+
+- A spoonful on its own, or stirred into warm (not boiling) water with lemon.
+- Drizzled over yoghurt, porridge or fresh fruit.
+- With paratha or bread for a traditional breakfast.
+- As a gift: a jar of sidr is a much-loved present.
+
+[Browse our honey](/shop)`,
+  },
+  {
+    slug: "honey-and-babies-under-one",
+    title: "Honey and babies: why not before their first birthday",
+    excerpt: "Health experts advise never giving honey, raw or cooked, to babies under 12 months. Here's the simple reason, and when it becomes safe.",
+    publishedAt: new Date("2026-10-14T09:00:00+05:00"),
+    body: `Honey is a wonderful food for children and adults, with one important exception: **babies under one year old should not have honey.**
+
+## Why
+
+Honey can naturally contain spores of a bacterium called *Clostridium botulinum*. They are harmless to older children and adults, whose digestive systems deal with them easily.
+
+A baby's gut is still developing. In babies under 12 months, the spores can grow and cause a rare but serious illness called **infant botulism**.
+
+## What this means in practice
+
+- **Don't give honey to babies under 12 months,** not even a small taste or on a dummy.
+- **This applies to all honey:** raw, pasteurised, local or imported.
+- **Cooking doesn't make it safe** for infants, so avoid baked foods made with honey too.
+- **Check labels** on baby foods and snacks for honey.
+
+## When is it safe?
+
+From their **first birthday** onwards, honey is fine for children as part of a balanced diet. As with any sweet food, small amounts are best, and brush their teeth afterwards.
+
+If you are ever unsure what to feed your baby, ask your doctor or health visitor.`,
   },
 ];
