@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { WhatsAppFloatLink } from "@/components/store/whatsapp-float-link";
 import { toWhatsAppNumber } from "@/lib/utils";
 import { getSettings } from "@/server/settings";
@@ -9,5 +10,10 @@ export async function WhatsAppFloat() {
   const settings = await getSettings();
   const number = toWhatsAppNumber(settings.store.whatsapp);
   if (!number) return null;
-  return <WhatsAppFloatLink href={`https://wa.me/${number}?text=${encodeURIComponent(WHATSAPP_GREETING)}`} />;
+  // The link reads the URL (to hide itself on checkout), which is runtime data: stream it in.
+  return (
+    <Suspense fallback={null}>
+      <WhatsAppFloatLink href={`https://wa.me/${number}?text=${encodeURIComponent(WHATSAPP_GREETING)}`} />
+    </Suspense>
+  );
 }

@@ -2,7 +2,7 @@
 
 import { createContext, use, useEffect, useState, useTransition, type ReactNode } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Heart } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -38,10 +38,11 @@ function useWishlist() {
 export function WishlistButton({ productId, productName, className, size = "md" }: { productId: string; productName: string; className?: string; size?: "md" | "lg" }) {
   const { state, setState } = useWishlist();
   const router = useRouter();
-  const pathname = usePathname();
   const [pending, start] = useTransition();
+  // Read the URL only when clicked (not during render), so product cards stay in the prerendered page.
+  const here = () => window.location.pathname;
   const saved = state.ids.has(productId);
-  const toLogin = () => router.push(`/login?next=${encodeURIComponent(pathname)}`);
+  const toLogin = () => router.push(`/login?next=${encodeURIComponent(here())}`);
 
   const flip = (on: boolean) =>
     setState((s) => {
@@ -59,7 +60,7 @@ export function WishlistButton({ productId, productName, className, size = "md" 
       if (res.ok) {
         flip(res.data.saved);
         toast.success(res.message);
-        if (pathname === "/account/wishlist") router.refresh();
+        if (here() === "/account/wishlist") router.refresh();
       } else {
         flip(saved);
         if (/log in/i.test(res.error)) toLogin();

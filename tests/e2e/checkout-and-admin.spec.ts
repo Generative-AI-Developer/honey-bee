@@ -182,17 +182,22 @@ test("admin sets up WhatsApp order alerts and sends a test message", async ({ pa
 
 test("signed-in shoppers can save products to their wishlist", async ({ page }) => {
   await login(page, ADMIN.email, ADMIN.password, "/products/acacia-phulai-honey");
+  // the owner may rename products, so use the name shown on the page
+  const name = ((await page.getByRole("heading", { level: 1 }).textContent()) ?? "").trim();
+  const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   const heart = page.getByRole("button", { name: /wishlist/ }).first();
   await expect(heart).toHaveAttribute("aria-pressed", "false");
   await heart.click();
   await expect(heart).toHaveAttribute("aria-pressed", "true");
   await expect(page.getByRole("link", { name: "Wishlist, 1 items" })).toBeVisible();
+  // the heart updates instantly; wait for the server to confirm before leaving the page
+  await expect(page.getByText("Saved to your wishlist").first()).toBeVisible();
 
   await page.goto("/account/wishlist");
   await expect(page.getByRole("heading", { name: "My wishlist" })).toBeVisible();
-  await expect(page.getByRole("link", { name: /Acacia \(Phulai\) Honey/ }).first()).toBeVisible();
+  await expect(page.getByRole("link", { name: new RegExp(escaped) }).first()).toBeVisible();
   // remove it again from the wishlist page
-  await page.getByRole("button", { name: /Remove Acacia \(Phulai\) Honey from wishlist/ }).click();
+  await page.getByRole("button", { name: `Remove ${name} from wishlist` }).click();
   await expect(page.getByText("Nothing saved yet")).toBeVisible();
 });
 
