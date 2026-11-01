@@ -69,7 +69,7 @@ export async function SiteFooter() {
             </ul>
           )}
         </div>
-        <FooterCol title="Shop" links={[{ href: "/shop", label: "All Products" }, ...categories.slice(0, 5).map((c) => ({ href: `/category/${c.slug}`, label: c.name }))]} />
+        <FooterCol title="Shop" links={[{ href: "/shop", label: "All Categories" }, ...categories.slice(0, 5).map((c) => ({ href: `/category/${c.slug}`, label: c.name }))]} />
         <FooterCol
           title="Support"
           links={[

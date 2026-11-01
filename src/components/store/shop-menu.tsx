@@ -17,7 +17,7 @@ export function ShopMenu({ categories }: { categories: Category[] }) {
       <DropdownMenuContent align="start" sideOffset={14} className="w-72 rounded-2xl border border-border p-2 shadow-card ring-0">
         <DropdownMenuItem asChild className="rounded-xl px-3 py-2.5 font-semibold">
           <Link href="/shop">
-            All Products <span className="ml-auto text-xs text-muted-foreground tabular-nums">{total}</span>
+            All Categories <span className="ml-auto text-xs text-muted-foreground tabular-nums">{total}</span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
