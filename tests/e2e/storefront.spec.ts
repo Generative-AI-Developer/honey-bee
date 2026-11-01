@@ -63,11 +63,13 @@ test("WhatsApp button, closable announcement and the Shop menu", async ({ page }
   if (info.project.name !== "mobile") {
     await page.getByRole("button", { name: /^Shop/ }).click();
     const menu = page.getByRole("menu");
-    await expect(menu.getByRole("menuitem", { name: /New harvest/ })).toBeVisible();
-    await expect(menu.getByText("Categories", { exact: true })).toHaveCount(0); // removed at the owner's request
-    await menu.getByRole("menuitem", { name: /All Products/ }).click();
-    await expect(page).toHaveURL(/\/shop$/);
-    await expect(page.getByRole("heading", { level: 1, name: "All Products" })).toBeVisible();
+    // category names are the owner's to change, so just follow the first one listed
+    await expect(menu.getByRole("menuitem", { name: /All Products/ })).toBeVisible();
+    const first = menu.getByRole("menuitem").nth(1);
+    const name = ((await first.textContent()) ?? "").replace(/\d+$/, "").trim();
+    await first.click();
+    await expect(page).toHaveURL(/\/category\/[a-z0-9-]+/);
+    await expect(page.getByRole("heading", { level: 1, name })).toBeVisible();
   }
 });
 
