@@ -8,13 +8,29 @@ const bodyBackground = (page: Page) => page.evaluate(() => getComputedStyle(docu
 
 // One admin session for the whole file (sign-in is rate-limited to 5 per minute).
 let adminContext: BrowserContext;
+// The owner's live choice, put back afterwards even if a test fails midway.
+let saved: { scheme: string; mode: string } | null = null;
 test.beforeAll(async ({ browser }) => {
   adminContext = await browser.newContext();
   const page = await adminContext.newPage();
   await login(page, ADMIN.email, ADMIN.password, "/admin/appearance");
+  const active = page.getByText("Active on the website").locator("..");
+  await expect(active).toBeVisible();
+  const text = (await active.textContent()) ?? "";
+  saved = { scheme: text.match(/Golden|Indigo|Midnight/)?.[0] ?? "Golden", mode: /Dark mode/.test(text) ? "Dark" : "Light" };
   await page.close();
 });
 test.afterAll(async () => {
+  if (saved && adminContext) {
+    const page = await openAppearance();
+    await page.getByRole("radio", { name: new RegExp(`^${saved.scheme}`) }).click();
+    await page.getByRole("radiogroup", { name: "Colour mode" }).getByRole("radio", { name: saved.mode }).click();
+    const apply = page.getByRole("button", { name: "Apply theme" });
+    if (await apply.isEnabled()) {
+      await apply.click();
+      await expect(page.getByText("Theme applied").first()).toBeVisible();
+    }
+  }
   await adminContext?.close();
 });
 
@@ -73,8 +89,9 @@ test("applying a theme updates the whole site for every visitor and persists", a
   expect(await bodyBackground(guest)).toBe("rgb(11, 18, 32)"); // #0B1220 midnight dark background
   // client-side navigation keeps the theme
   await guest.goto("/");
-  await guest.getByRole("link", { name: "Shop", exact: true }).first().click();
-  await guest.waitForURL(/\/shop/);
+  await guest.getByRole("button", { name: /^Shop/ }).click();
+  await guest.getByRole("menu").getByRole("menuitem").first().click();
+  await guest.waitForURL(/\/(shop|category\/)/);
   expect(await htmlTheme(guest)).toEqual(["midnight", "dark"]);
   await guest.close();
 
