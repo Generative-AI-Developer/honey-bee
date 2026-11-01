@@ -78,7 +78,7 @@ function NavLinks({ role, counts, onNavigate }: { role: string; counts: Counts; 
 export function AdminSidebar({ role, counts, className }: { role: string; counts: Counts; className?: string }) {
   return (
     <aside className={cn("sticky top-0 h-screen print:hidden flex-col gap-2 overflow-y-auto bg-chrome px-3.5 py-5 text-chrome-foreground", className)}>
-      <Logo inverted href="/admin" className="px-2.5 text-[1.375rem]" />
+      <Logo inverted href="/admin" className="gap-2 px-1.5 text-base" markClassName="size-10" />
       <span className="mx-3 mt-1 mb-4 text-[11px] font-semibold tracking-[0.14em] text-chrome-accent uppercase">Admin</span>
       <NavLinks role={role} counts={counts} />
       <div className="mt-auto grid gap-1 border-t border-chrome-border pt-3">
@@ -103,7 +103,7 @@ export function AdminTopbar({ user, counts }: { user: { name: string; role: stri
         </SheetTrigger>
         <SheetContent side="left" className="w-72 border-chrome-border bg-chrome p-4 text-chrome-foreground">
           <SheetTitle className="sr-only">Admin menu</SheetTitle>
-          <Logo inverted href="/admin" className="mb-4 px-2" />
+          <Logo inverted href="/admin" className="mb-4 gap-2 px-1.5 text-lg" markClassName="size-11" />
           <NavLinks role={user.role} counts={counts} />
         </SheetContent>
       </Sheet>

@@ -20,7 +20,7 @@ export function MobileNav({ nav, categories }: { nav: NavItem[]; categories: Nav
         <SheetHeader className="border-b border-border p-5">
           <SheetTitle asChild>
             <div onClick={close}>
-              <Logo />
+              <Logo className="gap-2 text-lg" markClassName="size-10" />
             </div>
           </SheetTitle>
         </SheetHeader>
