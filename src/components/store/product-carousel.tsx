@@ -54,10 +54,10 @@ export function ProductCarousel({ items, autoSlide, intervalSeconds, autoplayOnP
       <div
         ref={track}
         data-product-track
-        className="-mx-4 flex snap-x snap-mandatory scroll-px-4 gap-3 overflow-x-auto px-4 pb-3 [scrollbar-width:none] sm:mx-0 sm:scroll-px-0 sm:gap-5 sm:px-0 [&::-webkit-scrollbar]:hidden"
+        className="-mx-4 flex snap-x snap-mandatory scroll-px-4 gap-4 overflow-x-auto px-4 pb-3 [scrollbar-width:none] sm:mx-0 sm:scroll-px-0 sm:gap-6 sm:px-0 lg:gap-8 [&::-webkit-scrollbar]:hidden"
       >
         {items.map((item, i) => (
-          <div key={i} className="flex w-[44%] shrink-0 snap-start [&>*]:flex-1 sm:w-[30%] lg:w-[calc((100%-3*1.25rem)/4.2)]">
+          <div key={i} className="flex w-[44%] shrink-0 snap-start [&>*]:flex-1 sm:w-[30%] lg:w-[calc((100%-3*2rem)/4.2)]">
             {item}
           </div>
         ))}

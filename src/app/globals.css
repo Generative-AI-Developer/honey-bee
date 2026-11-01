@@ -55,6 +55,7 @@
   --color-header-foreground: var(--header-foreground);
   --color-header-accent: var(--header-accent);
   --color-header-hover: var(--header-hover);
+  --color-header-active: var(--header-active);
   --color-header-border: var(--header-border);
   --color-inverse: var(--inverse);
   --color-inverse-foreground: var(--inverse-foreground);

@@ -30,7 +30,7 @@ export function ProductCard({ product, priority }: { product: Card; priority?: b
         )}
       </Link>
       <WishlistButton productId={product.id} productName={product.name} className="absolute top-2.5 right-2.5" />
-      <div className="flex flex-1 flex-col gap-1 p-3 sm:p-4">
+      <div className="flex flex-1 flex-col gap-1 p-3 sm:p-5">
         {product.origin && <p className="truncate text-[0.7rem] font-medium tracking-[0.08em] text-muted-foreground uppercase">{product.origin}</p>}
         <h3 className="text-base leading-snug sm:text-lg">
           <Link href={`/products/${product.slug}`} className="hover:text-primary-strong">
@@ -50,9 +50,16 @@ export function ProductCard({ product, priority }: { product: Card; priority?: b
   );
 }
 
+// Grid spacing: 2 per row on phones, 3 on tablets, 3–4 on computers, with generous gaps so each product stands out.
+function gridClass(columns: 3 | 4) {
+  return columns === 3
+    ? "grid grid-cols-2 gap-4 sm:gap-x-6 sm:gap-y-8 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-10"
+    : "grid grid-cols-2 gap-4 sm:gap-x-6 sm:gap-y-8 md:grid-cols-3 lg:grid-cols-4 lg:gap-x-8 lg:gap-y-10";
+}
+
 export function ProductGrid({ products, columns = 4, priorityCount = 0 }: { products: Card[]; columns?: 3 | 4; priorityCount?: number }) {
   return (
-    <div className={columns === 3 ? "grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3" : "grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4"}>
+    <div className={gridClass(columns)}>
       {products.map((p, i) => (
         <ProductCard key={p.id} product={p} priority={i < priorityCount} />
       ))}
@@ -62,7 +69,7 @@ export function ProductGrid({ products, columns = 4, priorityCount = 0 }: { prod
 
 export function ProductGridSkeleton({ count = 8, columns = 4 }: { count?: number; columns?: 3 | 4 }) {
   return (
-    <div className={columns === 3 ? "grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3" : "grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4"}>
+    <div className={gridClass(columns)}>
       {Array.from({ length: count }).map((_, i) => (
         <div key={i} className="card-surface overflow-hidden">
           <div className="aspect-square animate-pulse bg-muted" />

@@ -32,16 +32,35 @@ test("centred category badges switch category and keep the sort", async ({ page 
 });
 
 test("product page lets you pick a size and add it to the cart", async ({ page }) => {
-  await page.goto("/products/wild-forest-honey");
-  await page.getByRole("button", { name: /^1kg/ }).click();
-  await expect(page.getByRole("button", { name: /Add to cart · Rs 5,300/ })).toBeVisible();
+  // Products are the owner's to rename or remove: use a product with several sizes and read its details from the page.
+  await page.goto("/shop");
+  const cards = page.getByRole("article");
+  await expect(cards.first()).toBeVisible();
+  let found = false;
+  for (let i = 0; i < Math.min(await cards.count(), 6) && !found; i++) {
+    await cards.nth(i).getByRole("link").first().click();
+    await page.waitForURL(/\/products\//, { waitUntil: "commit" });
+    await expect(page.getByRole("button", { name: /Add to cart|Sold out/ }).first()).toBeVisible();
+    const sizes = page.locator("button[aria-pressed]:not([disabled]):has(b)");
+    if ((await sizes.count()) >= 2) found = true;
+    else await page.goto("/shop");
+  }
+  test.skip(!found, "no product with more than one size in stock");
+  const name = ((await page.getByRole("heading", { level: 1 }).textContent()) ?? "").trim();
+  const size = page.locator("button[aria-pressed]:not([disabled]):has(b)").last();
+  const sizeName = ((await size.locator("b").textContent()) ?? "").trim();
+  const price = Number(((await size.textContent()) ?? "").match(/Rs\s*([\d,]+)/)![1]!.replace(/,/g, ""));
+  const rs = (n: number) => `Rs ${n.toLocaleString("en-US")}`;
+  await size.click();
+  await expect(size).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByRole("button", { name: new RegExp(`Add to cart · ${rs(price)}`) })).toBeVisible();
   await page.getByRole("button", { name: "Increase quantity" }).click();
-  await expect(page.getByRole("button", { name: /Add to cart · Rs 10,600/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: new RegExp(`Add to cart · ${rs(price * 2)}`) })).toBeVisible();
   await page.getByRole("button", { name: /Add to cart/ }).click();
   await expect(page.getByText(/added to cart/i)).toBeVisible();
   await page.goto("/cart");
-  await expect(page.getByRole("heading", { name: "Wild Forest Honey" })).toBeVisible();
-  await expect(page.getByText("Size: 1kg")).toBeVisible();
+  await expect(page.getByRole("heading", { name })).toBeVisible();
+  await expect(page.getByText(`Size: ${sizeName}`)).toBeVisible();
 });
 
 test("unknown pages show the not-found page", async ({ page }) => {
