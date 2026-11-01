@@ -2,11 +2,11 @@
 
 import Link from "next/link";
 import { ChevronDown, Gift, Sparkles } from "lucide-react";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 type Category = { slug: string; name: string; count: number };
 
-/** "Shop ▾" in the header (computers): every category with its product count, plus quick links. */
+/** "Shop ▾" in the header (computers): All Products (with the product count) plus quick links. */
 export function ShopMenu({ categories }: { categories: Category[] }) {
   const total = categories.reduce((s, c) => s + c.count, 0);
   return (
@@ -20,15 +20,6 @@ export function ShopMenu({ categories }: { categories: Category[] }) {
             All Products <span className="ml-auto text-xs text-muted-foreground tabular-nums">{total}</span>
           </Link>
         </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuLabel className="px-3 text-xs font-semibold tracking-[0.08em] text-muted-foreground uppercase">Categories</DropdownMenuLabel>
-        {categories.map((c) => (
-          <DropdownMenuItem key={c.slug} asChild className="rounded-xl px-3 py-2">
-            <Link href={`/category/${c.slug}`}>
-              {c.name} <span className="ml-auto text-xs text-muted-foreground tabular-nums">{c.count}</span>
-            </Link>
-          </DropdownMenuItem>
-        ))}
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild className="rounded-xl px-3 py-2">
           <Link href="/shop?sort=newest">
